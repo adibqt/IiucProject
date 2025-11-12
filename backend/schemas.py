@@ -15,6 +15,13 @@ class UserRole(str, Enum):
     STUDENT = "student"
 
 
+class ExperienceLevel(str, Enum):
+    FRESHER = "fresher"
+    JUNIOR = "junior"
+    MID = "mid"
+    SENIOR = "senior"
+
+
 class SkillLevel(str, Enum):
     BEGINNER = "beginner"
     INTERMEDIATE = "intermediate"
@@ -27,6 +34,55 @@ class AdminLogin(BaseModel):
     """Admin login request"""
     email: EmailStr
     password: str = Field(..., min_length=6)
+
+
+class UserRegister(BaseModel):
+    """User registration request"""
+    full_name: str = Field(..., min_length=2, max_length=255)
+    email: EmailStr
+    password: str = Field(..., min_length=8)
+    
+    @validator('password')
+    def password_strong(cls, v):
+        """Validate password strength"""
+        if not any(char.isdigit() for char in v):
+            raise ValueError('Password must contain at least one digit')
+        return v
+
+
+class UserLogin(BaseModel):
+    """User login request"""
+    email: EmailStr
+    password: str = Field(..., min_length=6)
+
+
+class UserUpdate(BaseModel):
+    """User profile update request"""
+    full_name: Optional[str] = Field(None, min_length=2, max_length=255)
+    bio: Optional[str] = None
+    phone_number: Optional[str] = None
+
+
+class UserProfile(BaseModel):
+    """User profile response (detailed)"""
+    id: int
+    full_name: Optional[str]
+    email: str
+    username: str
+    role: UserRole
+    bio: Optional[str]
+    created_at: datetime
+    updated_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
+class UserLoginResponse(BaseModel):
+    """User login response"""
+    access_token: str
+    token_type: str = "bearer"
+    user: UserProfile
 
 
 class Token(BaseModel):
@@ -51,23 +107,8 @@ class UserBase(BaseModel):
     role: UserRole = UserRole.STUDENT
 
 
-class UserCreate(UserBase):
-    """User creation request"""
-    password: str = Field(..., min_length=6)
-
-
-class UserUpdate(BaseModel):
-    """User update request"""
-    full_name: Optional[str] = None
-    bio: Optional[str] = None
-    phone_number: Optional[str] = None
-    learning_style: Optional[str] = None
-    interests: Optional[str] = None
-    career_goals: Optional[str] = None
-
-
 class UserResponse(UserBase):
-    """User response"""
+    """User response (basic)"""
     id: int
     is_active: bool
     is_verified: bool

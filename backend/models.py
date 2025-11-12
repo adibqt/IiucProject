@@ -23,6 +23,13 @@ class SkillLevel(str, enum.Enum):
     EXPERT = "expert"
 
 
+class ExperienceLevel(str, enum.Enum):
+    FRESHER = "fresher"
+    JUNIOR = "junior"
+    MID = "mid"
+    SENIOR = "senior"
+
+
 class CourseStatus(str, enum.Enum):
     DRAFT = "draft"
     PUBLISHED = "published"
@@ -61,6 +68,7 @@ class User(Base):
     """
     User model - supports admin, instructor, and student roles
     AI-ready: includes fields for learning preferences, skill gaps, and recommendations
+    Extended with career roadmap fields for job matching and learning path recommendations
     """
     __tablename__ = "users"
 
@@ -76,11 +84,7 @@ class User(Base):
     avatar_url = Column(String(500))
     phone_number = Column(String(20))
     
-    # AI-ready fields
-    learning_style = Column(String(50))  # visual, auditory, kinesthetic, reading
-    skill_level = Column(Enum(SkillLevel), default=SkillLevel.BEGINNER)
-    interests = Column(Text)  # JSON array of interests
-    career_goals = Column(Text)  # For AI-powered recommendations
+
     
     # Metadata
     is_active = Column(Boolean, default=True)

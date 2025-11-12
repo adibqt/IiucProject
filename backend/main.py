@@ -1,6 +1,6 @@
 """
 SkillSync - AI-Powered Learning Platform
-Main FastAPI application with admin authentication
+Main FastAPI application with admin and user authentication
 """
 from fastapi import FastAPI, Depends, HTTPException, status, Header
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,6 +20,9 @@ from auth import (
     create_access_token, decode_access_token
 )
 
+# Import user routes
+from api_users import router as user_router
+
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
@@ -38,6 +41,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(user_router)
 
 
 # ==================== Authentication Helpers ====================
