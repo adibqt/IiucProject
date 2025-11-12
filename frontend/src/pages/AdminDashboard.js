@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SkillSyncLogo from '../components/SkillSyncLogo';
+import AdminSkills from './AdminSkills';
 import { authAPI, dashboardAPI } from '../services/api';
 import './AdminDashboard.css';
 
@@ -284,7 +285,11 @@ const AdminDashboard = () => {
             </>
           )}
 
-          {activeSection !== 'dashboard' && (
+          {activeSection === 'skills' && (
+            <AdminSkills />
+          )}
+
+          {activeSection !== 'dashboard' && activeSection !== 'skills' && (
             <div style={{ 
               background: 'white', 
               padding: '48px', 

@@ -135,12 +135,74 @@ class CourseResponse(CourseBase):
         from_attributes = True
 
 
+# Job Schemas
+class JobBase(BaseModel):
+    """Base job information"""
+    title: str = Field(..., min_length=5, max_length=255)
+    company_name: str = Field(..., min_length=2, max_length=255)
+    description: str = Field(..., min_length=20)
+    location: str = Field(..., min_length=2, max_length=255)
+    job_type: str = Field(..., description="full-time, part-time, contract, internship, freelance")
+    experience_level: str = Field(..., description="entry, mid, senior")
+
+
+class JobCreate(JobBase):
+    """Job creation request"""
+    company_logo: Optional[str] = None
+    requirements: Optional[str] = None
+    responsibilities: Optional[str] = None
+    salary_range: Optional[str] = None
+    required_skills: Optional[str] = None  # JSON array of skill IDs
+    application_url: Optional[str] = None
+    application_email: Optional[EmailStr] = None
+    application_deadline: Optional[datetime] = None
+
+
+class JobUpdate(BaseModel):
+    """Job update request"""
+    title: Optional[str] = None
+    company_name: Optional[str] = None
+    description: Optional[str] = None
+    location: Optional[str] = None
+    job_type: Optional[str] = None
+    experience_level: Optional[str] = None
+    requirements: Optional[str] = None
+    responsibilities: Optional[str] = None
+    salary_range: Optional[str] = None
+    required_skills: Optional[str] = None
+    application_url: Optional[str] = None
+    application_email: Optional[EmailStr] = None
+    application_deadline: Optional[datetime] = None
+    is_active: Optional[bool] = None
+
+
+class JobResponse(JobBase):
+    """Job response"""
+    id: int
+    company_logo: Optional[str] = None
+    requirements: Optional[str] = None
+    responsibilities: Optional[str] = None
+    salary_range: Optional[str] = None
+    required_skills: Optional[str] = None
+    application_url: Optional[str] = None
+    application_email: Optional[str] = None
+    application_deadline: Optional[datetime] = None
+    is_active: bool
+    views_count: int
+    applications_count: int
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
 # Dashboard Statistics Schema
 class DashboardStats(BaseModel):
     """Admin dashboard statistics"""
     total_users: int
     total_courses: int
     total_skills: int
+    total_jobs: int
     active_enrollments: int
     new_users_this_month: int
     courses_published_this_month: int
