@@ -100,6 +100,16 @@ export const skillsAPI = {
     const response = await api.get(`/admin/skills?skip=${skip}&limit=${limit}`);
     return response.data;
   },
+
+  create: async (skillData) => {
+    const response = await api.post("/admin/skills", skillData);
+    return response.data;
+  },
+
+  delete: async (skillId) => {
+    const response = await api.delete(`/admin/skills/${skillId}`);
+    return response.data;
+  },
 };
 
 // Courses API

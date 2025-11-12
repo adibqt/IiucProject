@@ -10,10 +10,11 @@ from datetime import datetime
 
 # Import local modules
 from database import engine, Base, get_db
-from models import User, UserRole, Skill, Course, AdminLog
+from models import User, UserRole, Skill, Course, AdminLog, Job
 from schemas import (
     AdminLogin, Token, UserResponse, SuccessResponse, 
-    DashboardStats, SkillResponse, CourseResponse
+    DashboardStats, SkillResponse, CourseResponse,
+    SkillCreate, JobCreate, JobUpdate, JobResponse
 )
 from auth import (
     verify_password, get_password_hash, 
@@ -36,7 +37,7 @@ app = FastAPI(
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React frontend
+    allow_origins=["http://localhost:3000", "http://localhost:3001"],  # React frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -216,6 +217,7 @@ async def get_dashboard_stats(current_user: User = Depends(get_admin_user), db: 
     total_users = db.query(func.count(User.id)).scalar()
     total_courses = db.query(func.count(Course.id)).scalar()
     total_skills = db.query(func.count(Skill.id)).scalar()
+    total_jobs = db.query(func.count(Job.id)).filter(Job.is_active == True).scalar()
     
     new_users_this_month = db.query(func.count(User.id)).filter(
         User.created_at >= this_month_start
@@ -229,6 +231,7 @@ async def get_dashboard_stats(current_user: User = Depends(get_admin_user), db: 
         "total_users": total_users or 0,
         "total_courses": total_courses or 0,
         "total_skills": total_skills or 0,
+        "total_jobs": total_jobs or 0,
         "active_enrollments": 0,  # Will be calculated with enrollments
         "new_users_this_month": new_users_this_month or 0,
         "courses_published_this_month": courses_published_this_month or 0
@@ -322,3 +325,204 @@ def initialize_admin(db: Session = Depends(get_db)):
             "note": "Please change the password immediately!"
         }
     }
+
+
+# ==================== Admin Skill CRUD ====================
+
+@app.post("/api/admin/skills", response_model=SkillResponse)
+async def create_skill(
+    skill: SkillCreate,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Create a new skill
+    """
+    # Check if skill already exists
+    existing_skill = db.query(Skill).filter(Skill.slug == skill.slug).first()
+    if existing_skill:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Skill with this slug already exists"
+        )
+    
+    # Create new skill
+    new_skill = Skill(**skill.dict())
+    db.add(new_skill)
+    db.commit()
+    db.refresh(new_skill)
+    
+    # Log action
+    log_admin_action(
+        db, current_user.id, "create_skill", 
+        "skill", new_skill.id, f"Created skill: {new_skill.name}"
+    )
+    
+    return new_skill
+
+
+@app.delete("/api/admin/skills/{skill_id}")
+async def delete_skill(
+    skill_id: int,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Delete a skill
+    """
+    skill = db.query(Skill).filter(Skill.id == skill_id).first()
+    if not skill:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Skill not found"
+        )
+    
+    skill_name = skill.name
+    db.delete(skill)
+    db.commit()
+    
+    # Log action
+    log_admin_action(
+        db, current_user.id, "delete_skill",
+        "skill", skill_id, f"Deleted skill: {skill_name}"
+    )
+    
+    return {"success": True, "message": f"Skill '{skill_name}' deleted successfully"}
+
+
+# ==================== Admin Job CRUD ====================
+
+@app.get("/api/admin/jobs", response_model=list[JobResponse])
+async def list_jobs_admin(
+    skip: int = 0,
+    limit: int = 50,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    List all jobs (admin view)
+    """
+    jobs = db.query(Job).offset(skip).limit(limit).all()
+    return jobs
+
+
+@app.post("/api/admin/jobs", response_model=JobResponse)
+async def create_job(
+    job: JobCreate,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Create a new job posting
+    """
+    new_job = Job(
+        **job.dict(),
+        posted_by=current_user.id
+    )
+    db.add(new_job)
+    db.commit()
+    db.refresh(new_job)
+    
+    # Log action
+    log_admin_action(
+        db, current_user.id, "create_job",
+        "job", new_job.id, f"Created job: {new_job.title}"
+    )
+    
+    return new_job
+
+
+@app.put("/api/admin/jobs/{job_id}", response_model=JobResponse)
+async def update_job(
+    job_id: int,
+    job_update: JobUpdate,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Update a job posting
+    """
+    job = db.query(Job).filter(Job.id == job_id).first()
+    if not job:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Job not found"
+        )
+    
+    # Update fields
+    for field, value in job_update.dict(exclude_unset=True).items():
+        setattr(job, field, value)
+    
+    db.commit()
+    db.refresh(job)
+    
+    # Log action
+    log_admin_action(
+        db, current_user.id, "update_job",
+        "job", job.id, f"Updated job: {job.title}"
+    )
+    
+    return job
+
+
+@app.delete("/api/admin/jobs/{job_id}")
+async def delete_job(
+    job_id: int,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Delete a job posting
+    """
+    job = db.query(Job).filter(Job.id == job_id).first()
+    if not job:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Job not found"
+        )
+    
+    job_title = job.title
+    db.delete(job)
+    db.commit()
+    
+    # Log action
+    log_admin_action(
+        db, current_user.id, "delete_job",
+        "job", job_id, f"Deleted job: {job_title}"
+    )
+    
+    return {"success": True, "message": f"Job '{job_title}' deleted successfully"}
+
+
+# ==================== Public Job Endpoints ====================
+
+@app.get("/api/jobs", response_model=list[JobResponse])
+async def list_jobs_public(
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db)
+):
+    """
+    List all active jobs (public endpoint)
+    """
+    jobs = db.query(Job).filter(Job.is_active == True).offset(skip).limit(limit).all()
+    return jobs
+
+
+@app.get("/api/jobs/{job_id}", response_model=JobResponse)
+async def get_job(job_id: int, db: Session = Depends(get_db)):
+    """
+    Get a specific job by ID
+    """
+    job = db.query(Job).filter(Job.id == job_id, Job.is_active == True).first()
+    if not job:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Job not found"
+        )
+    
+    # Increment view count
+    job.views_count += 1
+    db.commit()
+    
+    return job

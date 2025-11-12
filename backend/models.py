@@ -241,6 +241,46 @@ class AIRecommendation(Base):
     user = relationship("User", back_populates="ai_recommendations")
 
 
+class Job(Base):
+    """
+    Job posting model - represents job opportunities
+    Links to required skills for matching
+    """
+    __tablename__ = "jobs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(255), nullable=False, index=True)
+    company_name = Column(String(255), nullable=False)
+    company_logo = Column(String(500))
+    
+    # Job details
+    description = Column(Text, nullable=False)
+    requirements = Column(Text)  # Detailed requirements
+    responsibilities = Column(Text)  # Job responsibilities
+    
+    # Employment details
+    job_type = Column(String(50))  # full-time, part-time, contract, internship
+    location = Column(String(255))
+    salary_range = Column(String(100))
+    experience_level = Column(String(50))  # entry, mid, senior
+    
+    # Skills required (JSON array of skill IDs)
+    required_skills = Column(Text)  # JSON array
+    
+    # Application details
+    application_url = Column(String(500))
+    application_email = Column(String(255))
+    application_deadline = Column(DateTime)
+    
+    # Metadata
+    is_active = Column(Boolean, default=True)
+    posted_by = Column(Integer, ForeignKey('users.id'))
+    views_count = Column(Integer, default=0)
+    applications_count = Column(Integer, default=0)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
+
 class AdminLog(Base):
     """
     Audit log for admin actions
