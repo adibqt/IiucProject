@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import SkillSyncLogo from '../components/SkillSyncLogo';
 import AdminSkills from './AdminSkills';
 import AdminJobs from './AdminJobs';
+import AdminCourses from './AdminCourses';
 import { authAPI, dashboardAPI } from '../services/api';
 import './AdminDashboard.css';
 
@@ -297,11 +298,15 @@ const AdminDashboard = () => {
             <AdminSkills />
           )}
 
+          {activeSection === 'courses' && (
+            <AdminCourses />
+          )}
+
           {activeSection === 'jobs' && (
             <AdminJobs />
           )}
 
-          {activeSection !== 'dashboard' && activeSection !== 'skills' && activeSection !== 'jobs' && (
+          {activeSection !== 'dashboard' && activeSection !== 'skills' && activeSection !== 'courses' && activeSection !== 'jobs' && (
             <div style={{ 
               background: 'white', 
               padding: '48px', 
