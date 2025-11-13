@@ -4,13 +4,14 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import SkillSyncLogo from "../components/SkillSyncLogo";
 import "./Login.css";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login, isAuthenticated } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -23,6 +24,16 @@ const Login = () => {
   const [alert, setAlert] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+
+  // Show redirect message if coming from protected route
+  useEffect(() => {
+    if (location.state?.message) {
+      setAlert({
+        type: "info",
+        message: location.state.message,
+      });
+    }
+  }, [location]);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -103,11 +114,13 @@ const Login = () => {
 
         setAlert({
           type: "success",
-          message: "Login successful! Redirecting to dashboard...",
+          message: "Login successful! Redirecting...",
         });
 
+        // Redirect to the page they came from or dashboard
+        const redirectTo = location.state?.from || "/dashboard";
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate(redirectTo);
         }, 1500);
       } else {
         let errorMessage = result.error;

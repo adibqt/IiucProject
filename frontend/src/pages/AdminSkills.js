@@ -16,6 +16,11 @@ const AdminSkills = () => {
   });
   const [alert, setAlert] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(9);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterCategory, setFilterCategory] = useState('all');
+  const [filterDifficulty, setFilterDifficulty] = useState('all');
 
   useEffect(() => {
     loadSkills();
@@ -32,6 +37,41 @@ const AdminSkills = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Filter and search logic
+  const filteredSkills = skills.filter(skill => {
+    const matchesSearch = skill.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         skill.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = filterCategory === 'all' || skill.category === filterCategory;
+    const matchesDifficulty = filterDifficulty === 'all' || skill.difficulty_level === filterDifficulty;
+    
+    return matchesSearch && matchesCategory && matchesDifficulty;
+  });
+
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentSkills = filteredSkills.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredSkills.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
+  };
+
+  const handleFilterChange = (type, value) => {
+    if (type === 'category') {
+      setFilterCategory(value);
+    } else if (type === 'difficulty') {
+      setFilterDifficulty(value);
+    }
+    setCurrentPage(1); // Reset to first page on filter change
   };
 
   const showAlert = (type, message) => {
@@ -141,21 +181,91 @@ const AdminSkills = () => {
         </div>
       )}
 
+      {/* Search and Filters */}
+      <div className="search-filter-container">
+        <div className="search-box">
+          <svg className="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <input
+            type="text"
+            placeholder="Search skills by name or description..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="search-input"
+          />
+          {searchTerm && (
+            <button className="clear-search" onClick={() => setSearchTerm('')}>×</button>
+          )}
+        </div>
+
+        <div className="filter-group">
+          <select 
+            value={filterCategory} 
+            onChange={(e) => handleFilterChange('category', e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Categories</option>
+            <option value="Programming">Programming</option>
+            <option value="Design">Design</option>
+            <option value="Business">Business</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Analytics">Analytics</option>
+            <option value="Soft Skills">Soft Skills</option>
+          </select>
+
+          <select 
+            value={filterDifficulty} 
+            onChange={(e) => handleFilterChange('difficulty', e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Levels</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+            <option value="expert">Expert</option>
+          </select>
+
+          {(searchTerm || filterCategory !== 'all' || filterDifficulty !== 'all') && (
+            <button 
+              className="clear-filters-btn"
+              onClick={() => {
+                setSearchTerm('');
+                setFilterCategory('all');
+                setFilterDifficulty('all');
+              }}
+            >
+              Clear All
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Results count */}
+      {!loading && (
+        <div className="results-count">
+          Showing {currentSkills.length} of {filteredSkills.length} skill{filteredSkills.length !== 1 ? 's' : ''}
+          {filteredSkills.length !== skills.length && ` (filtered from ${skills.length} total)`}
+        </div>
+      )}
+
       {/* Skills Grid */}
       {loading ? (
         <div className="loading-spinner">
           <div className="spinner"></div>
           <p>Loading skills...</p>
         </div>
-      ) : skills.length === 0 ? (
+      ) : filteredSkills.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">📚</div>
-          <h3>No skills yet</h3>
-          <p>Add your first skill to get started</p>
+          <div className="empty-icon">🔍</div>
+          <h3>No skills found</h3>
+          <p>{searchTerm || filterCategory !== 'all' || filterDifficulty !== 'all' 
+            ? 'Try adjusting your search or filters' 
+            : 'Add your first skill to get started'}</p>
         </div>
       ) : (
         <div className="skills-grid">
-          {skills.map((skill) => (
+          {currentSkills.map((skill) => (
             <div key={skill.id} className="skill-card">
               <div className="skill-card-header">
                 <div 
@@ -194,6 +304,55 @@ const AdminSkills = () => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {!loading && filteredSkills.length > itemsPerPage && (
+        <div className="pagination">
+          <button 
+            className="pagination-btn"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            ← Previous
+          </button>
+          
+          <div className="pagination-numbers">
+            {[...Array(totalPages)].map((_, index) => {
+              const pageNumber = index + 1;
+              // Show first page, last page, current page, and pages around current
+              if (
+                pageNumber === 1 ||
+                pageNumber === totalPages ||
+                (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
+              ) {
+                return (
+                  <button
+                    key={pageNumber}
+                    className={`pagination-number ${currentPage === pageNumber ? 'active' : ''}`}
+                    onClick={() => handlePageChange(pageNumber)}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              } else if (
+                pageNumber === currentPage - 2 ||
+                pageNumber === currentPage + 2
+              ) {
+                return <span key={pageNumber} className="pagination-ellipsis">...</span>;
+              }
+              return null;
+            })}
+          </div>
+
+          <button 
+            className="pagination-btn"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next →
+          </button>
         </div>
       )}
 

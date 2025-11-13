@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "./Dashboard.css";
 
@@ -52,6 +52,11 @@ const Dashboard = () => {
                 <a href="#dashboard" className="dashboard-nav-link active">
                   Dashboard
                 </a>
+              </li>
+              <li>
+                <Link to="/jobs" className="dashboard-nav-link">
+                  Jobs
+                </Link>
               </li>
               <li>
                 <a href="#profile" className="dashboard-nav-link">

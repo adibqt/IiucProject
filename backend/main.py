@@ -85,6 +85,7 @@ async def get_admin_user(current_user: User = Depends(get_current_user)):
     """
     Dependency to ensure current user is an admin
     """
+    print(f"DEBUG: User role: {current_user.role}, Expected: {UserRole.ADMIN}, Match: {current_user.role == UserRole.ADMIN}")
     if current_user.role != UserRole.ADMIN:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -265,6 +266,19 @@ async def list_skills(
 ):
     """
     List all skills (paginated)
+    """
+    skills = db.query(Skill).offset(skip).limit(limit).all()
+    return skills
+
+
+@app.get("/api/skills", response_model=list[SkillResponse])
+async def list_skills_public(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """
+    List all skills (public endpoint)
     """
     skills = db.query(Skill).offset(skip).limit(limit).all()
     return skills
