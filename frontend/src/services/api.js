@@ -112,6 +112,29 @@ export const skillsAPI = {
   },
 };
 
+// Jobs API
+export const jobsAPI = {
+  list: async (skip = 0, limit = 100) => {
+    const response = await api.get(`/admin/jobs?skip=${skip}&limit=${limit}`);
+    return response.data;
+  },
+
+  create: async (jobData) => {
+    const response = await api.post("/admin/jobs", jobData);
+    return response.data;
+  },
+
+  update: async (jobId, jobData) => {
+    const response = await api.put(`/admin/jobs/${jobId}`, jobData);
+    return response.data;
+  },
+
+  delete: async (jobId) => {
+    const response = await api.delete(`/admin/jobs/${jobId}`);
+    return response.data;
+  },
+};
+
 // Courses API
 export const coursesAPI = {
   list: async (skip = 0, limit = 50) => {

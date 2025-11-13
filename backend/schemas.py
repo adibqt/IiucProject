@@ -197,6 +197,7 @@ class JobCreate(JobBase):
     application_url: Optional[str] = None
     application_email: Optional[EmailStr] = None
     application_deadline: Optional[datetime] = None
+    is_active: Optional[bool] = True
 
 
 class JobUpdate(BaseModel):

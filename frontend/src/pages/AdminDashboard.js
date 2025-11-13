@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SkillSyncLogo from '../components/SkillSyncLogo';
 import AdminSkills from './AdminSkills';
+import AdminJobs from './AdminJobs';
 import { authAPI, dashboardAPI } from '../services/api';
 import './AdminDashboard.css';
 
@@ -123,6 +124,13 @@ const AdminDashboard = () => {
             >
               <span className="admin-nav-icon">🎯</span>
               <span>Skills</span>
+            </div>
+            <div
+              className={`admin-nav-item ${activeSection === 'jobs' ? 'active' : ''}`}
+              onClick={() => setActiveSection('jobs')}
+            >
+              <span className="admin-nav-icon">💼</span>
+              <span>Jobs</span>
             </div>
             <div
               className={`admin-nav-item ${activeSection === 'instructors' ? 'active' : ''}`}
@@ -289,7 +297,11 @@ const AdminDashboard = () => {
             <AdminSkills />
           )}
 
-          {activeSection !== 'dashboard' && activeSection !== 'skills' && (
+          {activeSection === 'jobs' && (
+            <AdminJobs />
+          )}
+
+          {activeSection !== 'dashboard' && activeSection !== 'skills' && activeSection !== 'jobs' && (
             <div style={{ 
               background: 'white', 
               padding: '48px', 

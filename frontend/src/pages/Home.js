@@ -49,6 +49,9 @@ const Home = () => {
             <SkillSyncLogo />
           </div>
           <div className="home-nav-links">
+            <Link to="/jobs" className="home-nav-link">
+              Jobs
+            </Link>
             <a href="#features" className="home-nav-link">
               Features
             </a>

@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Home from "./pages/Home";
+import Jobs from "./pages/Jobs";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import Login from "./pages/Login";
@@ -89,6 +90,9 @@ function AppRoutes() {
     <Routes>
       {/* Default route */}
       <Route path="/" element={<Home />} />
+
+      {/* Public Jobs Route */}
+      <Route path="/jobs" element={<Jobs />} />
 
       {/* User Authentication Routes */}
       <Route
