@@ -6,10 +6,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const isActive = (p) => {
-    if (p === "/dashboard")
+  const isActive = (path) => {
+    if (path === "/dashboard") {
       return pathname === "/dashboard" || pathname === "/";
-    return pathname.startsWith(p);
+    }
+    return pathname.startsWith(path);
   };
 
   return (
@@ -65,9 +66,9 @@ const Navbar = () => {
             </li>
             <li>
               <button
-                onClick={() => navigate("/#resources")}
+                onClick={() => navigate("/resources")}
                 className={`dashboard-nav-link ${
-                  isActive("/#resources") ? "active" : ""
+                  isActive("/resources") ? "active" : ""
                 }`}
                 style={{
                   background: "none",

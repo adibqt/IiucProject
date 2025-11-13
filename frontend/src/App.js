@@ -17,6 +17,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+import Resources from "./pages/Resources";
 import "./App.css";
 
 // Protected Route Component for User Auth
@@ -139,6 +140,14 @@ function AppRoutes() {
         element={
           <ProtectedUserRoute>
             <Profile />
+          </ProtectedUserRoute>
+        }
+      />
+      <Route
+        path="/resources"
+        element={
+          <ProtectedUserRoute>
+            <Resources />
           </ProtectedUserRoute>
         }
       />
