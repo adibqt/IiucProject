@@ -1,181 +1,393 @@
-# NutriMap - Smart Job & Skills Platform
+# SkillSync - Smart Skills & Learning Platform
 
-A comprehensive platform connecting job seekers with opportunities while building and showcasing their professional skills.
+A comprehensive platform for skill development, job matching, and personalized learning paths with AI-powered recommendations.
 
-## 🎯 Current Features
+## ✨ Features
 
-### Feature #1: Job Listings & Search ✅
+### 🎓 For Students & Professionals
+- **Profile Management**: Build and showcase your skills portfolio
+- **Job Matching**: Find opportunities that match your skills
+- **Course Discovery**: Access curated learning resources from top platforms
+- **Skill Tracking**: Monitor your learning progress and skill development
+- **Career Guidance**: Get personalized recommendations based on your goals
 
-- Browse available job opportunities
-- Real-time search by title, company, description
-- Filter by job type (Full-time, Part-time, Internship, Freelance, Contract)
-- Filter by location
-- Filter by required skills
-- View detailed job information
-- Skill matching indicators
+### 👨‍💼 Admin Panel
+- **User Management**: View and manage all registered users
+- **Course Management**: Curate learning resources from YouTube, Coursera, Udemy, etc.
+- **Job Management**: Post and manage job opportunities
+- **Skills Management**: Maintain the skills database
+- **Analytics Dashboard**: Track platform usage and growth metrics
 
-### Feature #2: User Profile & Skill Input ✅
+### 🤖 AI-Powered (Ready for Integration)
+- Personalized learning path generation
+- Skill gap analysis
+- Job recommendations
+- Career trajectory planning
 
-- **Profile Management**
-
-  - Edit basic information (name, phone, bio, avatar)
-  - Manage professional skills with proficiency levels
-  - Set career interests
-  - Document work experience
-  - Store CV/resume content
-
-- **Skills & Matching**
-  - Select from available skills database
-  - Assign proficiency levels (Beginner to Expert)
-  - View matched jobs based on skills
-  - See skill match percentages
-
-### Coming Soon
-
-- Feature #3: Job Applications & Tracking
-- Feature #4: Admin Job Creation & Management
-- Feature #5: AI-Powered Job Recommendations
-- Advanced Profile Analytics
-- Resume Parsing & Enhancement
-
-## 🚀 Quick Start
+## 🚀 Quick Start with Docker
 
 ### Prerequisites
+- **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux)
+- **Docker Compose** v2.0 or higher
+- **Git** for cloning the repository
 
-- Docker & Docker Compose
-- Node.js 14+ (for local frontend development)
-- Python 3.9+ (for local backend development)
-- PostgreSQL 12+ (included in Docker)
+### Installation Steps
 
-### Start Application
-
+1. **Clone the Repository**
 ```bash
-# From project root
-cd e:\code\NutriMap
-docker-compose up -d
+git clone <repository-url>
+cd NutriMap
 ```
 
-### Access Services
+2. **Environment Configuration**
 
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000
-- **API Documentation**: http://localhost:8000/docs
-- **Database**: localhost:5432 (PostgreSQL)
+Create a `.env` file in the project root (if not exists):
+```env
+# Database Configuration
+POSTGRES_USER=nutrimap_user
+POSTGRES_PASSWORD=nutrimap_password
+POSTGRES_DB=nutrimap_db
+DATABASE_URL=postgresql://nutrimap_user:nutrimap_password@db:5432/nutrimap_db
 
-### User Authentication
+# JWT Configuration
+SECRET_KEY=your-secret-key-here-change-in-production
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
 
-**Test Account:**
+# CORS Configuration
+CORS_ORIGINS=http://localhost:3000,http://localhost:3001
+```
 
-- Email: `test@example.com`
-- Password: `password123`
+3. **Start the Application**
+```bash
+# Build and start all services
+docker compose up -d --build
 
-Or register new account:
+# Or without building (if images exist)
+docker compose up -d
+```
 
-1. Click "Sign Up" on login page
-2. Enter email and password
-3. Account created automatically
+4. **Initialize Database** (First time only)
+```bash
+# Run migrations and seed data
+docker compose exec backend python migrations/add_default_skills_and_jobs.py
+docker compose exec backend python migrations/add_default_courses.py
+```
 
-### Admin Access
+5. **Verify Services**
+```bash
+# Check if all containers are running
+docker compose ps
 
-- Admin Login: http://localhost:3000/admin
-- Default credentials available in AdminLogin.js
+# View logs
+docker compose logs -f
+
+# View specific service logs
+docker compose logs -f frontend
+docker compose logs -f backend
+```
+
+### Access the Application
+
+- 🌐 **Frontend**: http://localhost:3000
+- 🔧 **Backend API**: http://localhost:8000
+- 📚 **API Docs**: http://localhost:8000/docs
+- 🗄️ **Database**: localhost:5432
+
+### Default Credentials
+
+**Admin Panel** (http://localhost:3000/admin)
+- Email: Check `backend/main.py` for initialization credentials
+- Or run: `docker compose exec backend python -c "from main import *; import asyncio; asyncio.run(initialize_admin())"`
+
+**User Account**
+- Register at: http://localhost:3000/register
+- Or use any existing test account
+
+## 🐳 Docker Commands Reference
+
+### Starting & Stopping
+
+```bash
+# Start all services
+docker compose up -d
+
+# Stop all services (keeps data)
+docker compose stop
+
+# Stop and remove containers (keeps volumes)
+docker compose down
+
+# Stop and remove everything including volumes (CAUTION: deletes data)
+docker compose down -v
+```
+
+### Building & Rebuilding
+
+```bash
+# Build all services
+docker compose build
+
+# Build specific service
+docker compose build frontend
+docker compose build backend
+
+# Rebuild and restart specific service
+docker compose up -d --build frontend
+
+# Force rebuild without cache
+docker compose build --no-cache
+```
+
+### Viewing Logs
+
+```bash
+# View all logs
+docker compose logs
+
+# Follow logs in real-time
+docker compose logs -f
+
+# View specific service logs
+docker compose logs backend
+docker compose logs frontend
+docker compose logs db
+
+# View last 100 lines
+docker compose logs --tail=100
+```
+
+### Service Management
+
+```bash
+# Restart specific service
+docker compose restart frontend
+docker compose restart backend
+
+# Stop specific service
+docker compose stop backend
+
+# Start specific service
+docker compose start backend
+
+# Execute command in running container
+docker compose exec backend python main.py
+docker compose exec backend bash
+docker compose exec frontend npm install
+```
+
+### Database Operations
+
+```bash
+# Access PostgreSQL CLI
+docker compose exec db psql -U nutrimap_user -d nutrimap_db
+
+# Backup database
+docker compose exec db pg_dump -U nutrimap_user nutrimap_db > backup.sql
+
+# Restore database
+docker compose exec -T db psql -U nutrimap_user -d nutrimap_db < backup.sql
+
+# Run migration
+docker compose exec backend python migrations/migrate_courses.py
+```
+
+### Troubleshooting
+
+```bash
+# Check container status
+docker compose ps
+
+# View container resource usage
+docker stats
+
+# Inspect container
+docker compose exec backend env
+
+# Remove all stopped containers
+docker compose rm
+
+# Clean up unused images and volumes
+docker system prune -a
+docker volume prune
+```
+
+## 🏗️ Architecture
+
+### Docker Services
+
+**Frontend** (React App)
+- Port: 3000
+- Image: Node 22 Alpine
+- Hot reload enabled for development
+
+**Backend** (FastAPI)
+- Port: 8000
+- Image: Python 3.11
+- Auto-reload enabled for development
+
+**Database** (PostgreSQL)
+- Port: 5432
+- Version: PostgreSQL 16
+- Persistent volume for data storage
+
+### Network Architecture
+```
+┌─────────────────────────────────────┐
+│         Docker Network              │
+│                                     │
+│  ┌──────────┐  ┌──────────┐       │
+│  │ Frontend │  │ Backend  │       │
+│  │  :3000   │◄─┤  :8000   │       │
+│  └──────────┘  └────┬─────┘       │
+│                     │              │
+│                ┌────▼─────┐       │
+│                │PostgreSQL│       │
+│                │  :5432   │       │
+│                └──────────┘       │
+└─────────────────────────────────────┘
+```
 
 ## 📁 Project Structure
 
 ```
 NutriMap/
-├── backend/                 # FastAPI backend
-│   ├── models.py          # SQLAlchemy ORM models
-│   ├── schemas.py         # Pydantic validation schemas
-│   ├── main.py            # FastAPI app initialization
-│   ├── auth.py            # Authentication & JWT
-│   ├── database.py        # Database configuration
-│   └── routes/            # API route handlers
-│       ├── job_routes.py
-│       └── profile_routes.py
-├── frontend/              # React frontend
-│   └── src/
-│       ├── pages/        # Page components
-│       │   ├── Profile.jsx       # User profile management
-│       │   ├── Jobs.jsx          # Job listing & filtering
-│       │   ├── JobDetails.jsx    # Job detail view
-│       │   ├── Dashboard.js      # User dashboard
-│       │   ├── Login.js
-│       │   └── Register.js
-│       ├── services/     # API client wrappers
-│       │   ├── profileService.js # Profile API calls
-│       │   ├── jobService.js     # Job API calls
-│       │   └── api.js            # Axios instance & auth
-│       ├── components/   # Reusable components
-│       └── contexts/     # React Context (AuthContext)
-├── docker-compose.yml     # Container orchestration
-└── README.md             # This file
+├── docker-compose.yml           # Docker orchestration config
+├── .env                        # Environment variables
+├── README.md
+│
+├── backend/                    # FastAPI Backend
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── main.py                # Application entry point
+│   ├── models.py              # Database models
+│   ├── schemas.py             # Pydantic schemas
+│   ├── database.py            # DB connection
+│   ├── auth.py                # Authentication
+│   └── migrations/            # Database migrations
+│       ├── add_default_skills_and_jobs.py
+│       ├── add_default_courses.py
+│       └── migrate_courses.py
+│
+└── frontend/                   # React Frontend
+    ├── Dockerfile
+    ├── package.json
+    ├── public/
+    └── src/
+        ├── pages/             # Page components
+        │   ├── Dashboard.js      # User dashboard
+        │   ├── Profile.jsx       # Profile management
+        │   ├── Jobs.jsx          # Job listings
+        │   ├── Resources.jsx     # Learning resources
+        │   ├── Login.js
+        │   ├── Register.js
+        │   ├── AdminLogin.js
+        │   ├── AdminDashboard.js # Admin main page
+        │   ├── AdminUsers.js     # User management
+        │   ├── AdminCourses.js   # Course management
+        │   ├── AdminJobs.js      # Job management
+        │   └── AdminSkills.js    # Skills management
+        ├── services/          # API services
+        │   └── api.js           # Axios & API methods
+        ├── components/        # Reusable components
+        │   └── SkillSyncLogo.js
+        └── contexts/          # React contexts
+            └── AuthContext.js
 ```
 
 ## 🔧 Technology Stack
 
 ### Backend
-
-- **Framework**: FastAPI
+- **Framework**: FastAPI (Python 3.11)
 - **ORM**: SQLAlchemy
-- **Database**: PostgreSQL
-- **Auth**: JWT (HS256) + bcrypt
-- **Validation**: Pydantic
-- **API Docs**: Swagger/OpenAPI
+- **Database**: PostgreSQL 16
+- **Authentication**: JWT (HS256) + bcrypt
+- **Validation**: Pydantic v2
+- **Documentation**: Swagger/OpenAPI
+- **Server**: Uvicorn (ASGI)
 
 ### Frontend
-
-- **Framework**: React 18
+- **Framework**: React 19.2.0
 - **Routing**: React Router v6
 - **HTTP Client**: Axios
-- **State Management**: React Context API
-- **Styling**: CSS3 with responsive design
-- **Build Tool**: Create React App
+- **State Management**: React Context API + Hooks
+- **Styling**: CSS3 (Component-scoped)
+- **Build Tool**: Webpack 5
 
 ### Infrastructure
-
-- **Containerization**: Docker & Docker Compose
-- **Network**: Internal Docker network with volume persistence
+- **Containerization**: Docker & Docker Compose v2
+- **Base Images**: 
+  - Frontend: node:22-alpine
+  - Backend: python:3.11-slim
+  - Database: postgres:16
+- **Volumes**: Persistent storage for database
+- **Network**: Bridge network for inter-service communication
+- **Environment**: Development with hot-reload enabled
 
 ## 📚 API Endpoints
 
-### Profile Endpoints
-
-```
-GET    /api/users/me/profile              # Get current user profile
-PUT    /api/users/me/profile              # Update profile
-GET    /api/users/{user_id}/profile       # Get public profile
-
-GET    /api/users/me/skills               # List user skills
-POST   /api/users/me/skills/{skill_id}    # Add skill
-DELETE /api/users/me/skills/{skill_id}    # Remove skill
-
-GET    /api/users/me/career-interests     # Get career interests
-POST   /api/users/me/career-interests     # Set career interests
-
-PUT    /api/users/me/experience           # Update experience
-PUT    /api/users/me/cv                   # Update CV
-```
-
-### Job Endpoints
-
-```
-GET    /api/jobs                          # List all jobs
-GET    /api/jobs/{id}                     # Get job details
-GET    /api/jobs/search?q=...             # Search jobs
-GET    /api/skills                        # List available skills
-POST   /api/jobs/seed                     # Seed test data (admin)
-```
-
 ### Authentication
-
+```http
+POST   /api/users/register          # User registration
+POST   /api/users/login             # User login
+POST   /api/admin/login             # Admin login
+POST   /api/admin/init              # Initialize admin account
+GET    /api/users/me                # Get current user
+GET    /api/admin/me                # Get current admin
 ```
-POST   /api/auth/register                 # Register user
-POST   /api/auth/login                    # Login user
-POST   /api/admin/login                   # Admin login
+
+### User Profile
+```http
+GET    /api/users/me                # Get profile
+PUT    /api/users/me                # Update profile
+POST   /api/users/me/skills         # Add skill
+DELETE /api/users/me/skills         # Remove skill
+GET    /api/users/me/skills         # List user skills
+PUT    /api/users/me/cv             # Update CV
 ```
 
-All protected endpoints require `Authorization: Bearer {token}` header.
+### Jobs (Public)
+```http
+GET    /api/jobs                    # List active jobs
+GET    /api/jobs/{id}               # Get job details
+```
+
+### Admin - Users
+```http
+GET    /api/admin/users             # List all users (paginated)
+```
+
+### Admin - Skills
+```http
+GET    /api/admin/skills            # List all skills
+POST   /api/admin/skills            # Create skill
+DELETE /api/admin/skills/{id}       # Delete skill
+```
+
+### Admin - Jobs
+```http
+GET    /api/admin/jobs              # List all jobs
+POST   /api/admin/jobs              # Create job
+PUT    /api/admin/jobs/{id}         # Update job
+DELETE /api/admin/jobs/{id}         # Delete job
+```
+
+### Admin - Courses
+```http
+GET    /api/admin/courses           # List all courses
+POST   /api/admin/courses           # Create course
+PUT    /api/admin/courses/{id}      # Update course
+DELETE /api/admin/courses/{id}      # Delete course
+GET    /api/courses                 # List active courses (public)
+GET    /api/courses/{id}            # Get course details (public)
+```
+
+### Admin - Dashboard
+```http
+GET    /api/admin/dashboard/stats   # Get platform statistics
+```
+
+**Authentication**: Protected endpoints require `Authorization: Bearer {token}` header
 
 ## 🎨 Design System
 
@@ -261,31 +473,75 @@ See `FEATURE2_TESTING_GUIDE.md` for comprehensive testing procedures.
 - `FEATURE2_IMPLEMENTATION_COMPLETE.md` - Complete status overview
 - `FEATURE2_TESTING_GUIDE.md` - Testing procedures and checklist
 
-## 🚀 Deployment
+## 🚀 Production Deployment
 
-### Build Docker Images
+### Environment Setup
 
-```bash
-docker-compose build
+1. **Update `.env` for production**:
+```env
+# Use strong secrets
+SECRET_KEY=<generate-strong-random-key>
+POSTGRES_PASSWORD=<strong-database-password>
+
+# Update CORS origins
+CORS_ORIGINS=https://yourdomain.com
+
+# Optional: Use external database
+DATABASE_URL=postgresql://user:pass@host:5432/dbname
 ```
 
-### Run Production
-
+2. **Build production images**:
 ```bash
-docker-compose up -d
+docker compose build --no-cache
 ```
 
-### Check Service Status
-
+3. **Deploy**:
 ```bash
-docker-compose ps
-docker-compose logs -f
+# Start in detached mode
+docker compose up -d
+
+# Check health
+docker compose ps
+docker compose logs --tail=50
 ```
 
-### Stop Services
+4. **Setup SSL/TLS** (Recommended):
+   - Use nginx or Traefik as reverse proxy
+   - Configure Let's Encrypt certificates
+   - Update CORS settings accordingly
+
+### Backup & Restore
+
+**Backup**:
+```bash
+# Database backup
+docker compose exec db pg_dump -U nutrimap_user nutrimap_db > backup_$(date +%Y%m%d).sql
+
+# Volume backup
+docker run --rm -v nutrimap_db_data:/data -v $(pwd):/backup alpine tar czf /backup/db_backup.tar.gz /data
+```
+
+**Restore**:
+```bash
+# From SQL dump
+docker compose exec -T db psql -U nutrimap_user -d nutrimap_db < backup_20241113.sql
+
+# From volume backup
+docker run --rm -v nutrimap_db_data:/data -v $(pwd):/backup alpine tar xzf /backup/db_backup.tar.gz
+```
+
+### Monitoring
 
 ```bash
-docker-compose down
+# Watch logs
+docker compose logs -f
+
+# Check resource usage
+docker stats
+
+# Health checks
+curl http://localhost:8000/docs  # API health
+curl http://localhost:3000       # Frontend health
 ```
 
 ## 🤝 Contributing
@@ -319,56 +575,97 @@ None currently. See GitHub Issues for tracking.
 - **Lighthouse Score**: 85+
 - **Mobile Performance**: 60fps animations
 
-## 🔮 Future Roadmap
+## 🔮 Roadmap
 
-### Q1 2024
+### Phase 1: Core Platform ✅
+- [x] User authentication & profiles
+- [x] Skills management
+- [x] Job listings & matching
+- [x] Course management
+- [x] Admin panel (users, jobs, courses, skills)
+- [x] Dashboard analytics
 
-- [ ] Job application tracking system
-- [ ] Resume file upload & parsing
-- [ ] Email notifications
-
-### Q2 2024
-
-- [ ] AI job recommendations
+### Phase 2: AI Integration (Ready)
+- [ ] Personalized learning paths
 - [ ] Skill gap analysis
+- [ ] Smart job recommendations
+- [ ] Career trajectory planning
+- [ ] Resume optimization
+
+### Phase 3: Advanced Features
+- [ ] Job application tracking
+- [ ] Resume/CV file upload & parsing
+- [ ] Email notifications
 - [ ] LinkedIn integration
-
-### Q3 2024
-
-- [ ] Advanced analytics dashboard
-- [ ] Interview preparation tools
 - [ ] Skill endorsements
+- [ ] Interview preparation tools
 
-### Q4 2024
-
+### Phase 4: Scale & Mobile
 - [ ] Mobile app (React Native)
-- [ ] Video interview feature
+- [ ] Video interviews
 - [ ] Employer dashboard
+- [ ] API marketplace
+- [ ] Advanced analytics
+
+## 🐛 Common Issues & Solutions
+
+### Frontend won't start
+```bash
+# Clear node modules and rebuild
+docker compose down
+docker compose build --no-cache frontend
+docker compose up -d frontend
+```
+
+### Backend won't connect to database
+```bash
+# Check database is running
+docker compose ps db
+
+# Restart database
+docker compose restart db
+
+# Check database logs
+docker compose logs db
+```
+
+### Database connection refused
+```bash
+# Ensure DATABASE_URL uses service name
+DATABASE_URL=postgresql://user:pass@db:5432/dbname
+# NOT localhost!
+```
+
+### Port already in use
+```bash
+# Find process using port
+netstat -ano | findstr :3000
+netstat -ano | findstr :8000
+
+# Kill process or change port in docker-compose.yml
+```
+
+### Hot reload not working
+```bash
+# Ensure volumes are mounted correctly in docker-compose.yml
+# Restart specific service
+docker compose restart frontend
+```
 
 ## 📞 Support
 
-For issues or questions:
-
-1. Check documentation files
-2. Review code comments
-3. Check API documentation at /docs
-4. Review test files for usage examples
+- 📚 **API Documentation**: http://localhost:8000/docs
+- 🔧 **Check Logs**: `docker compose logs -f`
+- 🐛 **Issues**: Create GitHub issue with logs
+- 💬 **Questions**: Check code comments and inline documentation
 
 ## 📄 License
 
 Proprietary - All rights reserved
 
-## 👥 Team
-
-Built for hackathon with focus on:
-
-- Professional design
-- User experience
-- Code quality
-- Scalability
-
 ---
 
-**Last Updated**: 2024
-**Status**: Feature #2 Complete - Ready for Feature #3
+**Project**: SkillSync Platform  
+**Last Updated**: November 2025  
+**Status**: Production Ready - Phase 1 Complete  
 **Version**: 1.0.0
