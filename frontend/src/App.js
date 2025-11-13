@@ -125,6 +125,14 @@ function AppRoutes() {
       />
 
       {/* Jobs routes removed per request */}
+      <Route
+        path="/jobs"
+        element={
+          <ProtectedUserRoute>
+            <Jobs />
+          </ProtectedUserRoute>
+        }
+      />
 
       <Route
         path="/profile"

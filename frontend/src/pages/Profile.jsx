@@ -8,6 +8,7 @@ import profileAPI from "../services/profileService";
 import api from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 import "./Profile.css";
+import Navbar from "../components/Navbar";
 
 const Profile = () => {
   const { getCurrentUser } = useAuth();
@@ -39,7 +40,7 @@ const Profile = () => {
     try {
       const [profileData, skillsResponse] = await Promise.all([
         profileAPI.getProfile(),
-        api.get('/skills'),
+        api.get("/skills"),
       ]);
       setProfile(profileData);
       setAvailableSkills(skillsResponse.data || []);
@@ -199,6 +200,7 @@ const Profile = () => {
 
   return (
     <div className="profile-page">
+      <Navbar />
       <div className="profile-container">
         <div className="profile-header">
           <div className="profile-header-content">

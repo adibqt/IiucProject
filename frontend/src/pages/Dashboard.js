@@ -3,14 +3,108 @@
  * Main page for authenticated users
  */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "./Dashboard.css";
+import Navbar from "../components/Navbar";
+import api from "../services/api";
+import profileAPI from "../services/profileService";
+import "./Jobs.css"; // reuse compact job card styles
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { user, logout, isAuthenticated } = useAuth();
+  const [recommendedJobs, setRecommendedJobs] = useState([]);
+  const carouselRef = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const scrollCarousel = useCallback((direction = 1) => {
+    const el = carouselRef.current;
+    if (!el) return;
+
+    const card = el.querySelector(".recommended-job-card");
+    const cardWidth = card
+      ? card.getBoundingClientRect().width
+      : el.clientWidth;
+    const gap = 16;
+
+    el.scrollBy({
+      left: direction * (cardWidth + gap),
+      behavior: "smooth",
+    });
+  }, []);
+
+  useEffect(() => {
+    // Fetch profile skills and jobs, compute deterministic matches
+    const loadRecommendations = async () => {
+      try {
+        const profile = await profileAPI.getProfile();
+        const userSkillIds = (profile?.skills || []).map((s) => String(s.id));
+        const userSet = new Set(userSkillIds);
+
+        const resp = await api.get("/jobs");
+        const jobs = resp?.data || [];
+
+        const matched = jobs
+          .map((job) => {
+            let req = [];
+            try {
+              req = job.required_skills ? JSON.parse(job.required_skills) : [];
+            } catch (e) {
+              // malformed JSON, ignore
+              req = [];
+            }
+            const reqIds = (req || []).map((r) => String(r));
+            const matchedIds = reqIds.filter((id) => userSet.has(id));
+            const matchedCount = matchedIds.length;
+            const requiredCount = reqIds.length;
+            if (matchedCount === 0) return null; // exclude no-overlap
+
+            return {
+              ...job,
+              _matched_count: matchedCount,
+              _required_count: requiredCount,
+              _is_full: requiredCount > 0 && matchedCount === requiredCount,
+              _match_label:
+                requiredCount > 0 && matchedCount === requiredCount
+                  ? "Full match"
+                  : `${matchedCount} match${matchedCount > 1 ? "es" : ""}`,
+            };
+          })
+          .filter(Boolean);
+
+        const full = matched.filter((j) => j._is_full);
+        const partial = matched
+          .filter((j) => !j._is_full)
+          .sort((a, b) => b._matched_count - a._matched_count);
+
+        setRecommendedJobs([...full, ...partial]);
+      } catch (err) {
+        // silently fail; keep recommendedJobs empty
+        console.error("Failed to load job recommendations", err);
+      }
+    };
+
+    loadRecommendations();
+  }, []);
+
+  // auto-scroll carousel: advance by container width every 4s
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el || recommendedJobs.length <= 3) return; // nothing to scroll
+
+    const interval = setInterval(() => {
+      if (isPaused) return;
+      const maxScrollLeft = el.scrollWidth - el.clientWidth;
+      if (el.scrollLeft >= maxScrollLeft - 4) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        scrollCarousel(1);
+      }
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [recommendedJobs, isPaused, scrollCarousel]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -42,55 +136,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Header/Navbar */}
-      <header className="dashboard-header">
-        <div className="dashboard-header-content">
-          <h1 className="dashboard-logo">SkillSync</h1>
-          <nav className="dashboard-nav">
-            <ul className="dashboard-nav-list">
-              <li>
-                <a href="#dashboard" className="dashboard-nav-link active">
-                  Dashboard
-                </a>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigate("/profile")}
-                  className="dashboard-nav-link"
-                  style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  Profile
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigate("/jobs")}
-                  className="dashboard-nav-link"
-                  style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  Jobs
-                </button>
-              </li>
-              <li>
-                <a href="#resources" className="dashboard-nav-link">
-                  Resources
-                </a>
-              </li>
-            </ul>
-            <button className="dashboard-logout-button" onClick={handleLogout}>
-              Logout
-            </button>
-          </nav>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Main Content */}
       <main className="dashboard-main">
@@ -140,24 +186,87 @@ const Dashboard = () => {
             </div>
           </section>
 
-          {/* Coming Soon Features */}
-          <section className="dashboard-section">
-            <h3>Coming Soon</h3>
-            <div className="coming-soon-grid">
-              <div className="coming-soon-card">
-                <div className="coming-soon-icon">📚</div>
-                <h4>Recommended Resources</h4>
-                <p>Get personalized learning resources</p>
-              </div>
-              <div className="coming-soon-card">
-                <div className="coming-soon-icon">🎯</div>
-                <h4>Job Matches</h4>
-                <p>Find jobs that match your skills</p>
-              </div>
-              <div className="coming-soon-card">
-                <div className="coming-soon-icon">🗺️</div>
-                <h4>Career Roadmap</h4>
-                <p>Plan your career path with AI</p>
+          {/* Recommended Jobs (based on user's skills) */}
+          <section className="dashboard-section dashboard-section--centered">
+            <h3>
+              <span>Recommended Jobs</span>
+              {recommendedJobs.length > 0 && (
+                <div
+                  className="jobs-scroll-controls"
+                  role="group"
+                  aria-label="Recommended jobs navigation"
+                >
+                  <button
+                    type="button"
+                    className="jobs-scroll-btn"
+                    onClick={() => scrollCarousel(-1)}
+                    aria-label="Scroll recommended jobs left"
+                  >
+                    ←
+                  </button>
+                  <button
+                    type="button"
+                    className="jobs-scroll-btn"
+                    onClick={() => scrollCarousel(1)}
+                    aria-label="Scroll recommended jobs right"
+                  >
+                    →
+                  </button>
+                </div>
+              )}
+            </h3>
+            <div className="recommended-jobs-grid">
+              {recommendedJobs.length === 0 && (
+                <div className="coming-soon-card">
+                  <div className="coming-soon-icon">🎯</div>
+                  <h4>No matched jobs</h4>
+                  <p>We couldn't find jobs matching your skills yet.</p>
+                </div>
+              )}
+
+              <div
+                className="recommended-jobs-list"
+                ref={carouselRef}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+              >
+                {recommendedJobs.map((job) => (
+                  <div
+                    key={job.id}
+                    className="job-card-compact recommended-job-card"
+                    onClick={() => navigate(`/jobs`)}
+                    role="button"
+                    tabIndex={0}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <div className="job-card-header">
+                      {job.company_logo && (
+                        <img
+                          src={job.company_logo}
+                          alt={job.company_name}
+                          className="company-logo-compact"
+                        />
+                      )}
+                    </div>
+
+                    <div className="job-card-content">
+                      <h3 className="job-title-compact">{job.title}</h3>
+                      <p className="company-name-compact">{job.company_name}</p>
+
+                      <div className="job-card-meta">
+                        <span className="meta-item">{job.location}</span>
+                        <span className="meta-item">{job.job_type}</span>
+                      </div>
+
+                      <div className="job-card-footer">
+                        <span className="job-posted">{job._match_label}</span>
+                        <span className="job-views-compact">
+                          🔧 {job._matched_count}/{job._required_count}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
