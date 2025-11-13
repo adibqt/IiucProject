@@ -10,11 +10,11 @@ from datetime import datetime
 
 # Import local modules
 from database import engine, Base, get_db
-from models import User, UserRole, Skill, Course, AdminLog, Job
+from models import User, UserRole, Skill, Course, AdminLog
 from schemas import (
     AdminLogin, Token, UserResponse, SuccessResponse, 
     DashboardStats, SkillResponse, CourseResponse,
-    SkillCreate, JobCreate, JobUpdate, JobResponse
+    SkillCreate
 )
 from auth import (
     verify_password, get_password_hash, 
@@ -45,9 +45,6 @@ app.add_middleware(
 
 # Include routers
 app.include_router(user_router)
-# Include job routes (moved to modular router)
-from routes.job_routes import router as job_router
-app.include_router(job_router)
 # Include profile routes (user profile and skill management)
 from routes.profile_routes import router as profile_router
 app.include_router(profile_router)
@@ -223,7 +220,8 @@ async def get_dashboard_stats(current_user: User = Depends(get_admin_user), db: 
     total_users = db.query(func.count(User.id)).scalar()
     total_courses = db.query(func.count(Course.id)).scalar()
     total_skills = db.query(func.count(Skill.id)).scalar()
-    total_jobs = db.query(func.count(Job.id)).filter(Job.is_active == True).scalar()
+    # Jobs feature removed; keep total_jobs as 0 for compatibility
+    total_jobs = 0
     
     new_users_this_month = db.query(func.count(User.id)).filter(
         User.created_at >= this_month_start
