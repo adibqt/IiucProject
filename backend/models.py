@@ -83,8 +83,9 @@ class User(Base):
     bio = Column(Text)
     avatar_url = Column(String(500))
     phone_number = Column(String(20))
-    
-
+    experience_description = Column(Text)  # user's work/project experience
+    career_interests = Column(Text)  # target roles or career paths (JSON array of strings)
+    cv_text = Column(Text)  # stored CV/resume text for later AI analysis
     
     # Metadata
     is_active = Column(Boolean, default=True)

@@ -45,6 +45,12 @@ app.add_middleware(
 
 # Include routers
 app.include_router(user_router)
+# Include job routes (moved to modular router)
+from routes.job_routes import router as job_router
+app.include_router(job_router)
+# Include profile routes (user profile and skill management)
+from routes.profile_routes import router as profile_router
+app.include_router(profile_router)
 
 
 # ==================== Authentication Helpers ====================
@@ -390,139 +396,3 @@ async def delete_skill(
     return {"success": True, "message": f"Skill '{skill_name}' deleted successfully"}
 
 
-# ==================== Admin Job CRUD ====================
-
-@app.get("/api/admin/jobs", response_model=list[JobResponse])
-async def list_jobs_admin(
-    skip: int = 0,
-    limit: int = 50,
-    current_user: User = Depends(get_admin_user),
-    db: Session = Depends(get_db)
-):
-    """
-    List all jobs (admin view)
-    """
-    jobs = db.query(Job).offset(skip).limit(limit).all()
-    return jobs
-
-
-@app.post("/api/admin/jobs", response_model=JobResponse)
-async def create_job(
-    job: JobCreate,
-    current_user: User = Depends(get_admin_user),
-    db: Session = Depends(get_db)
-):
-    """
-    Create a new job posting
-    """
-    new_job = Job(
-        **job.dict(),
-        posted_by=current_user.id
-    )
-    db.add(new_job)
-    db.commit()
-    db.refresh(new_job)
-    
-    # Log action
-    log_admin_action(
-        db, current_user.id, "create_job",
-        "job", new_job.id, f"Created job: {new_job.title}"
-    )
-    
-    return new_job
-
-
-@app.put("/api/admin/jobs/{job_id}", response_model=JobResponse)
-async def update_job(
-    job_id: int,
-    job_update: JobUpdate,
-    current_user: User = Depends(get_admin_user),
-    db: Session = Depends(get_db)
-):
-    """
-    Update a job posting
-    """
-    job = db.query(Job).filter(Job.id == job_id).first()
-    if not job:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Job not found"
-        )
-    
-    # Update fields
-    for field, value in job_update.dict(exclude_unset=True).items():
-        setattr(job, field, value)
-    
-    db.commit()
-    db.refresh(job)
-    
-    # Log action
-    log_admin_action(
-        db, current_user.id, "update_job",
-        "job", job.id, f"Updated job: {job.title}"
-    )
-    
-    return job
-
-
-@app.delete("/api/admin/jobs/{job_id}")
-async def delete_job(
-    job_id: int,
-    current_user: User = Depends(get_admin_user),
-    db: Session = Depends(get_db)
-):
-    """
-    Delete a job posting
-    """
-    job = db.query(Job).filter(Job.id == job_id).first()
-    if not job:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Job not found"
-        )
-    
-    job_title = job.title
-    db.delete(job)
-    db.commit()
-    
-    # Log action
-    log_admin_action(
-        db, current_user.id, "delete_job",
-        "job", job_id, f"Deleted job: {job_title}"
-    )
-    
-    return {"success": True, "message": f"Job '{job_title}' deleted successfully"}
-
-
-# ==================== Public Job Endpoints ====================
-
-@app.get("/api/jobs", response_model=list[JobResponse])
-async def list_jobs_public(
-    skip: int = 0,
-    limit: int = 50,
-    db: Session = Depends(get_db)
-):
-    """
-    List all active jobs (public endpoint)
-    """
-    jobs = db.query(Job).filter(Job.is_active == True).offset(skip).limit(limit).all()
-    return jobs
-
-
-@app.get("/api/jobs/{job_id}", response_model=JobResponse)
-async def get_job(job_id: int, db: Session = Depends(get_db)):
-    """
-    Get a specific job by ID
-    """
-    job = db.query(Job).filter(Job.id == job_id, Job.is_active == True).first()
-    if not job:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Job not found"
-        )
-    
-    # Increment view count
-    job.views_count += 1
-    db.commit()
-    
-    return job

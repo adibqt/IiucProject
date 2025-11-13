@@ -63,6 +63,17 @@ class UserUpdate(BaseModel):
     phone_number: Optional[str] = None
 
 
+class UserProfileUpdate(BaseModel):
+    """Extended user profile update request (includes skills, experience, career interests, CV)"""
+    full_name: Optional[str] = Field(None, min_length=2, max_length=255)
+    bio: Optional[str] = None
+    phone_number: Optional[str] = None
+    avatar_url: Optional[str] = None
+    experience_description: Optional[str] = None
+    career_interests: Optional[str] = None  # JSON array of strings
+    cv_text: Optional[str] = None
+
+
 class UserProfile(BaseModel):
     """User profile response (detailed)"""
     id: int
@@ -71,6 +82,12 @@ class UserProfile(BaseModel):
     username: str
     role: UserRole
     bio: Optional[str]
+    avatar_url: Optional[str] = None
+    phone_number: Optional[str] = None
+    experience_description: Optional[str] = None
+    career_interests: Optional[str] = None
+    cv_text: Optional[str] = None
+    skills: List["SkillResponse"] = []  # Include user's skills
     created_at: datetime
     updated_at: datetime
     
