@@ -54,20 +54,19 @@ const Dashboard = () => {
                 </a>
               </li>
               <li>
-                <Link to="/jobs" className="dashboard-nav-link">
-                  Jobs
-                </Link>
-              </li>
-              <li>
-                <a href="#profile" className="dashboard-nav-link">
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="dashboard-nav-link"
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
                   Profile
-                </a>
+                </button>
               </li>
-              <li>
-                <a href="#skills" className="dashboard-nav-link">
-                  Skills
-                </a>
-              </li>
+
               <li>
                 <a href="#resources" className="dashboard-nav-link">
                   Resources

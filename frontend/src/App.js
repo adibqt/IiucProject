@@ -16,6 +16,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
 import "./App.css";
 
 // Protected Route Component for User Auth
@@ -119,6 +120,17 @@ function AppRoutes() {
         element={
           <ProtectedUserRoute>
             <Dashboard />
+          </ProtectedUserRoute>
+        }
+      />
+
+      {/* Jobs routes removed per request */}
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedUserRoute>
+            <Profile />
           </ProtectedUserRoute>
         }
       />

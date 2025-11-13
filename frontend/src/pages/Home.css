@@ -382,6 +382,15 @@
   display: block;
 }
 
+/* Make inline SVGs size relative to the surrounding font-size so they match the emoji sizing */
+.home-feature-icon svg,
+.home-platform-icon svg {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .home-feature-card h3 {
   font-size: 22px;
   margin-bottom: 15px;
