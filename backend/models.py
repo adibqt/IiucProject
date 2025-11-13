@@ -134,45 +134,32 @@ class Skill(Base):
 
 class Course(Base):
     """
-    Course model - represents learning courses
-    AI-ready: structured for content recommendations and adaptive learning paths
+    Course model - represents learning courses from various platforms
     """
     __tablename__ = "courses"
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False, index=True)
-    slug = Column(String(255), unique=True, nullable=False)
+    platform = Column(String(100), nullable=False)  # YouTube, Coursera, Udemy, etc.
+    url = Column(String(1000), nullable=False)
+    cost_type = Column(String(20), nullable=False)  # free or paid
     description = Column(Text)
-    short_description = Column(String(500))
-    
-    # Course details
-    instructor_id = Column(Integer, ForeignKey('users.id'))
-    duration_hours = Column(Integer)
-    difficulty_level = Column(Enum(SkillLevel), default=SkillLevel.BEGINNER)
-    status = Column(Enum(CourseStatus), default=CourseStatus.DRAFT)
-    
-    # Media and resources
     thumbnail_url = Column(String(500))
-    video_intro_url = Column(String(500))
-    course_content = Column(Text)  # JSON structure of modules and lessons
     
-    # AI-ready fields
-    prerequisites = Column(Text)  # JSON array of required skills
-    learning_outcomes = Column(Text)  # JSON array for AI to match with user goals
-    target_audience = Column(Text)  # For AI-powered recommendations
+    # Related skills stored as JSON array of skill IDs
+    related_skills = Column(Text)  # JSON array of skill IDs
     
-    # Analytics for AI
+    # Analytics
     enrollment_count = Column(Integer, default=0)
-    completion_rate = Column(Float, default=0.0)
-    average_rating = Column(Float, default=0.0)
+    views_count = Column(Integer, default=0)
     
     # Metadata
-    is_published = Column(Boolean, default=False)
-    published_at = Column(DateTime)
+    is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
     
-    # Relationships
+    # Keep relationships for backward compatibility
+    instructor_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     instructor = relationship("User", back_populates="courses_created", foreign_keys=[instructor_id])
     skills = relationship("Skill", secondary=course_skills, back_populates="courses")
     enrolled_students = relationship("User", secondary=course_enrollments, back_populates="enrolled_courses")

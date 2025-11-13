@@ -14,7 +14,8 @@ from models import User, UserRole, Skill, Course, AdminLog, Job
 from schemas import (
     AdminLogin, Token, UserResponse, SuccessResponse, 
     DashboardStats, SkillResponse, CourseResponse,
-    SkillCreate, JobCreate, JobUpdate, JobResponse
+    SkillCreate, JobCreate, JobUpdate, JobResponse,
+    CourseCreate, CourseUpdate
 )
 from auth import (
     verify_password, get_password_hash, 
@@ -228,8 +229,8 @@ async def get_dashboard_stats(current_user: User = Depends(get_admin_user), db: 
         User.created_at >= this_month_start
     ).scalar()
     
-    courses_published_this_month = db.query(func.count(Course.id)).filter(
-        Course.published_at >= this_month_start
+    courses_added_this_month = db.query(func.count(Course.id)).filter(
+        Course.created_at >= this_month_start
     ).scalar()
     
     return {
@@ -239,7 +240,7 @@ async def get_dashboard_stats(current_user: User = Depends(get_admin_user), db: 
         "total_jobs": total_jobs or 0,
         "active_enrollments": 0,  # Will be calculated with enrollments
         "new_users_this_month": new_users_this_month or 0,
-        "courses_published_this_month": courses_published_this_month or 0
+        "courses_published_this_month": courses_added_this_month or 0
     }
 
 
@@ -549,5 +550,169 @@ async def get_job(
     db.refresh(job)
     
     return job
+
+
+# ==================== Course Management (Admin) ====================
+
+@app.get("/api/admin/courses", response_model=list[CourseResponse])
+async def list_admin_courses(
+    skip: int = 0,
+    limit: int = 100,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get all courses for admin management
+    """
+    courses = db.query(Course).offset(skip).limit(limit).all()
+    return courses
+
+
+@app.post("/api/admin/courses", response_model=CourseResponse, status_code=status.HTTP_201_CREATED)
+async def create_course(
+    course_data: CourseCreate,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Create a new course (admin only)
+    """
+    import json
+    
+    # Create course
+    new_course = Course(
+        title=course_data.title,
+        platform=course_data.platform,
+        url=course_data.url,
+        cost_type=course_data.cost_type,
+        description=course_data.description,
+        thumbnail_url=course_data.thumbnail_url,
+        related_skills=json.dumps(course_data.related_skills) if course_data.related_skills else None,
+        is_active=course_data.is_active,
+        enrollment_count=0,
+        views_count=0
+    )
+    
+    db.add(new_course)
+    db.commit()
+    db.refresh(new_course)
+    
+    # Log action
+    log_admin_action(
+        db, current_user.id, "create_course",
+        "course", new_course.id, f"Created course: {new_course.title}"
+    )
+    
+    return new_course
+
+
+@app.put("/api/admin/courses/{course_id}", response_model=CourseResponse)
+async def update_course(
+    course_id: int,
+    course_data: CourseUpdate,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Update a course (admin only)
+    """
+    import json
+    
+    course = db.query(Course).filter(Course.id == course_id).first()
+    if not course:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Course not found"
+        )
+    
+    # Update fields
+    update_data = course_data.dict(exclude_unset=True)
+    
+    # Handle related_skills separately
+    if 'related_skills' in update_data and update_data['related_skills'] is not None:
+        update_data['related_skills'] = json.dumps(update_data['related_skills'])
+    
+    for field, value in update_data.items():
+        setattr(course, field, value)
+    
+    course.updated_at = datetime.utcnow()
+    db.commit()
+    db.refresh(course)
+    
+    # Log action
+    log_admin_action(
+        db, current_user.id, "update_course",
+        "course", course.id, f"Updated course: {course.title}"
+    )
+    
+    return course
+
+
+@app.delete("/api/admin/courses/{course_id}")
+async def delete_course(
+    course_id: int,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Delete a course (admin only)
+    """
+    course = db.query(Course).filter(Course.id == course_id).first()
+    if not course:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Course not found"
+        )
+    
+    course_title = course.title
+    db.delete(course)
+    db.commit()
+    
+    # Log action
+    log_admin_action(
+        db, current_user.id, "delete_course",
+        "course", course_id, f"Deleted course: {course_title}"
+    )
+    
+    return {"success": True, "message": f"Course '{course_title}' deleted successfully"}
+
+
+# ==================== Course Management (Public) ====================
+
+@app.get("/api/courses", response_model=list[CourseResponse])
+async def list_courses(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """
+    Get all active courses (public access)
+    """
+    courses = db.query(Course).filter(Course.is_active == True).offset(skip).limit(limit).all()
+    return courses
+
+
+@app.get("/api/courses/{course_id}", response_model=CourseResponse)
+async def get_course(
+    course_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    Get a specific course by ID (public access)
+    Increments view count
+    """
+    course = db.query(Course).filter(Course.id == course_id, Course.is_active == True).first()
+    if not course:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Course not found"
+        )
+    
+    # Increment view count
+    course.views_count += 1
+    db.commit()
+    db.refresh(course)
+    
+    return course
 
 

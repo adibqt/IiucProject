@@ -137,10 +137,23 @@ export const jobsAPI = {
 
 // Courses API
 export const coursesAPI = {
-  list: async (skip = 0, limit = 50) => {
-    const response = await api.get(
-      `/admin/courses?skip=${skip}&limit=${limit}`
-    );
+  list: async (skip = 0, limit = 100) => {
+    const response = await api.get(`/admin/courses?skip=${skip}&limit=${limit}`);
+    return response.data;
+  },
+
+  create: async (courseData) => {
+    const response = await api.post("/admin/courses", courseData);
+    return response.data;
+  },
+
+  update: async (courseId, courseData) => {
+    const response = await api.put(`/admin/courses/${courseId}`, courseData);
+    return response.data;
+  },
+
+  delete: async (courseId) => {
+    const response = await api.delete(`/admin/courses/${courseId}`);
     return response.data;
   },
 };

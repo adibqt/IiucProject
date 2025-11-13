@@ -165,29 +165,41 @@ class SkillResponse(SkillBase):
 # Course Schemas
 class CourseBase(BaseModel):
     """Base course information"""
-    title: str = Field(..., min_length=5, max_length=255)
+    title: str = Field(..., min_length=3, max_length=255)
+    platform: str = Field(..., min_length=2, max_length=100, description="e.g., YouTube, Coursera, Udemy")
+    url: str = Field(..., min_length=10, max_length=1000)
+    cost_type: str = Field(..., description="free or paid")
     description: Optional[str] = None
-    short_description: Optional[str] = Field(None, max_length=500)
-    difficulty_level: SkillLevel = SkillLevel.BEGINNER
+    thumbnail_url: Optional[str] = None
 
 
 class CourseCreate(CourseBase):
     """Course creation request"""
-    slug: str
-    duration_hours: Optional[int] = None
-    prerequisites: Optional[str] = None
-    learning_outcomes: Optional[str] = None
+    related_skills: Optional[List[int]] = []  # List of skill IDs
+    is_active: bool = True
+
+
+class CourseUpdate(BaseModel):
+    """Course update request"""
+    title: Optional[str] = Field(None, min_length=3, max_length=255)
+    platform: Optional[str] = Field(None, min_length=2, max_length=100)
+    url: Optional[str] = Field(None, min_length=10, max_length=1000)
+    cost_type: Optional[str] = None
+    description: Optional[str] = None
+    thumbnail_url: Optional[str] = None
+    related_skills: Optional[List[int]] = None
+    is_active: Optional[bool] = None
 
 
 class CourseResponse(CourseBase):
     """Course response"""
     id: int
-    slug: str
-    instructor_id: Optional[int] = None
+    related_skills: Optional[str] = None  # JSON string of skill IDs
     enrollment_count: int
-    average_rating: float
-    is_published: bool
+    views_count: int
+    is_active: bool
     created_at: datetime
+    updated_at: datetime
     
     class Config:
         from_attributes = True
