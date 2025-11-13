@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import profileAPI from "../services/profileService";
-import jobAPI from "../services/jobService";
+import api from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 import "./Profile.css";
 
@@ -37,12 +37,12 @@ const Profile = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [profileData, skillsData] = await Promise.all([
+      const [profileData, skillsResponse] = await Promise.all([
         profileAPI.getProfile(),
-        jobAPI.listSkillsPublic(),
+        api.get('/skills'),
       ]);
       setProfile(profileData);
-      setAvailableSkills(skillsData || []);
+      setAvailableSkills(skillsResponse.data || []);
       setBasicForm({
         full_name: profileData.full_name || "",
         bio: profileData.bio || "",

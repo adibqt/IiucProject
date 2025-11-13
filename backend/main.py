@@ -10,11 +10,11 @@ from datetime import datetime
 
 # Import local modules
 from database import engine, Base, get_db
-from models import User, UserRole, Skill, Course, AdminLog
+from models import User, UserRole, Skill, Course, AdminLog, Job
 from schemas import (
     AdminLogin, Token, UserResponse, SuccessResponse, 
     DashboardStats, SkillResponse, CourseResponse,
-    SkillCreate
+    SkillCreate, JobCreate, JobUpdate, JobResponse
 )
 from auth import (
     verify_password, get_password_hash, 
@@ -406,5 +406,148 @@ async def delete_skill(
     )
     
     return {"success": True, "message": f"Skill '{skill_name}' deleted successfully"}
+
+
+# ==================== Job Management (Admin) ====================
+
+@app.get("/api/admin/jobs", response_model=list[JobResponse])
+async def list_admin_jobs(
+    skip: int = 0,
+    limit: int = 100,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Get all jobs (admin only)
+    """
+    jobs = db.query(Job).offset(skip).limit(limit).all()
+    return jobs
+
+
+@app.post("/api/admin/jobs", response_model=JobResponse, status_code=status.HTTP_201_CREATED)
+async def create_job(
+    job: JobCreate,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Create a new job posting (admin only)
+    """
+    # Create new job
+    new_job = Job(**job.dict(), posted_by=current_user.id)
+    db.add(new_job)
+    db.commit()
+    db.refresh(new_job)
+    
+    # Log action
+    log_admin_action(
+        db, current_user.id, "create_job", 
+        "job", new_job.id, f"Created job: {new_job.title} at {new_job.company_name}"
+    )
+    
+    return new_job
+
+
+@app.put("/api/admin/jobs/{job_id}", response_model=JobResponse)
+async def update_job(
+    job_id: int,
+    job_update: JobUpdate,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Update a job posting (admin only)
+    """
+    job = db.query(Job).filter(Job.id == job_id).first()
+    if not job:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Job not found"
+        )
+    
+    # Update job fields
+    update_data = job_update.dict(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(job, field, value)
+    
+    db.commit()
+    db.refresh(job)
+    
+    # Log action
+    log_admin_action(
+        db, current_user.id, "update_job",
+        "job", job.id, f"Updated job: {job.title}"
+    )
+    
+    return job
+
+
+@app.delete("/api/admin/jobs/{job_id}")
+async def delete_job(
+    job_id: int,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Delete a job posting (admin only)
+    """
+    job = db.query(Job).filter(Job.id == job_id).first()
+    if not job:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Job not found"
+        )
+    
+    job_title = job.title
+    company = job.company_name
+    db.delete(job)
+    db.commit()
+    
+    # Log action
+    log_admin_action(
+        db, current_user.id, "delete_job",
+        "job", job_id, f"Deleted job: {job_title} at {company}"
+    )
+    
+    return {"success": True, "message": f"Job '{job_title}' deleted successfully"}
+
+
+# ==================== Job Management (Public) ====================
+
+@app.get("/api/jobs", response_model=list[JobResponse])
+async def list_jobs(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """
+    Get all active jobs (public access)
+    """
+    jobs = db.query(Job).filter(Job.is_active == True).offset(skip).limit(limit).all()
+    return jobs
+
+
+@app.get("/api/jobs/{job_id}", response_model=JobResponse)
+async def get_job(
+    job_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    Get a specific job by ID (public access)
+    Increments view count
+    """
+    job = db.query(Job).filter(Job.id == job_id, Job.is_active == True).first()
+    if not job:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Job not found"
+        )
+    
+    # Increment view count
+    job.views_count += 1
+    db.commit()
+    db.refresh(job)
+    
+    return job
 
 
