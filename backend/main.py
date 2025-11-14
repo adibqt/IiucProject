@@ -52,6 +52,9 @@ app.include_router(profile_router)
 # Include CV routes (CV/Resume management)
 from routes.cv_routes import router as cv_router
 app.include_router(cv_router)
+# Include job recommendation routes (AI-powered job matching)
+from routes.job_recommendation_routes import router as job_recommendation_router
+app.include_router(job_recommendation_router)
 
 
 # ==================== Authentication Helpers ====================
