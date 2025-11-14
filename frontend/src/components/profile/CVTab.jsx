@@ -1,79 +1,25 @@
 /**
- * CV/Resume Tab Component - Fresh implementation
- * Structured CV input with all required fields
+ * CV/Resume Tab Component - PDF Upload Only
+ * Users can upload, view, and delete their CV as a PDF file
  */
 import React, { useState, useEffect } from "react";
 import cvAPI from "../../services/cvService";
-import api from "../../services/api";
 
 const CVTab = ({ profile, onUpdate, onError, onSuccess }) => {
   const [loading, setLoading] = useState(false);
-  const [availableSkills, setAvailableSkills] = useState([]);
-
-  // CV Form State
-  const [cvData, setCvData] = useState({
-    personal_summary: "",
-    experiences: [],
-    education: [],
-    skills: [], // Array of skill IDs
-    tools: [], // Array of strings
-    projects: [],
-    raw_cv_text: "",
-  });
-
-  // Form inputs for adding new items
-  const [newExperience, setNewExperience] = useState({
-    title: "",
-    company: "",
-    location: "",
-    start_date: "",
-    end_date: "",
-    current: false,
-    description: "",
-  });
-
-  const [newEducation, setNewEducation] = useState({
-    degree: "",
-    institution: "",
-    field: "",
-    graduation_year: "",
-    gpa: "",
-  });
-
-  const [newProject, setNewProject] = useState({
-    name: "",
-    description: "",
-    technologies: "",
-    link: "",
-  });
-
-  const [newTool, setNewTool] = useState("");
-  const [selectedSkillIds, setSelectedSkillIds] = useState([]);
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfFilename, setPdfFilename] = useState(null);
   const [uploadingPDF, setUploadingPDF] = useState(false);
 
-  // Load CV data and available skills on mount
+  // Load CV PDF info on mount
   useEffect(() => {
-    loadCVData();
-    loadAvailableSkills();
+    loadCVPDF();
   }, []);
 
-  const loadCVData = async () => {
+  const loadCVPDF = async () => {
     try {
       setLoading(true);
       const cv = await cvAPI.getCV();
-      console.log("CV loaded successfully:", cv);
-      setCvData({
-        personal_summary: cv.personal_summary || "",
-        experiences: cv.experiences || [],
-        education: cv.education || [],
-        skills: cv.skills || [],
-        tools: cv.tools || [],
-        projects: cv.projects || [],
-        raw_cv_text: cv.raw_cv_text || "",
-      });
-      setSelectedSkillIds(cv.skills || []);
       setPdfFilename(cv.cv_pdf_filename || null);
     } catch (err) {
       // CV doesn't exist yet, that's okay
@@ -87,201 +33,6 @@ const CVTab = ({ profile, onUpdate, onError, onSuccess }) => {
       }
     } finally {
       setLoading(false);
-    }
-  };
-
-  const loadAvailableSkills = async () => {
-    try {
-      const response = await api.get("/skills");
-      setAvailableSkills(response.data || []);
-    } catch (err) {
-      console.error("Error loading skills:", err);
-    }
-  };
-
-  const handleSave = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      onError(null);
-
-      const cvPayload = {
-        personal_summary: cvData.personal_summary || null,
-        experiences: cvData.experiences,
-        education: cvData.education,
-        skills: selectedSkillIds,
-        tools: cvData.tools,
-        projects: cvData.projects,
-        raw_cv_text: cvData.raw_cv_text || null,
-      };
-
-      console.log("Saving CV with payload:", cvPayload);
-      const saved = await cvAPI.saveCV(cvPayload);
-      console.log("CV saved successfully:", saved);
-
-      // Update local state with saved data
-      setCvData({
-        personal_summary: saved.personal_summary || "",
-        experiences: saved.experiences || [],
-        education: saved.education || [],
-        skills: saved.skills || [],
-        tools: saved.tools || [],
-        projects: saved.projects || [],
-        raw_cv_text: saved.raw_cv_text || "",
-      });
-      setSelectedSkillIds(saved.skills || []);
-
-      onSuccess("CV saved successfully!");
-    } catch (err) {
-      const errorMessage =
-        err.response?.data?.detail || err.message || "Failed to save CV";
-      console.error("Error saving CV:", err);
-      console.error("Error response:", err.response?.data);
-      onError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleReset = async () => {
-    if (
-      !window.confirm(
-        "Are you sure you want to reset your CV? This action cannot be undone."
-      )
-    ) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await cvAPI.resetCV();
-      setCvData({
-        personal_summary: "",
-        experiences: [],
-        education: [],
-        skills: [],
-        tools: [],
-        projects: [],
-        raw_cv_text: "",
-      });
-      setSelectedSkillIds([]);
-      onSuccess("CV reset successfully!");
-    } catch (err) {
-      onError(err.response?.data?.detail || "Failed to reset CV");
-      console.error("Error resetting CV:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Experience handlers
-  const handleAddExperience = () => {
-    if (!newExperience.title || !newExperience.company) {
-      onError("Title and company are required");
-      return;
-    }
-    setCvData({
-      ...cvData,
-      experiences: [...cvData.experiences, { ...newExperience }],
-    });
-    setNewExperience({
-      title: "",
-      company: "",
-      location: "",
-      start_date: "",
-      end_date: "",
-      current: false,
-      description: "",
-    });
-  };
-
-  const handleRemoveExperience = (index) => {
-    setCvData({
-      ...cvData,
-      experiences: cvData.experiences.filter((_, i) => i !== index),
-    });
-  };
-
-  // Education handlers
-  const handleAddEducation = () => {
-    if (!newEducation.degree || !newEducation.institution) {
-      onError("Degree and institution are required");
-      return;
-    }
-    setCvData({
-      ...cvData,
-      education: [...cvData.education, { ...newEducation }],
-    });
-    setNewEducation({
-      degree: "",
-      institution: "",
-      field: "",
-      graduation_year: "",
-      gpa: "",
-    });
-  };
-
-  const handleRemoveEducation = (index) => {
-    setCvData({
-      ...cvData,
-      education: cvData.education.filter((_, i) => i !== index),
-    });
-  };
-
-  // Project handlers
-  const handleAddProject = () => {
-    if (!newProject.name) {
-      onError("Project name is required");
-      return;
-    }
-    setCvData({
-      ...cvData,
-      projects: [...cvData.projects, { ...newProject }],
-    });
-    setNewProject({
-      name: "",
-      description: "",
-      technologies: "",
-      link: "",
-    });
-  };
-
-  const handleRemoveProject = (index) => {
-    setCvData({
-      ...cvData,
-      projects: cvData.projects.filter((_, i) => i !== index),
-    });
-  };
-
-  // Tools handlers
-  const handleAddTool = () => {
-    if (!newTool.trim()) {
-      return;
-    }
-    if (cvData.tools.includes(newTool.trim())) {
-      onError("Tool already added");
-      return;
-    }
-    setCvData({
-      ...cvData,
-      tools: [...cvData.tools, newTool.trim()],
-    });
-    setNewTool("");
-  };
-
-  const handleRemoveTool = (index) => {
-    setCvData({
-      ...cvData,
-      tools: cvData.tools.filter((_, i) => i !== index),
-    });
-  };
-
-  // Skills handlers (multi-select from admin-defined skills)
-  const handleToggleSkill = (skillId) => {
-    if (selectedSkillIds.includes(skillId)) {
-      setSelectedSkillIds(selectedSkillIds.filter((id) => id !== skillId));
-    } else {
-      setSelectedSkillIds([...selectedSkillIds, skillId]);
     }
   };
 
@@ -361,7 +112,7 @@ const CVTab = ({ profile, onUpdate, onError, onSuccess }) => {
     }
   };
 
-  if (loading && !cvData.personal_summary && cvData.experiences.length === 0) {
+  if (loading) {
     return (
       <div className="tab-panel">
         <div className="profile-loading">Loading CV...</div>
@@ -371,688 +122,192 @@ const CVTab = ({ profile, onUpdate, onError, onSuccess }) => {
 
   return (
     <div className="tab-panel">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <div>
-          <h2>CV/Resume</h2>
-          <p className="tab-description">
-            Build your structured CV/resume. All information is stored securely
-            for future AI analysis and job matching.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={handleReset}
-          className="home-btn home-btn-secondary"
-          style={{ marginTop: "0" }}
-        >
-          Reset CV
-        </button>
+      <div>
+        <h2>CV/Resume</h2>
+        <p className="tab-description">
+          Upload your CV/resume as a PDF file. You can only have one PDF at a
+          time. To upload a new PDF, delete the current one first.
+        </p>
       </div>
 
-      <form onSubmit={handleSave} className="profile-form">
-        {/* Personal Summary */}
-        <div className="cv-section">
-          <h3>Personal Summary</h3>
-          <div className="form-group">
-            <label>Professional Summary</label>
-            <textarea
-              value={cvData.personal_summary}
-              onChange={(e) =>
-                setCvData({ ...cvData, personal_summary: e.target.value })
-              }
-              placeholder="Write a brief professional summary..."
-              rows="4"
-            />
-          </div>
-        </div>
-
-        {/* Work Experience */}
-        <div className="cv-section">
-          <h3>Work Experience</h3>
-          <div className="cv-add-item">
-            <div className="form-row">
-              <div className="form-group">
-                <label>Job Title *</label>
-                <input
-                  type="text"
-                  value={newExperience.title}
-                  onChange={(e) =>
-                    setNewExperience({
-                      ...newExperience,
-                      title: e.target.value,
-                    })
-                  }
-                  placeholder="Software Engineer"
-                />
-              </div>
-              <div className="form-group">
-                <label>Company *</label>
-                <input
-                  type="text"
-                  value={newExperience.company}
-                  onChange={(e) =>
-                    setNewExperience({
-                      ...newExperience,
-                      company: e.target.value,
-                    })
-                  }
-                  placeholder="Company Name"
-                />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Location</label>
-                <input
-                  type="text"
-                  value={newExperience.location}
-                  onChange={(e) =>
-                    setNewExperience({
-                      ...newExperience,
-                      location: e.target.value,
-                    })
-                  }
-                  placeholder="City, Country"
-                />
-              </div>
-              <div className="form-group">
-                <label>Start Date</label>
-                <input
-                  type="text"
-                  value={newExperience.start_date}
-                  onChange={(e) =>
-                    setNewExperience({
-                      ...newExperience,
-                      start_date: e.target.value,
-                    })
-                  }
-                  placeholder="MM/YYYY"
-                />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>End Date</label>
-                <input
-                  type="text"
-                  value={newExperience.end_date}
-                  onChange={(e) =>
-                    setNewExperience({
-                      ...newExperience,
-                      end_date: e.target.value,
-                    })
-                  }
-                  placeholder="MM/YYYY or Present"
-                  disabled={newExperience.current}
-                />
-              </div>
-              <div className="form-group">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={newExperience.current}
-                    onChange={(e) =>
-                      setNewExperience({
-                        ...newExperience,
-                        current: e.target.checked,
-                        end_date: e.target.checked ? "Present" : "",
-                      })
-                    }
-                  />
-                  Current Position
-                </label>
-              </div>
-            </div>
-            <div className="form-group">
-              <label>Description</label>
-              <textarea
-                value={newExperience.description}
-                onChange={(e) =>
-                  setNewExperience({
-                    ...newExperience,
-                    description: e.target.value,
-                  })
-                }
-                placeholder="Describe your responsibilities and achievements..."
-                rows="3"
-              />
-            </div>
-            <button
-              type="button"
-              onClick={handleAddExperience}
-              className="home-btn home-btn-secondary"
-            >
-              + Add Experience
-            </button>
-          </div>
-
-          {cvData.experiences.length > 0 && (
-            <div className="cv-items-list">
-              {cvData.experiences.map((exp, idx) => (
-                <div key={idx} className="cv-item">
-                  <div className="cv-item-content">
-                    <h4 style={{ color: "#ffffff" }}>{exp.title}</h4>
-                    <p style={{ color: "#cbd5e1" }}>
-                      {exp.company}
-                      {exp.location && ` • ${exp.location}`}
-                    </p>
-                    <p style={{ color: "#cbd5e1" }}>
-                      {exp.start_date} - {exp.end_date || "Present"}
-                    </p>
-                    {exp.description && (
-                      <p style={{ color: "#cbd5e1" }}>{exp.description}</p>
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveExperience(idx)}
-                    className="cv-item-remove"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Education */}
-        <div className="cv-section">
-          <h3>Education</h3>
-          <div className="cv-add-item">
-            <div className="form-row">
-              <div className="form-group">
-                <label>Degree *</label>
-                <input
-                  type="text"
-                  value={newEducation.degree}
-                  onChange={(e) =>
-                    setNewEducation({ ...newEducation, degree: e.target.value })
-                  }
-                  placeholder="Bachelor of Science"
-                />
-              </div>
-              <div className="form-group">
-                <label>Institution *</label>
-                <input
-                  type="text"
-                  value={newEducation.institution}
-                  onChange={(e) =>
-                    setNewEducation({
-                      ...newEducation,
-                      institution: e.target.value,
-                    })
-                  }
-                  placeholder="University Name"
-                />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Field of Study</label>
-                <input
-                  type="text"
-                  value={newEducation.field}
-                  onChange={(e) =>
-                    setNewEducation({ ...newEducation, field: e.target.value })
-                  }
-                  placeholder="Computer Science"
-                />
-              </div>
-              <div className="form-group">
-                <label>Graduation Year</label>
-                <input
-                  type="text"
-                  value={newEducation.graduation_year}
-                  onChange={(e) =>
-                    setNewEducation({
-                      ...newEducation,
-                      graduation_year: e.target.value,
-                    })
-                  }
-                  placeholder="2024"
-                />
-              </div>
-            </div>
-            <div className="form-group">
-              <label>GPA (Optional)</label>
-              <input
-                type="text"
-                value={newEducation.gpa}
-                onChange={(e) =>
-                  setNewEducation({ ...newEducation, gpa: e.target.value })
-                }
-                placeholder="3.8/4.0"
-              />
-            </div>
-            <button
-              type="button"
-              onClick={handleAddEducation}
-              className="home-btn home-btn-secondary"
-            >
-              + Add Education
-            </button>
-          </div>
-
-          {cvData.education.length > 0 && (
-            <div className="cv-items-list">
-              {cvData.education.map((edu, idx) => (
-                <div key={idx} className="cv-item">
-                  <div className="cv-item-content">
-                    <h4 style={{ color: "#ffffff" }}>
-                      {edu.degree} {edu.field && `in ${edu.field}`}
-                    </h4>
-                    <p style={{ color: "#cbd5e1" }}>
-                      {edu.institution}
-                      {edu.graduation_year && ` • ${edu.graduation_year}`}
-                      {edu.gpa && ` • GPA: ${edu.gpa}`}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveEducation(idx)}
-                    className="cv-item-remove"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Skills - Multi-select from admin-defined skills */}
-        <div className="cv-section">
-          <h3>Skills</h3>
-          <p className="read-only-note" style={{ marginBottom: "15px" }}>
-            Select skills from the admin-defined skills list. Only skills from
-            this list can be added.
-          </p>
-          <div className="form-group">
-            <label>Available Skills</label>
-            <div
-              className="skills-grid"
-              style={{
-                maxHeight: "200px",
-                overflowY: "auto",
-                border: "1px solid rgba(148, 163, 184, 0.2)",
-                padding: "10px",
-                borderRadius: "8px",
-              }}
-            >
-              {availableSkills.length === 0 ? (
-                <p className="empty-message" style={{ color: "#94a3b8" }}>
-                  No skills available
-                </p>
-              ) : (
-                availableSkills.map((skill) => (
-                  <label
-                    key={skill.id}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      cursor: "pointer",
-                      padding: "5px",
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedSkillIds.includes(skill.id)}
-                      onChange={() => handleToggleSkill(skill.id)}
-                    />
-                    <span style={{ color: "#ffffff" }}>{skill.name}</span>
-                  </label>
-                ))
-              )}
-            </div>
-            {selectedSkillIds.length > 0 && (
-              <div style={{ marginTop: "10px" }}>
-                <strong style={{ color: "#ffffff" }}>
-                  Selected Skills ({selectedSkillIds.length}):
-                </strong>
-                <div className="skills-grid" style={{ marginTop: "5px" }}>
-                  {selectedSkillIds.map((skillId) => {
-                    const skill = availableSkills.find((s) => s.id === skillId);
-                    return skill ? (
-                      <div key={skillId} className="skill-tag">
-                        <span style={{ color: "#ffffff" }}>{skill.name}</span>
-                        <button
-                          type="button"
-                          onClick={() => handleToggleSkill(skillId)}
-                          className="skill-remove"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    ) : null;
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Tools/Technologies */}
-        <div className="cv-section">
-          <h3>Tools & Technologies</h3>
-          <div className="cv-add-item">
-            <div className="form-group">
-              <label>Add Tool/Technology</label>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <input
-                  type="text"
-                  value={newTool}
-                  onChange={(e) => setNewTool(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleAddTool();
-                    }
-                  }}
-                  placeholder="e.g., React, Node.js, MongoDB"
-                />
-                <button
-                  type="button"
-                  onClick={handleAddTool}
-                  className="home-btn home-btn-secondary"
-                >
-                  Add
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {cvData.tools.length > 0 && (
-            <div className="cv-items-list">
-              {cvData.tools.map((tool, idx) => (
-                <div key={idx} className="cv-item">
-                  <div className="cv-item-content">
-                    <span style={{ color: "#ffffff" }}>{tool}</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveTool(idx)}
-                    className="cv-item-remove"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Projects */}
-        <div className="cv-section">
-          <h3>Projects</h3>
-          <div className="cv-add-item">
-            <div className="form-group">
-              <label>Project Name *</label>
-              <input
-                type="text"
-                value={newProject.name}
-                onChange={(e) =>
-                  setNewProject({ ...newProject, name: e.target.value })
-                }
-                placeholder="My Awesome Project"
-              />
-            </div>
-            <div className="form-group">
-              <label>Description</label>
-              <textarea
-                value={newProject.description}
-                onChange={(e) =>
-                  setNewProject({ ...newProject, description: e.target.value })
-                }
-                placeholder="Describe your project..."
-                rows="3"
-              />
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Technologies</label>
-                <input
-                  type="text"
-                  value={newProject.technologies}
-                  onChange={(e) =>
-                    setNewProject({
-                      ...newProject,
-                      technologies: e.target.value,
-                    })
-                  }
-                  placeholder="React, Node.js, MongoDB"
-                />
-              </div>
-              <div className="form-group">
-                <label>Project Link</label>
-                <input
-                  type="url"
-                  value={newProject.link}
-                  onChange={(e) =>
-                    setNewProject({ ...newProject, link: e.target.value })
-                  }
-                  placeholder="https://project-link.com"
-                />
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={handleAddProject}
-              className="home-btn home-btn-secondary"
-            >
-              + Add Project
-            </button>
-          </div>
-
-          {cvData.projects.length > 0 && (
-            <div className="cv-items-list">
-              {cvData.projects.map((project, idx) => (
-                <div key={idx} className="cv-item">
-                  <div className="cv-item-content">
-                    <h4 style={{ color: "#ffffff" }}>{project.name}</h4>
-                    {project.description && (
-                      <p style={{ color: "#cbd5e1" }}>{project.description}</p>
-                    )}
-                    {project.technologies && (
-                      <p style={{ color: "#cbd5e1" }}>
-                        <strong style={{ color: "#ffffff" }}>
-                          Technologies:
-                        </strong>{" "}
-                        {project.technologies}
-                      </p>
-                    )}
-                    {project.link && (
-                      <p style={{ color: "#cbd5e1" }}>
-                        <a
-                          href={project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ color: "#3b82f6" }}
-                        >
-                          View Project
-                        </a>
-                      </p>
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveProject(idx)}
-                    className="cv-item-remove"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* CV PDF Upload */}
-        <div className="cv-section">
-          <h3>CV/Resume PDF</h3>
-          <p
-            className="read-only-note"
-            style={{ marginBottom: "15px", color: "#94a3b8" }}
-          >
-            Upload your CV/resume as a PDF file. You can only have one PDF at a
-            time. Uploading a new PDF will replace the existing one.
-          </p>
-
-          {pdfFilename ? (
-            <div
-              style={{
-                padding: "15px",
-                backgroundColor: "rgba(34, 197, 94, 0.1)",
-                border: "1px solid rgba(34, 197, 94, 0.3)",
-                borderRadius: "8px",
-                marginBottom: "15px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div>
-                  <p
-                    style={{
-                      margin: "0 0 5px 0",
-                      color: "#86efac",
-                      fontWeight: "600",
-                    }}
-                  >
-                    ✓ PDF Uploaded
-                  </p>
-                  <p
-                    style={{ margin: "0", color: "#cbd5e1", fontSize: "14px" }}
-                  >
-                    {pdfFilename}
-                  </p>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                  <button
-                    type="button"
-                    onClick={handleViewPDF}
-                    className="home-btn home-btn-secondary"
-                    style={{ padding: "8px 16px", fontSize: "14px" }}
-                  >
-                    👁️ View
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleDeletePDF}
-                    className="home-btn"
-                    style={{
-                      padding: "8px 16px",
-                      fontSize: "14px",
-                      backgroundColor: "rgba(239, 68, 68, 0.2)",
-                      border: "1px solid rgba(239, 68, 68, 0.4)",
-                      color: "#fca5a5",
-                    }}
-                    disabled={uploadingPDF}
-                  >
-                    {uploadingPDF ? "Deleting..." : "🗑️ Delete"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          <div className="form-group">
-            <label>Upload CV PDF</label>
-            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <input
-                id="cv-pdf-upload"
-                type="file"
-                accept=".pdf"
-                onChange={handleFileSelect}
-                style={{
-                  flex: 1,
-                  padding: "10px",
-                  backgroundColor: "rgba(15, 23, 42, 0.7)",
-                  border: "1px solid rgba(148, 163, 184, 0.2)",
-                  borderRadius: "8px",
-                  color: "#ffffff",
-                  cursor: "pointer",
-                }}
-                disabled={uploadingPDF || !!pdfFilename}
-              />
-              {pdfFile && !pdfFilename && (
-                <button
-                  type="button"
-                  onClick={handleUploadPDF}
-                  className="home-btn home-btn-primary"
-                  disabled={uploadingPDF}
-                  style={{ minWidth: "120px" }}
-                >
-                  {uploadingPDF ? "Uploading..." : "📤 Upload"}
-                </button>
-              )}
-            </div>
-            {pdfFile && !pdfFilename && (
-              <p
-                style={{
-                  margin: "5px 0 0 0",
-                  color: "#94a3b8",
-                  fontSize: "13px",
-                }}
-              >
-                Selected: {pdfFile.name} (
-                {(pdfFile.size / 1024 / 1024).toFixed(2)} MB)
-              </p>
-            )}
-            {pdfFilename && (
-              <p
-                style={{
-                  margin: "10px 0 0 0",
-                  color: "#94a3b8",
-                  fontSize: "13px",
-                }}
-              >
-                To upload a new PDF, delete the current one first.
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div
-          style={{
-            marginTop: "30px",
-            padding: "15px",
-            backgroundColor: "rgba(59, 130, 246, 0.1)",
-            borderRadius: "8px",
-            border: "1px solid rgba(59, 130, 246, 0.2)",
-          }}
+      <div className="cv-section" style={{ marginTop: "30px" }}>
+        <h3>CV/Resume PDF</h3>
+        <p
+          className="read-only-note"
+          style={{ marginBottom: "20px", color: "#94a3b8" }}
         >
-          <p
-            style={{ margin: "0 0 10px 0", color: "#94a3b8", fontSize: "14px" }}
+          Upload your CV/resume as a PDF file (max 10MB). The PDF will be stored
+          securely and can be viewed or downloaded later.
+        </p>
+
+        {pdfFilename ? (
+          <div
+            style={{
+              padding: "20px",
+              backgroundColor: "rgba(34, 197, 94, 0.1)",
+              border: "1px solid rgba(34, 197, 94, 0.3)",
+              borderRadius: "12px",
+              marginBottom: "25px",
+            }}
           >
-            <strong>⚠️ Important:</strong> Click "Save CV" below to persist your
-            changes to the database. Changes shown in the form are only saved
-            when you click the Save button.
-          </p>
-          <div style={{ display: "flex", gap: "10px" }}>
-            <button
-              type="submit"
-              className="home-btn home-btn-primary"
-              disabled={loading}
-              style={{ minWidth: "150px" }}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "15px",
+              }}
             >
-              {loading ? "Saving..." : "💾 Save CV"}
-            </button>
+              <div style={{ flex: 1, minWidth: "200px" }}>
+                <p
+                  style={{
+                    margin: "0 0 8px 0",
+                    color: "#86efac",
+                    fontWeight: "600",
+                    fontSize: "16px",
+                  }}
+                >
+                  ✓ PDF Uploaded
+                </p>
+                <p
+                  style={{
+                    margin: "0",
+                    color: "#cbd5e1",
+                    fontSize: "14px",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  📄 {pdfFilename}
+                </p>
+              </div>
+              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  onClick={handleViewPDF}
+                  className="home-btn home-btn-primary"
+                  style={{ padding: "10px 20px", fontSize: "14px" }}
+                >
+                  👁️ View PDF
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeletePDF}
+                  className="home-btn"
+                  style={{
+                    padding: "10px 20px",
+                    fontSize: "14px",
+                    backgroundColor: "rgba(239, 68, 68, 0.2)",
+                    border: "1px solid rgba(239, 68, 68, 0.4)",
+                    color: "#fca5a5",
+                  }}
+                  disabled={uploadingPDF}
+                >
+                  {uploadingPDF ? "Deleting..." : "🗑️ Delete"}
+                </button>
+              </div>
+            </div>
           </div>
+        ) : (
+          <div
+            style={{
+              padding: "20px",
+              backgroundColor: "rgba(59, 130, 246, 0.1)",
+              border: "1px solid rgba(59, 130, 246, 0.2)",
+              borderRadius: "12px",
+              marginBottom: "25px",
+            }}
+          >
+            <p
+              style={{
+                margin: "0 0 15px 0",
+                color: "#94a3b8",
+                fontSize: "14px",
+              }}
+            >
+              No CV PDF uploaded yet. Select a PDF file below to upload.
+            </p>
+          </div>
+        )}
+
+        <div className="form-group">
+          <label>Upload CV PDF</label>
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <input
+              id="cv-pdf-upload"
+              type="file"
+              accept=".pdf"
+              onChange={handleFileSelect}
+              disabled={uploadingPDF || !!pdfFilename}
+              style={{
+                flex: 1,
+                minWidth: "250px",
+                padding: "12px",
+                backgroundColor: "rgba(15, 23, 42, 0.7)",
+                border: "1px solid rgba(148, 163, 184, 0.2)",
+                borderRadius: "8px",
+                color: "#ffffff",
+                cursor: pdfFilename ? "not-allowed" : "pointer",
+                opacity: pdfFilename ? 0.6 : 1,
+              }}
+            />
+            {pdfFile && !pdfFilename && (
+              <button
+                type="button"
+                onClick={handleUploadPDF}
+                className="home-btn home-btn-primary"
+                disabled={uploadingPDF}
+                style={{ minWidth: "140px", padding: "12px 20px" }}
+              >
+                {uploadingPDF ? "Uploading..." : "📤 Upload PDF"}
+              </button>
+            )}
+          </div>
+          {pdfFile && !pdfFilename && (
+            <p
+              style={{
+                margin: "10px 0 0 0",
+                color: "#94a3b8",
+                fontSize: "13px",
+              }}
+            >
+              Selected:{" "}
+              <strong style={{ color: "#ffffff" }}>{pdfFile.name}</strong> (
+              {(pdfFile.size / 1024 / 1024).toFixed(2)} MB)
+            </p>
+          )}
+          {pdfFilename && (
+            <p
+              style={{
+                margin: "10px 0 0 0",
+                color: "#94a3b8",
+                fontSize: "13px",
+              }}
+            >
+              To upload a new PDF, delete the current one first.
+            </p>
+          )}
+          {!pdfFilename && (
+            <p
+              style={{
+                margin: "10px 0 0 0",
+                color: "#94a3b8",
+                fontSize: "13px",
+              }}
+            >
+              <strong>Note:</strong> Only PDF files are accepted. Maximum file
+              size is 10MB.
+            </p>
+          )}
         </div>
-      </form>
+      </div>
     </div>
   );
 };

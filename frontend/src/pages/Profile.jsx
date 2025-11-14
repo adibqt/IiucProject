@@ -9,6 +9,7 @@ import api from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 import "./Profile.css";
 import Navbar from "../components/Navbar";
+import CVTab from "../components/profile/CVTab";
 
 const Profile = () => {
   const { getCurrentUser } = useAuth();
@@ -26,7 +27,6 @@ const Profile = () => {
   const [basicForm, setBasicForm] = useState({});
   const [experienceForm, setExperienceForm] = useState("");
   const [interestsForm, setInterestsForm] = useState([]);
-  const [cvForm, setCvForm] = useState("");
   const [selectedSkillId, setSelectedSkillId] = useState("");
   const [proficiencyLevel, setProficiencyLevel] = useState("beginner");
 
@@ -51,7 +51,6 @@ const Profile = () => {
         avatar_url: profileData.avatar_url || "",
       });
       setExperienceForm(profileData.experience_description || "");
-      setCvForm(profileData.cv_text || "");
 
       // Parse career interests
       try {
@@ -113,20 +112,6 @@ const Profile = () => {
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError("Failed to update experience");
-      console.error(err);
-    }
-  };
-
-  const handleCVUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      setError(null);
-      await profileAPI.setCV(cvForm);
-      setProfile({ ...profile, cv_text: cvForm });
-      setSuccess("CV updated successfully!");
-      setTimeout(() => setSuccess(null), 3000);
-    } catch (err) {
-      setError("Failed to update CV");
       console.error(err);
     }
   };
@@ -474,27 +459,15 @@ const Profile = () => {
 
           {/* CV Tab */}
           {activeTab === "cv" && (
-            <div className="tab-panel">
-              <h2>CV/Resume</h2>
-              <p className="tab-description">
-                Paste your CV/resume content here (stored for future AI
-                analysis)
-              </p>
-              <form onSubmit={handleCVUpdate} className="profile-form">
-                <div className="form-group">
-                  <label>CV/Resume Text</label>
-                  <textarea
-                    value={cvForm}
-                    onChange={(e) => setCvForm(e.target.value)}
-                    placeholder="Paste your CV/resume content here..."
-                    rows="12"
-                  />
-                </div>
-                <button type="submit" className="home-btn home-btn-primary">
-                  Save CV
-                </button>
-              </form>
-            </div>
+            <CVTab
+              profile={profile}
+              onUpdate={setProfile}
+              onError={setError}
+              onSuccess={(msg) => {
+                setSuccess(msg);
+                setTimeout(() => setSuccess(null), 3000);
+              }}
+            />
           )}
         </div>
       </div>
