@@ -18,6 +18,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Resources from "./pages/Resources";
+import CareerBot from "./pages/CareerBot";
 import AIServices from "./pages/AIServices";
 import JobRecommendation from "./pages/JobRecommendation";
 import "./App.css";
@@ -95,9 +96,6 @@ function AppRoutes() {
       {/* Default route */}
       <Route path="/" element={<Home />} />
 
-      {/* Public Jobs Route */}
-      <Route path="/jobs" element={<Jobs />} />
-
       {/* User Authentication Routes */}
       <Route
         path="/login"
@@ -154,10 +152,26 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/bot"
+        element={
+          <ProtectedUserRoute>
+            <CareerBot />
+          </ProtectedUserRoute>
+        }
+      />
+      <Route
         path="/ai-services"
         element={
           <ProtectedUserRoute>
             <AIServices />
+          </ProtectedUserRoute>
+        }
+      />
+      <Route
+        path="/careerbot"
+        element={
+          <ProtectedUserRoute>
+            <CareerBot />
           </ProtectedUserRoute>
         }
       />

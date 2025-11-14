@@ -83,12 +83,30 @@ const Navbar = () => {
             </li>
             <li>
               <button
+                onClick={() =>
+                  navigate("/bot", { state: { fromNavigation: true } })
+                }
+                className={`dashboard-nav-link ${
+                  isActive("/bot") || isActive("/careerbot") ? "active" : ""
+                }`}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                CareerBot
+              </button>
+            </li>
+            <li>
+              <button
                 onClick={() => navigate("/ai-services")}
                 className={`dashboard-nav-link ai-services-nav-btn ${
                   isActive("/ai-services") ? "active" : ""
                 }`}
                 style={{
-                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                   border: "none",
                   cursor: "pointer",
                   padding: "8px 16px",

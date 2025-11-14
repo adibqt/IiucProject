@@ -332,3 +332,52 @@ class UserResume(Base):
     
     # Relationships
     user = relationship("User", backref="resume")
+
+
+class CareerBotSession(Base):
+    """
+    CareerBot conversation session model
+    Represents a single conversation thread (like ChatGPT's conversation sidebar)
+    """
+    __tablename__ = "careerbot_sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False, index=True)
+    
+    # Session details
+    title = Column(String(255), default="New Chat")  # Conversation title
+    
+    # Metadata
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    last_message_at = Column(DateTime, server_default=func.now())  # For sorting
+    
+    # Relationships
+    user = relationship("User", backref="careerbot_sessions")
+    messages = relationship("CareerBotConversation", back_populates="session", cascade="all, delete-orphan")
+
+
+class CareerBotConversation(Base):
+    """
+    CareerBot conversation history model
+    Stores all user-bot interactions for context and history
+    Each message belongs to a conversation session
+    """
+    __tablename__ = "careerbot_conversations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False, index=True)
+    session_id = Column(Integer, ForeignKey('careerbot_sessions.id', ondelete='CASCADE'), nullable=False, index=True)
+    
+    # Message details
+    role = Column(String(10), nullable=False)  # "user" or "bot"
+    message = Column(Text, nullable=False)
+    language = Column(String(10), default="en")  # "en", "bn", or "mix"
+    
+    # Metadata
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    # Relationships
+    user = relationship("User", backref="careerbot_conversations")
+    session = relationship("CareerBotSession", back_populates="messages")
