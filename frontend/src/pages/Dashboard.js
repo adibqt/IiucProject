@@ -250,25 +250,6 @@ const Dashboard = () => {
         </div>
 
         <div className="dashboard-grid">
-          {/* Quick Stats */}
-          <section className="dashboard-section">
-            <h3>Quick Stats</h3>
-            <div className="dashboard-stats">
-              <div className="stat-card">
-                <div className="stat-value">0</div>
-                <div className="stat-label">Skills</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-value">0</div>
-                <div className="stat-label">Courses</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-value">0%</div>
-                <div className="stat-label">Progress</div>
-              </div>
-            </div>
-          </section>
-
           {/* User Info */}
           <section className="dashboard-section">
             <h3>Account Information</h3>
