@@ -7,6 +7,7 @@ import SkillSyncLogo from '../components/SkillSyncLogo';
 import AdminSkills from './AdminSkills';
 import AdminJobs from './AdminJobs';
 import AdminCourses from './AdminCourses';
+import AdminUsers from './AdminUsers';
 import { authAPI, dashboardAPI } from '../services/api';
 import './AdminDashboard.css';
 
@@ -294,6 +295,10 @@ const AdminDashboard = () => {
             </>
           )}
 
+          {activeSection === 'users' && (
+            <AdminUsers />
+          )}
+
           {activeSection === 'skills' && (
             <AdminSkills />
           )}
@@ -306,7 +311,7 @@ const AdminDashboard = () => {
             <AdminJobs />
           )}
 
-          {activeSection !== 'dashboard' && activeSection !== 'skills' && activeSection !== 'courses' && activeSection !== 'jobs' && (
+          {activeSection !== 'dashboard' && activeSection !== 'users' && activeSection !== 'skills' && activeSection !== 'courses' && activeSection !== 'jobs' && (
             <div style={{ 
               background: 'white', 
               padding: '48px', 
