@@ -5,6 +5,7 @@ A comprehensive platform for skill development, job matching, and personalized l
 ## ✨ Features
 
 ### 🎓 For Students & Professionals
+
 - **Profile Management**: Build and showcase your skills portfolio
 - **Job Matching**: Find opportunities that match your skills
 - **Course Discovery**: Access curated learning resources from top platforms
@@ -12,21 +13,17 @@ A comprehensive platform for skill development, job matching, and personalized l
 - **Career Guidance**: Get personalized recommendations based on your goals
 
 ### 👨‍💼 Admin Panel
+
 - **User Management**: View and manage all registered users
 - **Course Management**: Curate learning resources from YouTube, Coursera, Udemy, etc.
 - **Job Management**: Post and manage job opportunities
 - **Skills Management**: Maintain the skills database
 - **Analytics Dashboard**: Track platform usage and growth metrics
 
-### 🤖 AI-Powered (Ready for Integration)
-- Personalized learning path generation
-- Skill gap analysis
-- Job recommendations
-- Career trajectory planning
-
 ## 🚀 Quick Start with Docker
 
 ### Prerequisites
+
 - **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux)
 - **Docker Compose** v2.0 or higher
 - **Git** for cloning the repository
@@ -34,6 +31,7 @@ A comprehensive platform for skill development, job matching, and personalized l
 ### Installation Steps
 
 1. **Clone the Repository**
+
 ```bash
 git clone <repository-url>
 cd NutriMap
@@ -42,6 +40,7 @@ cd NutriMap
 2. **Environment Configuration**
 
 Create a `.env` file in the project root (if not exists):
+
 ```env
 # Database Configuration
 POSTGRES_USER=nutrimap_user
@@ -59,6 +58,7 @@ CORS_ORIGINS=http://localhost:3000,http://localhost:3001
 ```
 
 3. **Start the Application**
+
 ```bash
 # Build and start all services
 docker compose up -d --build
@@ -68,6 +68,7 @@ docker compose up -d
 ```
 
 4. **Initialize Database** (First time only)
+
 ```bash
 # Run migrations and seed data
 docker compose exec backend python migrations/add_default_skills_and_jobs.py
@@ -75,6 +76,7 @@ docker compose exec backend python migrations/add_default_courses.py
 ```
 
 5. **Verify Services**
+
 ```bash
 # Check if all containers are running
 docker compose ps
@@ -97,10 +99,12 @@ docker compose logs -f backend
 ### Default Credentials
 
 **Admin Panel** (http://localhost:3000/admin)
+
 - Email: Check `backend/main.py` for initialization credentials
 - Or run: `docker compose exec backend python -c "from main import *; import asyncio; asyncio.run(initialize_admin())"`
 
 **User Account**
+
 - Register at: http://localhost:3000/register
 - Or use any existing test account
 
@@ -217,21 +221,25 @@ docker volume prune
 ### Docker Services
 
 **Frontend** (React App)
+
 - Port: 3000
 - Image: Node 22 Alpine
 - Hot reload enabled for development
 
 **Backend** (FastAPI)
+
 - Port: 8000
 - Image: Python 3.11
 - Auto-reload enabled for development
 
 **Database** (PostgreSQL)
+
 - Port: 5432
 - Version: PostgreSQL 16
 - Persistent volume for data storage
 
 ### Network Architecture
+
 ```
 ┌─────────────────────────────────────┐
 │         Docker Network              │
@@ -298,6 +306,7 @@ NutriMap/
 ## 🔧 Technology Stack
 
 ### Backend
+
 - **Framework**: FastAPI (Python 3.11)
 - **ORM**: SQLAlchemy
 - **Database**: PostgreSQL 16
@@ -307,6 +316,7 @@ NutriMap/
 - **Server**: Uvicorn (ASGI)
 
 ### Frontend
+
 - **Framework**: React 19.2.0
 - **Routing**: React Router v6
 - **HTTP Client**: Axios
@@ -315,8 +325,9 @@ NutriMap/
 - **Build Tool**: Webpack 5
 
 ### Infrastructure
+
 - **Containerization**: Docker & Docker Compose v2
-- **Base Images**: 
+- **Base Images**:
   - Frontend: node:22-alpine
   - Backend: python:3.11-slim
   - Database: postgres:16
@@ -327,6 +338,7 @@ NutriMap/
 ## 📚 API Endpoints
 
 ### Authentication
+
 ```http
 POST   /api/users/register          # User registration
 POST   /api/users/login             # User login
@@ -337,6 +349,7 @@ GET    /api/admin/me                # Get current admin
 ```
 
 ### User Profile
+
 ```http
 GET    /api/users/me                # Get profile
 PUT    /api/users/me                # Update profile
@@ -347,17 +360,20 @@ PUT    /api/users/me/cv             # Update CV
 ```
 
 ### Jobs (Public)
+
 ```http
 GET    /api/jobs                    # List active jobs
 GET    /api/jobs/{id}               # Get job details
 ```
 
 ### Admin - Users
+
 ```http
 GET    /api/admin/users             # List all users (paginated)
 ```
 
 ### Admin - Skills
+
 ```http
 GET    /api/admin/skills            # List all skills
 POST   /api/admin/skills            # Create skill
@@ -365,6 +381,7 @@ DELETE /api/admin/skills/{id}       # Delete skill
 ```
 
 ### Admin - Jobs
+
 ```http
 GET    /api/admin/jobs              # List all jobs
 POST   /api/admin/jobs              # Create job
@@ -373,6 +390,7 @@ DELETE /api/admin/jobs/{id}         # Delete job
 ```
 
 ### Admin - Courses
+
 ```http
 GET    /api/admin/courses           # List all courses
 POST   /api/admin/courses           # Create course
@@ -383,6 +401,7 @@ GET    /api/courses/{id}            # Get course details (public)
 ```
 
 ### Admin - Dashboard
+
 ```http
 GET    /api/admin/dashboard/stats   # Get platform statistics
 ```
@@ -478,6 +497,7 @@ See `FEATURE2_TESTING_GUIDE.md` for comprehensive testing procedures.
 ### Environment Setup
 
 1. **Update `.env` for production**:
+
 ```env
 # Use strong secrets
 SECRET_KEY=<generate-strong-random-key>
@@ -491,11 +511,13 @@ DATABASE_URL=postgresql://user:pass@host:5432/dbname
 ```
 
 2. **Build production images**:
+
 ```bash
 docker compose build --no-cache
 ```
 
 3. **Deploy**:
+
 ```bash
 # Start in detached mode
 docker compose up -d
@@ -513,6 +535,7 @@ docker compose logs --tail=50
 ### Backup & Restore
 
 **Backup**:
+
 ```bash
 # Database backup
 docker compose exec db pg_dump -U nutrimap_user nutrimap_db > backup_$(date +%Y%m%d).sql
@@ -522,6 +545,7 @@ docker run --rm -v nutrimap_db_data:/data -v $(pwd):/backup alpine tar czf /back
 ```
 
 **Restore**:
+
 ```bash
 # From SQL dump
 docker compose exec -T db psql -U nutrimap_user -d nutrimap_db < backup_20241113.sql
@@ -578,6 +602,7 @@ None currently. See GitHub Issues for tracking.
 ## 🔮 Roadmap
 
 ### Phase 1: Core Platform ✅
+
 - [x] User authentication & profiles
 - [x] Skills management
 - [x] Job listings & matching
@@ -586,6 +611,7 @@ None currently. See GitHub Issues for tracking.
 - [x] Dashboard analytics
 
 ### Phase 2: AI Integration (Ready)
+
 - [ ] Personalized learning paths
 - [ ] Skill gap analysis
 - [ ] Smart job recommendations
@@ -593,6 +619,7 @@ None currently. See GitHub Issues for tracking.
 - [ ] Resume optimization
 
 ### Phase 3: Advanced Features
+
 - [ ] Job application tracking
 - [ ] Resume/CV file upload & parsing
 - [ ] Email notifications
@@ -601,6 +628,7 @@ None currently. See GitHub Issues for tracking.
 - [ ] Interview preparation tools
 
 ### Phase 4: Scale & Mobile
+
 - [ ] Mobile app (React Native)
 - [ ] Video interviews
 - [ ] Employer dashboard
@@ -610,6 +638,7 @@ None currently. See GitHub Issues for tracking.
 ## 🐛 Common Issues & Solutions
 
 ### Frontend won't start
+
 ```bash
 # Clear node modules and rebuild
 docker compose down
@@ -618,6 +647,7 @@ docker compose up -d frontend
 ```
 
 ### Backend won't connect to database
+
 ```bash
 # Check database is running
 docker compose ps db
@@ -630,6 +660,7 @@ docker compose logs db
 ```
 
 ### Database connection refused
+
 ```bash
 # Ensure DATABASE_URL uses service name
 DATABASE_URL=postgresql://user:pass@db:5432/dbname
@@ -637,6 +668,7 @@ DATABASE_URL=postgresql://user:pass@db:5432/dbname
 ```
 
 ### Port already in use
+
 ```bash
 # Find process using port
 netstat -ano | findstr :3000
@@ -646,6 +678,7 @@ netstat -ano | findstr :8000
 ```
 
 ### Hot reload not working
+
 ```bash
 # Ensure volumes are mounted correctly in docker-compose.yml
 # Restart specific service
