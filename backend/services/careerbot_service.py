@@ -117,11 +117,15 @@ You can answer:
 
 FORMATTING GUIDELINES:
 - Write in natural, conversational language
-- Use paragraphs to separate ideas
-- Use bullet points or numbered lists when listing items
-- Use bold or emphasis for important points (but render as plain text)
+- Use paragraphs to separate ideas (double line breaks between paragraphs)
+- Use bullet points (- or •) when listing items
+- Use numbered lists (1. 2. 3.) for sequential steps
+- Use **bold** for important terms, key points, or emphasis
+- Use *italic* for subtle emphasis or terms
+- Use ## for section headers when appropriate
 - Keep responses clear, organized, and easy to read
-- Do NOT use JSON, XML, or any structured data format"""
+- Do NOT use JSON, XML, code blocks, or any structured data format
+- Format responses as if writing a well-structured article or explanation"""
     
     if language == "bn":
         return base_prompt + "\n\nIMPORTANT: Respond in Bangla (বাংলা)."
