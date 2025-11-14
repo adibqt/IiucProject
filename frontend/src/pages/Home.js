@@ -72,7 +72,7 @@ const Home = () => {
       <section className="home-hero">
         <div className="home-hero-content">
           <h1 className="home-hero-title">
-            NutriMap
+            SkillSync
             <span className="home-hero-subtitle-inline">
               AI-Powered Learning Platform
             </span>
@@ -248,7 +248,7 @@ const Home = () => {
       {/* Benefits Section */}
       <section id="benefits" className="home-benefits">
         <div className="home-section-container">
-          <h2 className="home-section-title">Why Choose NutriMap?</h2>
+          <h2 className="home-section-title">Why Choose SkillSync?</h2>
 
           <div className="home-benefits-grid">
             {/* Benefit 1 */}
@@ -315,7 +315,7 @@ const Home = () => {
         <div className="home-section-container">
           <h2 className="home-section-title">For Everyone</h2>
           <p className="home-section-subtitle">
-            NutriMap serves different user roles with tailored experiences
+            Skillsync serves different user roles with tailored experiences
           </p>
 
           <div className="home-platforms-grid">
@@ -364,7 +364,7 @@ const Home = () => {
             <h2>Ready to Start Learning?</h2>
             <p>
               Join thousands of students already transforming their careers with
-              NutriMap
+              SkillSync
             </p>
             <div className="home-cta-buttons">
               <Link to="/register" className="home-btn home-btn-large">
@@ -386,7 +386,7 @@ const Home = () => {
         <div className="home-section-container">
           <div className="home-footer-content">
             <div className="home-footer-section">
-              <h4>About NutriMap</h4>
+              <h4>About SkillSync</h4>
               <p>
                 An AI-powered learning platform designed to help students master
                 skills and achieve their career goals.
@@ -449,7 +449,7 @@ const Home = () => {
           </div>
 
           <div className="home-footer-bottom">
-            <p>&copy; 2025 NutriMap. All rights reserved.</p>
+            <p>&copy; 2025 SkillSync. All rights reserved.</p>
             <p>An AI-Powered Learning Platform for Career Growth</p>
           </div>
         </div>

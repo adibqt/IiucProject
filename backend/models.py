@@ -83,6 +83,9 @@ class User(Base):
     bio = Column(Text)
     avatar_url = Column(String(500))
     phone_number = Column(String(20))
+    linkedin_url = Column(String(500))  # LinkedIn profile URL
+    github_url = Column(String(500))  # GitHub profile URL
+    website_url = Column(String(500))  # Personal website/portfolio URL
     experience_description = Column(Text)  # user's work/project experience
     career_interests = Column(Text)  # target roles or career paths (JSON array of strings)
     cv_text = Column(Text)  # stored CV/resume text for later AI analysis
