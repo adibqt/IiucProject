@@ -96,9 +96,6 @@ function AppRoutes() {
       {/* Default route */}
       <Route path="/" element={<Home />} />
 
-      {/* Public Jobs Route */}
-      <Route path="/jobs" element={<Jobs />} />
-
       {/* User Authentication Routes */}
       <Route
         path="/login"
@@ -159,6 +156,10 @@ function AppRoutes() {
         element={
           <ProtectedUserRoute>
             <CareerBot />
+          </ProtectedUserRoute>
+        }
+      />
+      <Route
         path="/ai-services"
         element={
           <ProtectedUserRoute>
@@ -171,6 +172,10 @@ function AppRoutes() {
         element={
           <ProtectedUserRoute>
             <CareerBot />
+          </ProtectedUserRoute>
+        }
+      />
+      <Route
         path="/ai/job-recommendation"
         element={
           <ProtectedUserRoute>
