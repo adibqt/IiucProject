@@ -1,6 +1,7 @@
 /**
  * Profile Page - User profile, skills, experience, career interests, CV management
  * Implements Feature #2: User Profile & Skill Input
+ * Implements Feature #2: User Profile & Skill Input
  */
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +19,7 @@ const Profile = () => {
   // State
   const [profile, setProfile] = useState(null);
   const [availableSkills, setAvailableSkills] = useState([]);
+  const [activeTab, setActiveTab] = useState("basic"); // basic, skills, interests, experience, cv
   const [activeTab, setActiveTab] = useState("basic"); // basic, skills, interests, experience, cv
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -49,7 +51,9 @@ const Profile = () => {
       setAvailableSkills(skillsResponse.data || []);
       setBasicForm({
         full_name: profileData.full_name || "",
+        full_name: profileData.full_name || "",
         bio: profileData.bio || "",
+        phone_number: profileData.phone_number || "",
         phone_number: profileData.phone_number || "",
         avatar_url: profileData.avatar_url || "",
       });
@@ -84,6 +88,12 @@ const Profile = () => {
     return phoneRegex.test(phone);
   };
 
+  const validatePhoneNumber = (phone) => {
+    // Phone must be 11 digits starting with 01 (e.g., 01712345678)
+    const phoneRegex = /^01[0-9]{9}$/;
+    return phoneRegex.test(phone);
+  };
+
   const handleBasicUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -99,9 +109,21 @@ const Profile = () => {
         );
         return;
       }
+      // Validate phone number if provided
+      if (
+        basicForm.phone_number &&
+        !validatePhoneNumber(basicForm.phone_number)
+      ) {
+        setError(
+          "Phone number must be 11 digits starting with 01 (e.g., 01712345678)"
+        );
+        return;
+      }
 
       const updated = await profileAPI.updateProfile(basicForm);
+      const updated = await profileAPI.updateProfile(basicForm);
       setProfile(updated);
+      setSuccess("Basic information updated successfully!");
       setSuccess("Basic information updated successfully!");
       setTimeout(() => setSuccess(null), 3000);
 

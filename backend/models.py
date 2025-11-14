@@ -288,3 +288,47 @@ class AdminLog(Base):
     ip_address = Column(String(45))
     user_agent = Column(String(500))
     created_at = Column(DateTime, server_default=func.now())
+
+
+class UserResume(Base):
+    """
+    User Resume/CV model - structured CV data storage
+    AI-ready: designed for future NLP/AI-based skill extraction and analysis
+    One-to-one relationship with User (one user can have one resume)
+    """
+    __tablename__ = "user_resumes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), unique=True, nullable=False, index=True)
+    
+    # Personal Summary
+    personal_summary = Column(Text)  # Short bio/professional summary
+    
+    # Work Experience (JSON array of experience objects)
+    experiences = Column(Text)  # JSON array: [{"title": "...", "company": "...", "description": "...", ...}]
+    
+    # Education (JSON array of education objects)
+    education = Column(Text)  # JSON array: [{"degree": "...", "institution": "...", "field": "...", ...}]
+    
+    # Skills (JSON array of skill IDs from admin-defined skills table)
+    skills = Column(Text)  # JSON array of skill IDs: [1, 2, 3]
+    
+    # Tools/Technologies (JSON array of strings)
+    tools = Column(Text)  # JSON array: ["React", "Node.js", "MongoDB"]
+    
+    # Projects/Achievements (JSON array of project objects)
+    projects = Column(Text)  # JSON array: [{"name": "...", "description": "...", "technologies": "...", ...}]
+    
+    # Optional raw CV text (for future AI processing)
+    raw_cv_text = Column(Text)  # Optional pasted CV text
+    
+    # PDF CV file storage
+    cv_pdf_filename = Column(String(500))  # Filename of uploaded PDF
+    cv_pdf_path = Column(String(1000))  # Server path to PDF file
+    
+    # Metadata
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    # Relationships
+    user = relationship("User", backref="resume")

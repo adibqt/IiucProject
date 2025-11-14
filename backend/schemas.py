@@ -298,3 +298,63 @@ class ErrorResponse(BaseModel):
     success: bool = False
     error: str
     details: Optional[str] = None
+
+
+# CV/Resume Schemas
+class CVExperience(BaseModel):
+    """Work experience entry"""
+    title: str
+    company: str
+    location: Optional[str] = None
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    current: bool = False
+    description: Optional[str] = None
+
+
+class CVEducation(BaseModel):
+    """Education entry"""
+    degree: str
+    institution: str
+    field: Optional[str] = None
+    graduation_year: Optional[str] = None
+    gpa: Optional[str] = None
+
+
+class CVProject(BaseModel):
+    """Project entry"""
+    name: str
+    description: Optional[str] = None
+    technologies: Optional[str] = None
+    link: Optional[str] = None
+
+
+class CVCreate(BaseModel):
+    """CV creation/update request"""
+    personal_summary: Optional[str] = None
+    experiences: Optional[List[CVExperience]] = []
+    education: Optional[List[CVEducation]] = []
+    skills: Optional[List[int]] = []  # List of skill IDs from admin-defined skills
+    tools: Optional[List[str]] = []  # List of tool/technology names
+    projects: Optional[List[CVProject]] = []
+    raw_cv_text: Optional[str] = None
+
+
+class CVResponse(BaseModel):
+    """CV response"""
+    id: int
+    user_id: int
+    personal_summary: Optional[str] = None
+    experiences: Optional[List[dict]] = []  # Parsed JSON
+    education: Optional[List[dict]] = []  # Parsed JSON
+    skills: Optional[List[int]] = []  # Parsed JSON array of skill IDs
+    tools: Optional[List[str]] = []  # Parsed JSON array
+    projects: Optional[List[dict]] = []  # Parsed JSON
+    raw_cv_text: Optional[str] = None
+    cv_pdf_filename: Optional[str] = None
+    cv_pdf_path: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+    
+    class Config:
+        from_attributes = True
