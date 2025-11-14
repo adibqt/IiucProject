@@ -758,6 +758,209 @@
   object-fit: cover;
 }
 
+/* CV Section Styling */
+.cv-section {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.cv-section:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1);
+}
+
+.cv-section h3 {
+  color: #3b82f6;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cv-section h4 {
+  color: #60a5fa;
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+  font-weight: 600;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(59, 130, 246, 0.2);
+}
+
+.cv-input-section {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.3);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.cv-input-section:hover {
+  border-color: rgba(59, 130, 246, 0.25);
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.cv-add-item {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+
+.cv-add-item * {
+  color: inherit;
+}
+
+.cv-add-item label {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cv-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.cv-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.cv-item:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  background: rgba(15, 23, 42, 0.7);
+  transform: translateX(4px);
+}
+
+.cv-item-content {
+  flex: 1;
+  color: #ffffff;
+}
+
+.cv-item-content h4 {
+  color: #ffffff !important;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  border: none;
+  padding: 0;
+}
+
+.cv-item-content p {
+  color: #cbd5e1 !important;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.5;
+}
+
+.cv-item-content span {
+  color: #ffffff !important;
+  font-size: 0.95rem;
+}
+
+.cv-item-content strong {
+  color: #ffffff !important;
+}
+
+.cv-item-content a {
+  color: #3b82f6 !important;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.cv-item-content a:hover {
+  color: #60a5fa !important;
+  text-decoration: underline;
+}
+
+.cv-item-remove {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.cv-item-remove:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.6);
+  transform: scale(1.1);
+}
+
+.cv-item-remove:active {
+  transform: scale(0.95);
+}
+
+/* Skills Grid for CV */
+.cv-input-section .skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.cv-input-section .skills-grid label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #ffffff;
+}
+
+.cv-input-section .skills-grid label:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.cv-input-section .skills-grid input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #3b82f6;
+}
+
 @media (max-width: 768px) {
   .read-only-section {
     margin-bottom: 1.5rem;
@@ -772,5 +975,25 @@
   .avatar-preview img {
     max-width: 100px;
     max-height: 100px;
+  }
+
+  .cv-section {
+    padding: 1.5rem;
+  }
+
+  .cv-input-section {
+    padding: 1rem;
+  }
+
+  .cv-add-item {
+    padding: 1rem;
+  }
+
+  .cv-item {
+    padding: 1rem;
+  }
+
+  .cv-input-section .skills-grid {
+    grid-template-columns: 1fr;
   }
 }
