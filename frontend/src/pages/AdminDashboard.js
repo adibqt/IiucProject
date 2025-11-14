@@ -1,22 +1,22 @@
 // Admin Dashboard
 // Main dashboard with statistics and navigation
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import SkillSyncLogo from '../components/SkillSyncLogo';
-import AdminSkills from './AdminSkills';
-import AdminJobs from './AdminJobs';
-import AdminCourses from './AdminCourses';
-import AdminUsers from './AdminUsers';
-import { authAPI, dashboardAPI } from '../services/api';
-import './AdminDashboard.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import SkillSyncLogo from "../components/SkillSyncLogo";
+import AdminSkills from "./AdminSkills";
+import AdminJobs from "./AdminJobs";
+import AdminCourses from "./AdminCourses";
+import AdminUsers from "./AdminUsers";
+import { authAPI, dashboardAPI } from "../services/api";
+import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState('dashboard');
+  const [activeSection, setActiveSection] = useState("dashboard");
 
   useEffect(() => {
     loadData();
@@ -25,14 +25,14 @@ const AdminDashboard = () => {
   const loadData = async () => {
     try {
       // Check authentication
-      const token = localStorage.getItem('adminToken');
+      const token = localStorage.getItem("adminToken");
       if (!token) {
-        navigate('/admin');
+        navigate("/admin");
         return;
       }
 
       // Load user info
-      const storedUser = localStorage.getItem('adminUser');
+      const storedUser = localStorage.getItem("adminUser");
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
@@ -41,9 +41,9 @@ const AdminDashboard = () => {
       const statsData = await dashboardAPI.getStats();
       setStats(statsData);
     } catch (error) {
-      console.error('Error loading dashboard:', error);
+      console.error("Error loading dashboard:", error);
       if (error.response?.status === 401) {
-        navigate('/admin');
+        navigate("/admin");
       }
     } finally {
       setLoading(false);
@@ -54,11 +54,11 @@ const AdminDashboard = () => {
     try {
       await authAPI.logout();
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     } finally {
-      localStorage.removeItem('adminToken');
-      localStorage.removeItem('adminUser');
-      navigate('/admin');
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminUser");
+      navigate("/admin");
     }
   };
 
@@ -89,15 +89,19 @@ const AdminDashboard = () => {
           <div className="admin-nav-section">
             <div className="admin-nav-section-title">Overview</div>
             <div
-              className={`admin-nav-item ${activeSection === 'dashboard' ? 'active' : ''}`}
-              onClick={() => setActiveSection('dashboard')}
+              className={`admin-nav-item ${
+                activeSection === "dashboard" ? "active" : ""
+              }`}
+              onClick={() => setActiveSection("dashboard")}
             >
               <span className="admin-nav-icon">📊</span>
               <span>Dashboard</span>
             </div>
             <div
-              className={`admin-nav-item ${activeSection === 'analytics' ? 'active' : ''}`}
-              onClick={() => setActiveSection('analytics')}
+              className={`admin-nav-item ${
+                activeSection === "analytics" ? "active" : ""
+              }`}
+              onClick={() => setActiveSection("analytics")}
             >
               <span className="admin-nav-icon">📈</span>
               <span>Analytics</span>
@@ -107,36 +111,46 @@ const AdminDashboard = () => {
           <div className="admin-nav-section">
             <div className="admin-nav-section-title">Management</div>
             <div
-              className={`admin-nav-item ${activeSection === 'users' ? 'active' : ''}`}
-              onClick={() => setActiveSection('users')}
+              className={`admin-nav-item ${
+                activeSection === "users" ? "active" : ""
+              }`}
+              onClick={() => setActiveSection("users")}
             >
               <span className="admin-nav-icon">👥</span>
               <span>Users</span>
             </div>
             <div
-              className={`admin-nav-item ${activeSection === 'courses' ? 'active' : ''}`}
-              onClick={() => setActiveSection('courses')}
+              className={`admin-nav-item ${
+                activeSection === "courses" ? "active" : ""
+              }`}
+              onClick={() => setActiveSection("courses")}
             >
               <span className="admin-nav-icon">📚</span>
               <span>Courses</span>
             </div>
             <div
-              className={`admin-nav-item ${activeSection === 'skills' ? 'active' : ''}`}
-              onClick={() => setActiveSection('skills')}
+              className={`admin-nav-item ${
+                activeSection === "skills" ? "active" : ""
+              }`}
+              onClick={() => setActiveSection("skills")}
             >
               <span className="admin-nav-icon">🎯</span>
               <span>Skills</span>
             </div>
             <div
-              className={`admin-nav-item ${activeSection === 'jobs' ? 'active' : ''}`}
-              onClick={() => setActiveSection('jobs')}
+              className={`admin-nav-item ${
+                activeSection === "jobs" ? "active" : ""
+              }`}
+              onClick={() => setActiveSection("jobs")}
             >
               <span className="admin-nav-icon">💼</span>
               <span>Jobs</span>
             </div>
             <div
-              className={`admin-nav-item ${activeSection === 'instructors' ? 'active' : ''}`}
-              onClick={() => setActiveSection('instructors')}
+              className={`admin-nav-item ${
+                activeSection === "instructors" ? "active" : ""
+              }`}
+              onClick={() => setActiveSection("instructors")}
             >
               <span className="admin-nav-icon">🎓</span>
               <span>Instructors</span>
@@ -146,15 +160,19 @@ const AdminDashboard = () => {
           <div className="admin-nav-section">
             <div className="admin-nav-section-title">AI Features</div>
             <div
-              className={`admin-nav-item ${activeSection === 'recommendations' ? 'active' : ''}`}
-              onClick={() => setActiveSection('recommendations')}
+              className={`admin-nav-item ${
+                activeSection === "recommendations" ? "active" : ""
+              }`}
+              onClick={() => setActiveSection("recommendations")}
             >
               <span className="admin-nav-icon">🤖</span>
               <span>AI Recommendations</span>
             </div>
             <div
-              className={`admin-nav-item ${activeSection === 'learning-paths' ? 'active' : ''}`}
-              onClick={() => setActiveSection('learning-paths')}
+              className={`admin-nav-item ${
+                activeSection === "learning-paths" ? "active" : ""
+              }`}
+              onClick={() => setActiveSection("learning-paths")}
             >
               <span className="admin-nav-icon">🗺️</span>
               <span>Learning Paths</span>
@@ -164,15 +182,19 @@ const AdminDashboard = () => {
           <div className="admin-nav-section">
             <div className="admin-nav-section-title">System</div>
             <div
-              className={`admin-nav-item ${activeSection === 'settings' ? 'active' : ''}`}
-              onClick={() => setActiveSection('settings')}
+              className={`admin-nav-item ${
+                activeSection === "settings" ? "active" : ""
+              }`}
+              onClick={() => setActiveSection("settings")}
             >
               <span className="admin-nav-icon">⚙️</span>
               <span>Settings</span>
             </div>
             <div
-              className={`admin-nav-item ${activeSection === 'logs' ? 'active' : ''}`}
-              onClick={() => setActiveSection('logs')}
+              className={`admin-nav-item ${
+                activeSection === "logs" ? "active" : ""
+              }`}
+              onClick={() => setActiveSection("logs")}
             >
               <span className="admin-nav-icon">📋</span>
               <span>Activity Logs</span>
@@ -183,10 +205,12 @@ const AdminDashboard = () => {
         <div className="admin-sidebar-footer">
           <div className="admin-user-info">
             <div className="admin-user-avatar">
-              {user?.full_name?.charAt(0) || user?.username?.charAt(0) || 'A'}
+              {user?.full_name?.charAt(0) || user?.username?.charAt(0) || "A"}
             </div>
             <div className="admin-user-details">
-              <p className="admin-user-name">{user?.full_name || user?.username}</p>
+              <p className="admin-user-name">
+                {user?.full_name || user?.username}
+              </p>
               <p className="admin-user-role">Administrator</p>
             </div>
           </div>
@@ -200,7 +224,8 @@ const AdminDashboard = () => {
       <main className="admin-main">
         <header className="admin-header">
           <h1 className="admin-header-title">
-            {activeSection.charAt(0).toUpperCase() + activeSection.slice(1).replace('-', ' ')}
+            {activeSection.charAt(0).toUpperCase() +
+              activeSection.slice(1).replace("-", " ")}
           </h1>
           <div className="admin-header-actions">
             {/* Future: Add action buttons */}
@@ -208,7 +233,7 @@ const AdminDashboard = () => {
         </header>
 
         <div className="admin-content">
-          {activeSection === 'dashboard' && stats && (
+          {activeSection === "dashboard" && stats && (
             <>
               <div className="admin-stats-grid">
                 <div className="admin-stat-card">
@@ -227,7 +252,9 @@ const AdminDashboard = () => {
                 <div className="admin-stat-card">
                   <div className="admin-stat-header">
                     <div>
-                      <h3 className="admin-stat-value">{stats.total_courses}</h3>
+                      <h3 className="admin-stat-value">
+                        {stats.total_courses}
+                      </h3>
                       <p className="admin-stat-label">Total Courses</p>
                     </div>
                     <div className="admin-stat-icon purple">📚</div>
@@ -253,7 +280,9 @@ const AdminDashboard = () => {
                 <div className="admin-stat-card">
                   <div className="admin-stat-header">
                     <div>
-                      <h3 className="admin-stat-value">{stats.active_enrollments}</h3>
+                      <h3 className="admin-stat-value">
+                        {stats.active_enrollments}
+                      </h3>
                       <p className="admin-stat-label">Active Enrollments</p>
                     </div>
                     <div className="admin-stat-icon orange">📈</div>
@@ -264,70 +293,59 @@ const AdminDashboard = () => {
                 </div>
               </div>
 
-              <div style={{ 
-                background: 'white', 
-                padding: '32px', 
-                borderRadius: '12px',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-              }}>
-                <h2 style={{ margin: '0 0 16px 0', fontSize: '20px', fontWeight: '600' }}>
+              <div
+                style={{
+                  background: "white",
+                  padding: "32px",
+                  borderRadius: "12px",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                }}
+              >
+                <h2
+                  style={{
+                    margin: "0 0 16px 0",
+                    fontSize: "20px",
+                    fontWeight: "600",
+                  }}
+                >
                   Welcome to SkillSync Admin Panel
                 </h2>
-                <p style={{ color: '#6b7280', lineHeight: '1.6' }}>
-                  This is your central hub for managing the SkillSync learning platform. 
-                  From here, you can manage users, courses, skills, and leverage AI-powered 
-                  features to enhance the learning experience.
-                </p>
-                <div style={{ 
-                  marginTop: '24px', 
-                  padding: '16px', 
-                  background: '#dbeafe', 
-                  borderRadius: '8px',
-                  borderLeft: '4px solid #3b82f6'
-                }}>
-                  <strong style={{ color: '#1e40af' }}>🚀 Phase 2 Ready:</strong>
-                  <p style={{ margin: '8px 0 0 0', color: '#1e3a8a' }}>
-                    The database schema is designed for AI integration. You can add machine learning 
-                    models for personalized recommendations, adaptive learning paths, and skill gap analysis.
-                  </p>
-                </div>
               </div>
             </>
           )}
 
-          {activeSection === 'users' && (
-            <AdminUsers />
-          )}
+          {activeSection === "users" && <AdminUsers />}
 
-          {activeSection === 'skills' && (
-            <AdminSkills />
-          )}
+          {activeSection === "skills" && <AdminSkills />}
 
-          {activeSection === 'courses' && (
-            <AdminCourses />
-          )}
+          {activeSection === "courses" && <AdminCourses />}
 
-          {activeSection === 'jobs' && (
-            <AdminJobs />
-          )}
+          {activeSection === "jobs" && <AdminJobs />}
 
-          {activeSection !== 'dashboard' && activeSection !== 'users' && activeSection !== 'skills' && activeSection !== 'courses' && activeSection !== 'jobs' && (
-            <div style={{ 
-              background: 'white', 
-              padding: '48px', 
-              borderRadius: '12px',
-              textAlign: 'center',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
-              <h2 style={{ fontSize: '24px', margin: '0 0 12px 0' }}>
-                {activeSection.charAt(0).toUpperCase() + activeSection.slice(1).replace('-', ' ')}
-              </h2>
-              <p style={{ color: '#6b7280' }}>
-                This section is ready for implementation. 
-                The backend API endpoints and database models are prepared.
-              </p>
-            </div>
-          )}
+          {activeSection !== "dashboard" &&
+            activeSection !== "users" &&
+            activeSection !== "skills" &&
+            activeSection !== "courses" &&
+            activeSection !== "jobs" && (
+              <div
+                style={{
+                  background: "white",
+                  padding: "48px",
+                  borderRadius: "12px",
+                  textAlign: "center",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                }}
+              >
+                <h2 style={{ fontSize: "24px", margin: "0 0 12px 0" }}>
+                  {activeSection.charAt(0).toUpperCase() +
+                    activeSection.slice(1).replace("-", " ")}
+                </h2>
+                <p style={{ color: "#6b7280" }}>
+                  This section is ready for implementation. The backend API
+                  endpoints and database models are prepared.
+                </p>
+              </div>
+            )}
         </div>
       </main>
     </div>

@@ -123,8 +123,9 @@ const Dashboard = () => {
           .map((course) => {
             let req = [];
             try {
-              req = course.required_skills
-                ? JSON.parse(course.required_skills)
+              // Courses use 'related_skills' not 'required_skills'
+              req = course.related_skills
+                ? JSON.parse(course.related_skills)
                 : [];
             } catch (e) {
               req = [];
@@ -133,7 +134,8 @@ const Dashboard = () => {
             const matchedIds = reqIds.filter((id) => userSet.has(id));
             const matchedCount = matchedIds.length;
             const requiredCount = reqIds.length;
-            if (matchedCount === 0) return null;
+            // Show courses even if no match, but prioritize matched ones
+            if (matchedCount === 0 && requiredCount > 0) return null;
 
             return {
               ...course,
@@ -141,7 +143,9 @@ const Dashboard = () => {
               _required_count: requiredCount,
               _is_full: requiredCount > 0 && matchedCount === requiredCount,
               _match_label:
-                requiredCount > 0 && matchedCount === requiredCount
+                requiredCount === 0
+                  ? "General"
+                  : requiredCount > 0 && matchedCount === requiredCount
                   ? "Full match"
                   : `${matchedCount} match${matchedCount > 1 ? "es" : ""}`,
             };
@@ -151,11 +155,19 @@ const Dashboard = () => {
         const full = matched.filter((c) => c._is_full);
         const partial = matched
           .filter((c) => !c._is_full)
-          .sort((a, b) => b._matched_count - a._matched_count);
+          .sort((a, b) => {
+            // Sort by match count descending, then by required count
+            if (b._matched_count !== a._matched_count) {
+              return b._matched_count - a._matched_count;
+            }
+            return b._required_count - a._required_count;
+          });
 
         setRecommendedCourses([...full, ...partial]);
       } catch (err) {
         console.error("Failed to load course recommendations", err);
+        // Set empty array on error so UI shows "No matched courses"
+        setRecommendedCourses([]);
       }
     };
 
@@ -410,17 +422,20 @@ const Dashboard = () => {
                   <div
                     key={course.id}
                     className="job-card-compact recommended-course-card course-card-compact"
-                    onClick={() => navigate(`/courses`)}
+                    onClick={() => window.open(course.url, "_blank")}
                     role="button"
                     tabIndex={0}
                     style={{ cursor: "pointer" }}
                   >
                     <div className="job-card-header">
-                      {course.image && (
+                      {course.thumbnail_url && (
                         <img
-                          src={course.image}
-                          alt={course.provider || course.title}
+                          src={course.thumbnail_url}
+                          alt={course.platform || course.title}
                           className="company-logo-compact"
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                          }}
                         />
                       )}
                     </div>
@@ -428,14 +443,16 @@ const Dashboard = () => {
                     <div className="job-card-content">
                       <h3 className="job-title-compact">{course.title}</h3>
                       <p className="company-name-compact">
-                        {course.provider || course.instructor || ""}
+                        {course.platform || ""}
                       </p>
 
                       <div className="job-card-meta">
                         <span className="meta-item">
-                          {course.duration || ""}
+                          {course.cost_type === "free" ? "🆓 Free" : "💰 Paid"}
                         </span>
-                        <span className="meta-item">{course.level || ""}</span>
+                        <span className="meta-item">
+                          {course.platform || ""}
+                        </span>
                       </div>
 
                       <div className="job-card-footer">
@@ -443,7 +460,8 @@ const Dashboard = () => {
                           {course._match_label}
                         </span>
                         <span className="job-views-compact">
-                          🎯 {course._matched_count}/{course._required_count}
+                          🎯 {course._matched_count}/
+                          {course._required_count || 0}
                         </span>
                       </div>
                     </div>
