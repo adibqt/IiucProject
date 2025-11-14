@@ -145,14 +145,23 @@
   border-bottom: none;
 }
 
-.section-title {
-  font-size: 1.4rem;
+.professional-profile-card .section-title {
+  font-size: 1.5rem;
   font-weight: 700;
-  margin: 0 0 1.25rem 0;
+  margin: 0 0 1.5rem 0;
   color: white;
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+/* Enhanced section titles for Work Experience and Education */
+.professional-profile-card .experience-section .section-title,
+.professional-profile-card .education-section .section-title {
+  font-size: 1.6rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(6, 182, 212, 0.3);
+  margin-bottom: 2rem;
 }
 
 .section-icon {
@@ -405,146 +414,246 @@
 }
 
 /* Experience Items */
-.experiences-list {
+.professional-profile-card .experiences-list {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
   width: 100%;
   box-sizing: border-box;
 }
 
-.experience-item-card {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(59, 130, 246, 0.08));
-  border-left: 4px solid #06b6d4;
-  border-radius: 12px;
-  padding: 1.5rem;
+.professional-profile-card .experience-item-card {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(59, 130, 246, 0.12));
+  border: 2px solid rgba(6, 182, 212, 0.3);
+  border-left: 5px solid #06b6d4;
+  border-radius: 16px;
+  padding: 2rem;
   transition: all 0.3s ease;
   box-sizing: border-box;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
 }
 
-.experience-item-card:hover {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(59, 130, 246, 0.12));
+.professional-profile-card .experience-item-card:hover {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.18), rgba(59, 130, 246, 0.18));
   transform: translateX(8px);
-  box-shadow: 0 8px 20px rgba(6, 182, 212, 0.2);
+  box-shadow: 0 12px 28px rgba(6, 182, 212, 0.3);
+  border-color: rgba(6, 182, 212, 0.5);
 }
 
-.exp-header {
+.professional-profile-card .exp-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   gap: 1rem;
 }
 
-.exp-title-company {
+.professional-profile-card .exp-title-company {
   flex: 1;
 }
 
-.exp-title {
-  color: #06b6d4;
-  font-size: 1.15rem;
+.professional-profile-card .exp-title {
+  color: #ffffff !important;
+  font-size: 1.35rem;
   font-weight: 700;
-  margin: 0 0 0.25rem 0;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-.exp-company {
-  color: #94a3b8;
-  font-size: 1rem;
+.professional-profile-card .experience-item-card h4 {
+  color: #ffffff !important;
+}
+
+.professional-profile-card .experience-item-card .exp-title {
+  color: #ffffff !important;
+}
+
+.professional-profile-card .exp-company {
+  color: #cbd5e1;
+  font-size: 1.1rem;
   margin: 0;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.current-badge {
+.professional-profile-card .current-badge {
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
-  padding: 0.35rem 0.85rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 24px;
+  font-size: 0.85rem;
+  font-weight: 700;
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 3px 12px rgba(16, 185, 129, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.exp-location {
-  color: #64748b;
-  font-size: 0.9rem;
+.professional-profile-card .exp-location {
+  color: #94a3b8;
+  font-size: 1rem;
   margin: 0.25rem 0;
   font-weight: 500;
 }
 
-.exp-dates {
-  color: #475569;
-  font-size: 0.875rem;
-  margin: 0.5rem 0 0.75rem 0;
-  font-weight: 500;
+.professional-profile-card .exp-dates {
+  color: #64748b;
+  font-size: 1rem;
+  margin: 0.5rem 0 1rem 0;
+  font-weight: 600;
+  background: rgba(6, 182, 212, 0.1);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  display: inline-block;
 }
 
-.exp-description {
-  color: #cbd5e1;
-  line-height: 1.7;
-  font-size: 0.95rem;
+.professional-profile-card .exp-description {
+  color: #ffffff !important;
+  line-height: 1.8;
+  font-size: 1.05rem;
   margin: 0;
+  font-weight: 400;
+  white-space: pre-wrap;
+}
+
+.professional-profile-card .exp-description ul {
+  color: #ffffff !important;
+  list-style-type: disc !important;
+  padding-left: 1.5rem !important;
+  margin: 0.5rem 0 !important;
+}
+
+.professional-profile-card .exp-description li {
+  color: #ffffff !important;
+  line-height: 1.8 !important;
+  margin-bottom: 0.5rem !important;
+  font-size: 1.05rem !important;
+}
+
+.professional-profile-card .exp-description li::marker {
+  color: #ffffff !important;
+}
+
+.professional-profile-card .experience-item-card ul {
+  color: #ffffff !important;
+  list-style-type: disc !important;
+  padding-left: 1.5rem !important;
+  margin: 0.5rem 0 !important;
+}
+
+.professional-profile-card .experience-item-card li {
+  color: #ffffff !important;
+  line-height: 1.8 !important;
+  margin-bottom: 0.5rem !important;
+  font-size: 1.05rem !important;
+}
+
+.professional-profile-card .experience-item-card li::marker {
+  color: #ffffff !important;
+}
+
+.professional-profile-card .experience-item-card p {
+  color: #ffffff !important;
 }
 
 /* Education Items */
-.education-list {
+.professional-profile-card .education-list {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
   width: 100%;
   box-sizing: border-box;
 }
 
-.education-item-card {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(99, 102, 241, 0.08));
-  border-left: 4px solid #3b82f6;
-  border-radius: 12px;
-  padding: 1.5rem;
+.professional-profile-card .education-item-card {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(99, 102, 241, 0.12));
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  border-left: 5px solid #3b82f6;
+  border-radius: 16px;
+  padding: 2rem;
   transition: all 0.3s ease;
   box-sizing: border-box;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
-.education-item-card:hover {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(99, 102, 241, 0.12));
+.professional-profile-card .education-item-card:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), rgba(99, 102, 241, 0.18));
   transform: translateX(8px);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 12px 28px rgba(59, 130, 246, 0.3);
+  border-color: rgba(59, 130, 246, 0.5);
 }
 
-.edu-degree {
-  color: #3b82f6;
-  font-size: 1.1rem;
+.professional-profile-card .edu-degree {
+  color: #ffffff !important;
+  font-size: 1.35rem;
   font-weight: 700;
-  margin: 0 0 0.25rem 0;
-}
-
-.edu-field {
-  color: #94a3b8;
-  font-size: 0.95rem;
   margin: 0 0 0.5rem 0;
-  font-style: italic;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-.edu-institution {
-  color: #cbd5e1;
-  font-size: 1rem;
+.professional-profile-card .education-item-card h4 {
+  color: #ffffff !important;
+}
+
+.professional-profile-card .education-item-card .edu-degree {
+  color: #ffffff !important;
+}
+
+.professional-profile-card .edu-field {
+  color: #ffffff !important;
+  font-size: 1.05rem;
   margin: 0 0 0.75rem 0;
+  font-style: italic;
   font-weight: 500;
 }
 
-.edu-details {
+.professional-profile-card .edu-institution {
+  color: #ffffff !important;
+  font-size: 1.15rem;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.professional-profile-card .edu-details {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   align-items: center;
   flex-wrap: wrap;
 }
 
-.edu-year,
-.edu-gpa {
-  color: #64748b;
-  font-size: 0.875rem;
-  font-weight: 500;
+.professional-profile-card .edu-year,
+.professional-profile-card .edu-gpa {
+  color: #ffffff !important;
+  font-size: 1rem;
+  font-weight: 600;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+}
+
+.professional-profile-card .education-item-card p {
+  color: #ffffff !important;
+}
+
+.professional-profile-card .education-item-card ul {
+  color: #ffffff !important;
+  list-style-type: disc !important;
+  padding-left: 1.5rem !important;
+  margin: 0.5rem 0 !important;
+}
+
+.professional-profile-card .education-item-card li {
+  color: #ffffff !important;
+  line-height: 1.8 !important;
+  margin-bottom: 0.5rem !important;
+  font-size: 1.05rem !important;
+}
+
+.professional-profile-card .education-item-card li::marker {
+  color: #ffffff !important;
 }
 
 /* Projects Items */

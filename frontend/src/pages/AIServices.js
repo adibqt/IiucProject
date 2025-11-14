@@ -60,16 +60,16 @@ const AIServices = () => {
       id: 4,
       title: "CV/Profile Assistant",
       description:
-        "AI-powered CV analysis and optimization suggestions to make your profile stand out to recruiters and employers.",
+        "AI-powered CV generation with professional summaries, bullet point improvement, and LinkedIn/portfolio optimization.",
       icon: "📄",
       gradient: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
       features: [
-        "CV optimization tips",
-        "Profile strength analysis",
-        "Keyword suggestions",
+        "Professional summary generation",
+        "Bullet point improvement",
+        "LinkedIn & portfolio tips",
       ],
-      status: "Coming Soon",
-      route: "/ai/cv-assistant",
+      status: "Active",
+      route: "/cv-assistant",
     },
   ];
 
