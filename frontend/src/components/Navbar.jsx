@@ -1,10 +1,12 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import "./Navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { logout } = useAuth();
 
   const isActive = (path) => {
     if (path === "/dashboard") {
@@ -82,7 +84,10 @@ const Navbar = () => {
           </ul>
           <button
             className="dashboard-logout-button"
-            onClick={() => navigate("/login")}
+            onClick={async () => {
+              await logout();
+              navigate("/login");
+            }}
           >
             Logout
           </button>

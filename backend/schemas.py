@@ -69,6 +69,9 @@ class UserProfileUpdate(BaseModel):
     bio: Optional[str] = None
     phone_number: Optional[str] = None
     avatar_url: Optional[str] = None
+    linkedin_url: Optional[str] = None
+    github_url: Optional[str] = None
+    website_url: Optional[str] = None
     experience_description: Optional[str] = None
     career_interests: Optional[str] = None  # JSON array of strings
     cv_text: Optional[str] = None
@@ -84,6 +87,9 @@ class UserProfile(BaseModel):
     bio: Optional[str]
     avatar_url: Optional[str] = None
     phone_number: Optional[str] = None
+    linkedin_url: Optional[str] = None
+    github_url: Optional[str] = None
+    website_url: Optional[str] = None
     experience_description: Optional[str] = None
     career_interests: Optional[str] = None
     cv_text: Optional[str] = None
