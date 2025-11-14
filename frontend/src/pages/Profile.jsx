@@ -12,6 +12,7 @@ import { useAuth } from "../contexts/AuthContext";
 import "./Profile.css";
 import Navbar from "../components/Navbar";
 import ProfileCard from "../components/ProfileCard";
+import SkillsTab from "../components/profile/SkillsTab";
 
 const Profile = () => {
   const { getCurrentUser } = useAuth();
@@ -1337,65 +1338,17 @@ const Profile = () => {
                 )}
 
                 {activeTab === "skills" && (
-                  <div className="tab-panel">
-                    <h3>Skills</h3>
-                    <div className="skills-section">
-                      <div className="add-skill">
-                        <h4>Add a Skill</h4>
-                        <div className="skill-input-group">
-                          <select
-                            value={selectedSkillId}
-                            onChange={(e) => setSelectedSkillId(e.target.value)}
-                          >
-                            <option value="">Select skill...</option>
-                            {availableSkills.map((skill) => (
-                              <option key={skill.id} value={skill.id}>
-                                {skill.name}
-                              </option>
-                            ))}
-                          </select>
-                          <select
-                            value={proficiencyLevel}
-                            onChange={(e) => setProficiencyLevel(e.target.value)}
-                          >
-                            <option value="beginner">Beginner</option>
-                            <option value="intermediate">Intermediate</option>
-                            <option value="advanced">Advanced</option>
-                            <option value="expert">Expert</option>
-                          </select>
-                          <button
-                            type="button"
-                            onClick={handleAddSkill}
-                            className="home-btn home-btn-primary"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="my-skills">
-                        <h4>Your Skills</h4>
-                        {profile?.skills && profile.skills.length > 0 ? (
-                          <div className="skills-grid">
-                            {profile.skills.map((skill) => (
-                              <div key={skill.id} className="skill-tag">
-                                <span>{skill.name}</span>
-                                <button
-                                  type="button"
-                                  onClick={() => handleRemoveSkill(skill.id)}
-                                  className="skill-remove"
-                                >
-                                  ✕
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <p className="empty-message">No skills added yet</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  <SkillsTab
+                    profile={profile}
+                    availableSkills={availableSkills}
+                    selectedSkillId={selectedSkillId}
+                    setSelectedSkillId={setSelectedSkillId}
+                    proficiencyLevel={proficiencyLevel}
+                    setProficiencyLevel={setProficiencyLevel}
+                    onAddSkill={handleAddSkill}
+                    onRemoveSkill={handleRemoveSkill}
+                    onSuggestSkill={handleSuggestSkill}
+                  />
                 )}
 
                 {activeTab === "interests" && (
