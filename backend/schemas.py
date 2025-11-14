@@ -365,3 +365,38 @@ class CVResponse(BaseModel):
     
     class Config:
         from_attributes = True
+
+
+# Roadmap Schemas
+class RoadmapGenerateRequest(BaseModel):
+    """Roadmap generation request - accepts camelCase from frontend"""
+    targetRole: str = Field(..., min_length=2, max_length=255, description="Target role/job title")
+    timeframe: str = Field(..., min_length=2, max_length=100, description="Timeframe e.g., '3 months', '6 months'")
+    weeklyHours: Optional[int] = Field(None, ge=1, le=168, description="Optional weekly hours commitment")
+    
+    class Config:
+        populate_by_name = True  # Allow both camelCase and snake_case
+
+
+class RoadmapResponse(BaseModel):
+    """Roadmap response"""
+    id: int
+    user_id: int
+    target_role: str
+    timeframe: str
+    weekly_hours: Optional[int] = None
+    roadmap_visual: str
+    roadmap_description: str
+    created_at: datetime
+    updated_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
+class RoadmapGenerateResponse(BaseModel):
+    """Roadmap generation response"""
+    success: bool = True
+    roadmap_id: int
+    visual: str
+    description: str

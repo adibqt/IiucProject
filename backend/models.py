@@ -381,3 +381,34 @@ class CareerBotConversation(Base):
     # Relationships
     user = relationship("User", backref="careerbot_conversations")
     session = relationship("CareerBotSession", back_populates="messages")
+
+
+class CareerRoadmap(Base):
+    """
+    Career Roadmap model
+    Stores AI-generated career roadmaps for users
+    Each roadmap is personalized based on user profile, skills, CV, and target role
+    """
+    __tablename__ = "career_roadmaps"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False, index=True)
+    
+    # User inputs
+    target_role = Column(String(255), nullable=False)
+    timeframe = Column(String(100), nullable=False)  # e.g., "3 months", "6 months"
+    weekly_hours = Column(Integer, nullable=True)  # Optional weekly hours commitment
+    
+    # Context snapshot (JSON) - stores user profile & CV data used for generation
+    input_context = Column(Text)  # JSON string
+    
+    # Generated roadmap content
+    roadmap_visual = Column(Text, nullable=False)  # ASCII/console-style visual roadmap
+    roadmap_description = Column(Text, nullable=False)  # Detailed explanation section
+    
+    # Metadata
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    # Relationships
+    user = relationship("User", backref="career_roadmaps")
