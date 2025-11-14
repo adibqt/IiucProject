@@ -1,0 +1,136 @@
+/* CareerBot Page Styling */
+
+.careerbot-page {
+  background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 50%, #0f172a 100%);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.careerbot-navbar-wrapper {
+  flex-shrink: 0;
+}
+
+.careerbot-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+  overflow: hidden;
+}
+
+.careerbot-header {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.1),
+    rgba(59, 130, 246, 0.1)
+  );
+  border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+  padding: 1rem 2rem;
+  text-align: center;
+  animation: fadeInDown 0.6s ease-out;
+  flex-shrink: 0;
+}
+
+.careerbot-header-content h1 {
+  font-size: 1.75rem;
+  margin: 0 0 0.25rem 0;
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.careerbot-header-content p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* Alert */
+.careerbot-alert {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  margin: 0.5rem 0;
+  animation: slideInDown 0.4s ease-out;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.careerbot-alert.error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+/* Chat Container */
+.careerbot-chat-container {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 0.6s ease-out;
+  overflow: hidden;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .careerbot-container {
+    padding: 0 1rem;
+  }
+
+  .careerbot-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .careerbot-header-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .careerbot-header-content p {
+    font-size: 0.9rem;
+  }
+}

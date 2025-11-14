@@ -18,6 +18,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Resources from "./pages/Resources";
+import CareerBot from "./pages/CareerBot";
 import "./App.css";
 
 // Protected Route Component for User Auth
@@ -148,6 +149,22 @@ function AppRoutes() {
         element={
           <ProtectedUserRoute>
             <Resources />
+          </ProtectedUserRoute>
+        }
+      />
+      <Route
+        path="/bot"
+        element={
+          <ProtectedUserRoute>
+            <CareerBot />
+          </ProtectedUserRoute>
+        }
+      />
+      <Route
+        path="/careerbot"
+        element={
+          <ProtectedUserRoute>
+            <CareerBot />
           </ProtectedUserRoute>
         }
       />

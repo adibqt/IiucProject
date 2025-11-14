@@ -1,0 +1,106 @@
+/* Message Bubble Styling */
+
+.message-bubble {
+  display: flex;
+  margin-bottom: 1rem;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.message-bubble.user {
+  justify-content: flex-end;
+}
+
+.message-bubble.bot {
+  justify-content: flex-start;
+}
+
+.message-content {
+  max-width: 70%;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.message-bubble.user .message-content {
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.message-bubble.bot .message-content {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.95);
+  border-bottom-left-radius: 4px;
+}
+
+.message-text {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Format lists in bot messages */
+.message-bubble.bot .message-text {
+  /* Preserve line breaks and formatting */
+  white-space: pre-wrap;
+}
+
+/* Style bullet points and numbered lists */
+.message-bubble.bot .message-text::before {
+  content: none;
+}
+
+/* Ensure proper spacing for paragraphs */
+.message-bubble.bot .message-text p {
+  margin: 0.5rem 0;
+}
+
+.message-bubble.bot .message-text p:first-child {
+  margin-top: 0;
+}
+
+.message-bubble.bot .message-text p:last-child {
+  margin-bottom: 0;
+}
+
+.message-disclaimer {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 0.5rem;
+}
+
+.message-bubble.user .message-disclaimer {
+  display: none;
+}
+
+.message-time {
+  display: block;
+  font-size: 0.7rem;
+  opacity: 0.6;
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+.message-bubble.bot .message-time {
+  text-align: left;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

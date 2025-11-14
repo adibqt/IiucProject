@@ -332,3 +332,26 @@ class UserResume(Base):
     
     # Relationships
     user = relationship("User", backref="resume")
+
+
+class CareerBotConversation(Base):
+    """
+    CareerBot conversation history model
+    Stores all user-bot interactions for context and history
+    """
+    __tablename__ = "careerbot_conversations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False, index=True)
+    
+    # Message details
+    role = Column(String(10), nullable=False)  # "user" or "bot"
+    message = Column(Text, nullable=False)
+    language = Column(String(10), default="en")  # "en", "bn", or "mix"
+    
+    # Metadata
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    # Relationships
+    user = relationship("User", backref="careerbot_conversations")
