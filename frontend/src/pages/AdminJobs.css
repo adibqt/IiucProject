@@ -5,7 +5,7 @@
   max-width: 1400px;
   margin: 0 auto;
   min-height: 100vh;
-  background: #ffffff;
+  background: #ffffff !important;
 }
 
 .admin-jobs-header {
@@ -23,7 +23,7 @@
 .admin-jobs-header h1 {
   font-size: 32px;
   font-weight: 700;
-  color: #1e293b;
+  color: #e6e8ec;
   margin: 0 0 6px 0;
   line-height: 1.2;
 }
@@ -473,6 +473,7 @@
   align-items: center;
   padding: 24px 32px;
   border-bottom: 1px solid #e5e7eb;
+  background: white;
 }
 
 .modal-header h2 {
@@ -640,6 +641,14 @@
   max-width: 900px;
   max-height: 90vh;
   overflow-y: auto;
+  background: white;
+}
+
+/* Specific styling for admin job details modal header */
+.job-details-modal .modal-header {
+  background: white;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
 }
 
 .job-details-header {
@@ -677,6 +686,7 @@
 
 .job-details-content {
   padding: 32px;
+  background: white;
 }
 
 .job-details-meta-grid {
