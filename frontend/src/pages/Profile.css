@@ -163,10 +163,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  color: white !important;
 }
 
 .form-group label {
-  color: rgba(255, 255, 255, 0.9);
+  color: white !important;
   font-weight: 500;
   font-size: 0.95rem;
 }
@@ -509,6 +510,7 @@
 
   .tab-panel h2 {
     font-size: 1.25rem;
+    color: white !important;
   }
 
   .form-group input,
