@@ -397,44 +397,6 @@ const RoadmapCharts = ({ visual, timeframe }) => {
 
   return (
     <div className="roadmap-charts-container">
-      {/* Progress Overview */}
-      <div className="roadmap-chart-section">
-        <h4 className="roadmap-chart-title">Phase Progress</h4>
-        <div className="roadmap-progress-bars">
-          {roadmapData.map((phase, index) => {
-            const progress = 0; // Can be enhanced with actual user progress
-            return (
-              <div key={index} className="roadmap-progress-item">
-                <div className="roadmap-progress-header">
-                  <span className="roadmap-progress-phase">
-                    Phase {phase.number}: {phase.title}
-                  </span>
-                  <span className="roadmap-progress-stats">
-                    {phase.taskCount} tasks • {phase.timeframe}
-                  </span>
-                </div>
-                <div className="roadmap-progress-bar-container">
-                  <div className="roadmap-progress-bar">
-                    <div
-                      className="roadmap-progress-bar-fill"
-                      style={{
-                        width: `${progress}%`,
-                        background: `linear-gradient(90deg, ${
-                          colors[index % colors.length]
-                        }, ${colors[(index + 1) % colors.length]})`,
-                      }}
-                    />
-                  </div>
-                  <span className="roadmap-progress-percentage">
-                    {progress}%
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Tasks per Phase Bar Chart */}
       <div className="roadmap-chart-section">
         <h4 className="roadmap-chart-title">Tasks Distribution by Phase</h4>
