@@ -49,10 +49,22 @@ const Resources = () => {
         axios.get(`${API_BASE_URL}/skills`, config).catch(() => ({ data: [] })),
       ]);
 
-      setCourses(coursesResponse.data || []);
-      setSkills(skillsResponse.data || []);
+      const coursesData = coursesResponse.data || [];
+      const skillsData = skillsResponse.data || [];
+
+      console.log(
+        `Loaded ${coursesData.length} courses and ${skillsData.length} skills`
+      );
+
+      setCourses(coursesData);
+      setSkills(skillsData);
+
+      if (coursesData.length === 0) {
+        console.warn("No courses returned from API");
+      }
     } catch (error) {
       console.error("Error loading resources:", error);
+      console.error("Error details:", error.response?.data || error.message);
 
       if (error.response?.status === 401) {
         localStorage.removeItem("userToken");
@@ -63,6 +75,9 @@ const Resources = () => {
             message: "Session expired. Please login again.",
           },
         });
+      } else {
+        // For other errors, still try to show what we have
+        console.error("Failed to load courses. Please refresh the page.");
       }
     } finally {
       setLoading(false);
