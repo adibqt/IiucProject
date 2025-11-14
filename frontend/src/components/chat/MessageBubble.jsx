@@ -92,6 +92,11 @@ const MessageBubble = ({ role, message, language, timestamp }) => {
     return formatted;
   };
 
+  // Check if message contains the disclaimer
+  const hasDisclaimer =
+    !isUser &&
+    message.includes("This is a suggestion, not a guaranteed outcome");
+
   return (
     <div className={`message-bubble ${isUser ? "user" : "bot"}`}>
       <div className="message-content">
@@ -102,11 +107,6 @@ const MessageBubble = ({ role, message, language, timestamp }) => {
             className="message-text formatted"
             dangerouslySetInnerHTML={{ __html: formatMessage(message) }}
           />
-        )}
-        {!isUser && (
-          <p className="message-disclaimer">
-            This is a suggestion, not a guaranteed outcome.
-          </p>
         )}
         {formattedTime && <span className="message-time">{formattedTime}</span>}
       </div>

@@ -35,7 +35,7 @@ const ChatWindow = ({ messages, isLoading }) => {
         )}
         {messages.map((msg, index) => (
           <MessageBubble
-            key={index}
+            key={msg.timestamp ? `${msg.timestamp}-${index}` : index}
             role={msg.role}
             message={msg.message}
             language={msg.language}

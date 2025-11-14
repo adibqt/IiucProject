@@ -83,7 +83,9 @@ const Navbar = () => {
             </li>
             <li>
               <button
-                onClick={() => navigate("/bot")}
+                onClick={() =>
+                  navigate("/bot", { state: { fromNavigation: true } })
+                }
                 className={`dashboard-nav-link ${
                   isActive("/bot") || isActive("/careerbot") ? "active" : ""
                 }`}
