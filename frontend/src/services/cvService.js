@@ -75,6 +75,15 @@ const cvAPI = {
     const response = await api.delete("/cv/pdf");
     return response.data;
   },
+
+  /**
+   * Parse user's CV PDF with AI and get structured data
+   * @returns {Promise<Object>} Parsed CV data
+   */
+  parseCvPdf: async () => {
+    const response = await api.post("/cv/pdf/parse");
+    return response.data;
+  },
 };
 
 export default cvAPI;

@@ -12,6 +12,8 @@ from models import User, UserResume
 from schemas import CVCreate, CVResponse, SuccessResponse
 from api_users import get_current_user
 from services.cv_service import CVService
+from services.gemini_service import analyze_cv_pdf
+from models import Skill
 
 router = APIRouter(prefix="/api/cv", tags=["cv"])
 
@@ -172,6 +174,67 @@ async def upload_cv_pdf(
             "size": len(file_content)
         }
     }
+
+
+@router.post("/pdf/parse", response_model=CVResponse)
+async def parse_cv_pdf(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Parse the user's uploaded CV PDF with Gemini and update the structured CV data.
+    """
+    resume = CVService.get_user_resume(db, current_user.id)
+    
+    if not resume or not resume.cv_pdf_path:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No CV PDF found. Please upload a PDF first."
+        )
+    
+    pdf_path = Path(resume.cv_pdf_path)
+    if not pdf_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="CV PDF file not found on server."
+        )
+
+    # Get all available skills from the database to provide as context to Gemini
+    all_skills = db.query(Skill).all()
+    available_skill_names = [skill.name for skill in all_skills]
+    skill_name_to_id_map = {skill.name.lower(): skill.id for skill in all_skills}
+
+    # Call Gemini service to analyze the PDF with available skills context
+    extracted_data = analyze_cv_pdf(str(pdf_path), available_skills=available_skill_names)
+
+    if not extracted_data:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to parse CV with Gemini."
+        )
+
+    # Convert skill names to skill IDs
+    # Gemini should now only return skills from the available list
+    skill_names = extracted_data.get('skills', [])
+    skill_ids = []
+    
+    if skill_names:
+        for skill_name in skill_names:
+            skill_name_lower = skill_name.lower().strip()
+            if skill_name_lower in skill_name_to_id_map:
+                skill_ids.append(skill_name_to_id_map[skill_name_lower])
+    
+    # Replace skill names with skill IDs
+    extracted_data['skills'] = skill_ids
+
+    # Create a CVCreate object from the extracted data
+    cv_update_data = CVCreate(**extracted_data)
+
+    # Update the resume with the new data
+    updated_resume = CVService.create_or_update_resume(db, current_user.id, cv_update_data)
+    
+    formatted_resume = CVService.format_resume_response(updated_resume)
+    return formatted_resume
 
 
 @router.get("/pdf", response_class=FileResponse)

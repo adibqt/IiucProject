@@ -15,6 +15,7 @@ const CVTab = ({ profile, onUpdate, onError, onSuccess }) => {
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfFilename, setPdfFilename] = useState(null);
   const [uploadingPDF, setUploadingPDF] = useState(false);
+  const [parsingPDF, setParsingPDF] = useState(false);
 
   // CV Form State
   const [cvData, setCvData] = useState({
@@ -221,6 +222,41 @@ const CVTab = ({ profile, onUpdate, onError, onSuccess }) => {
     }
   };
 
+  const handleParsePDF = async () => {
+    if (!pdfFilename) {
+      onError("Please upload a PDF first.");
+      return;
+    }
+
+    try {
+      setParsingPDF(true);
+      onError(null);
+      const parsedData = await cvAPI.parseCvPdf();
+      
+      // Update state with parsed data
+      setCvData({
+        personal_summary: parsedData.personal_summary || cvData.personal_summary,
+        experiences: parsedData.experiences || cvData.experiences,
+        education: parsedData.education || cvData.education,
+        skills: parsedData.skills || cvData.skills,
+        tools: parsedData.tools || cvData.tools,
+        projects: parsedData.projects || cvData.projects,
+        raw_cv_text: parsedData.raw_cv_text || cvData.raw_cv_text,
+      });
+
+      // If skills are returned as names, we need to find their IDs
+      // For now, assuming the backend returns skill IDs
+      setSelectedSkillIds(parsedData.skills || selectedSkillIds);
+
+      onSuccess("CV parsed successfully! Review and save the details below.");
+    } catch (err) {
+      onError(err.response?.data?.detail || "Failed to parse CV with AI.");
+      console.error("Error parsing CV:", err);
+    } finally {
+      setParsingPDF(false);
+    }
+  };
+
   // Experience handlers
   const handleAddExperience = () => {
     if (!newExperience.title || !newExperience.company) {
@@ -412,6 +448,15 @@ const CVTab = ({ profile, onUpdate, onError, onSuccess }) => {
                     style={{ padding: "10px 20px", fontSize: "14px" }}
                   >
                     👁️ View PDF
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleParsePDF}
+                    className="home-btn home-btn-primary"
+                    style={{ padding: "10px 20px", fontSize: "14px" }}
+                    disabled={parsingPDF}
+                  >
+                    {parsingPDF ? "Parsing..." : "✨ Parse with AI"}
                   </button>
                   <button
                     type="button"
