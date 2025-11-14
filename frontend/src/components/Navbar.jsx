@@ -81,6 +81,21 @@ const Navbar = () => {
                 Resources
               </button>
             </li>
+            <li>
+              <button
+                onClick={() => navigate("/skillcoach")}
+                className={`dashboard-nav-link ${
+                  isActive("/skillcoach") ? "active" : ""
+                }`}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                SkillCoach AI
+              </button>
+            </li>
           </ul>
           <button
             className="dashboard-logout-button"

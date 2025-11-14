@@ -18,6 +18,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Resources from "./pages/Resources";
+import SkillCoach from "./pages/SkillCoach";
 import "./App.css";
 
 // Protected Route Component for User Auth
@@ -148,6 +149,15 @@ function AppRoutes() {
         element={
           <ProtectedUserRoute>
             <Resources />
+          </ProtectedUserRoute>
+        }
+      />
+
+      <Route
+        path="/skillcoach"
+        element={
+          <ProtectedUserRoute>
+            <SkillCoach />
           </ProtectedUserRoute>
         }
       />
