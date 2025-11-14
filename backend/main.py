@@ -10,7 +10,7 @@ from datetime import datetime
 
 # Import local modules
 from database import engine, Base, get_db
-from models import User, UserRole, Skill, Course, AdminLog, Job
+from models import User, UserRole, Skill, Course, AdminLog, Job, UserResume
 from schemas import (
     AdminLogin, Token, UserResponse, SuccessResponse, 
     DashboardStats, SkillResponse, CourseResponse,
@@ -49,6 +49,9 @@ app.include_router(user_router)
 # Include profile routes (user profile and skill management)
 from routes.profile_routes import router as profile_router
 app.include_router(profile_router)
+# Include CV routes (CV/Resume management)
+from routes.cv_routes import router as cv_router
+app.include_router(cv_router)
 
 
 # ==================== Authentication Helpers ====================

@@ -185,6 +185,21 @@
   color: #000000;
 }
 
+.dashboard-section--centered .recommended-courses-grid {
+  width: 100%;
+  max-width: 820px;
+  overflow: hidden;
+  position: relative;
+}
+
+.dashboard-section--centered .recommended-courses-list {
+  justify-content: flex-start;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-sizing: border-box;
+}
+
 /* Stats */
 .dashboard-stats {
   display: grid;
@@ -443,8 +458,15 @@
     width: 280px;
   }
 
+  .recommended-course-card {
+    flex: 0 0 280px;
+    width: 280px;
+    min-width: 280px;
+  }
+
   .dashboard-section--centered h3,
-  .dashboard-section--centered .recommended-jobs-grid {
+  .dashboard-section--centered .recommended-jobs-grid,
+  .dashboard-section--centered .recommended-courses-grid {
     max-width: 100%;
   }
 }

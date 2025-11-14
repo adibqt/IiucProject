@@ -1639,3 +1639,60 @@
     padding: 16px;
   }
 }
+
+/* Recommended courses carousel used on Dashboard (horizontal row) - matches jobs design */
+.recommended-courses-grid {
+  padding: 8px 0 0 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.recommended-courses-list {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  padding: 12px 8px;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.recommended-courses-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* Course Card Compact - matches job card styling */
+.recommended-course-card {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /* compact size for dashboard carousel */
+  flex: 0 0 300px;
+  width: 300px;
+  min-width: 300px;
+}
+
+.recommended-course-card:hover {
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 12px 32px rgba(6, 182, 212, 0.2);
+  transform: translateY(-6px);
+}
+
+.course-card-compact {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
