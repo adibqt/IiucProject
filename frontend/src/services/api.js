@@ -17,10 +17,15 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    // Try user token first, then admin token for backward compatibility
     const userToken = localStorage.getItem("userToken");
     const adminToken = localStorage.getItem("adminToken");
-    const token = userToken || adminToken;
+
+    const isAdminRequest =
+      typeof config.url === "string" && config.url.startsWith("/admin");
+
+    const token = isAdminRequest
+      ? adminToken || userToken
+      : userToken || adminToken;
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -138,7 +143,9 @@ export const jobsAPI = {
 // Courses API
 export const coursesAPI = {
   list: async (skip = 0, limit = 100) => {
-    const response = await api.get(`/admin/courses?skip=${skip}&limit=${limit}`);
+    const response = await api.get(
+      `/admin/courses?skip=${skip}&limit=${limit}`
+    );
     return response.data;
   },
 

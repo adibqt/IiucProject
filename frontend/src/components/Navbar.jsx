@@ -1,15 +1,18 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import "./Navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { logout } = useAuth();
 
-  const isActive = (p) => {
-    if (p === "/dashboard")
+  const isActive = (path) => {
+    if (path === "/dashboard") {
       return pathname === "/dashboard" || pathname === "/";
-    return pathname.startsWith(p);
+    }
+    return pathname.startsWith(path);
   };
 
   return (
@@ -65,9 +68,9 @@ const Navbar = () => {
             </li>
             <li>
               <button
-                onClick={() => navigate("/#resources")}
+                onClick={() => navigate("/resources")}
                 className={`dashboard-nav-link ${
-                  isActive("/#resources") ? "active" : ""
+                  isActive("/resources") ? "active" : ""
                 }`}
                 style={{
                   background: "none",
@@ -81,7 +84,10 @@ const Navbar = () => {
           </ul>
           <button
             className="dashboard-logout-button"
-            onClick={() => navigate("/login")}
+            onClick={async () => {
+              await logout();
+              navigate("/login");
+            }}
           >
             Logout
           </button>

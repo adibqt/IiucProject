@@ -2,8 +2,16 @@
 Migration script to update courses table structure
 Run this once to add new columns to courses table
 """
-from database import engine
+import os
+import sys
+
 from sqlalchemy import text
+
+try:
+    from backend.database import engine  # type: ignore
+except ModuleNotFoundError:
+    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+    from database import engine
 
 def migrate_courses_table():
     with engine.connect() as conn:
