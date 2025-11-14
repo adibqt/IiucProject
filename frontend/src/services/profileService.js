@@ -38,6 +38,16 @@ const profileAPI = {
     return response.data;
   },
 
+  suggestSkill: async (skillData) => {
+    const response = await api.post("/users/me/skills/suggest", skillData);
+    return response.data;
+  },
+
+  getAvailableSkills: async () => {
+    const response = await api.get("/skills");
+    return response.data;
+  },
+
   // Career interests endpoints
   getCareerInterests: async () => {
     const response = await api.get("/users/me/career-interests");

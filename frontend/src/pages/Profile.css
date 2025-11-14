@@ -142,8 +142,20 @@
 .tab-panel h2 {
   margin-top: 0;
   margin-bottom: 1rem;
-  color: #06b6d4;
+  color: white !important;
   font-size: 1.5rem;
+}
+
+.tab-panel h3 {
+  color: white !important;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.tab-panel h4 {
+  color: white !important;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
 }
 
 .tab-description {
@@ -163,10 +175,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  color: white !important;
 }
 
 .form-group label {
-  color: rgba(255, 255, 255, 0.9);
+  color: white !important;
   font-weight: 500;
   font-size: 0.95rem;
 }
@@ -210,9 +223,13 @@
   gap: 2rem;
 }
 
-.add-skill h3,
+.add-skill {
+  color: white !important;
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+}
 .my-skills h3 {
-  color: rgba(255, 255, 255, 0.9);
+  color: white !important;
   margin: 0 0 1rem 0;
   font-size: 1.1rem;
 }
@@ -273,6 +290,183 @@
 
 .skill-remove:hover {
   background: rgba(244, 63, 94, 0.2);
+}
+
+/* Custom Skill Form */
+.custom-skill-toggle {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(139, 92, 246, 0.05);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.toggle-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin: 0 0 0.75rem 0;
+}
+
+.toggle-btn {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  color: white;
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.toggle-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+.custom-skill-form {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.form-header h4 {
+  color: white !important;
+  font-size: 1.1rem;
+  margin: 0;
+  background: linear-gradient(135deg, #a78bfa, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.custom-skill-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 900px) {
+  .input-row {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.input-group label {
+  color: white !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.input-group input,
+.input-group select {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: white;
+  padding: 0.7rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.input-group select {
+  background: #1e293b;
+  cursor: pointer;
+}
+
+.input-group select option {
+  background: #1e293b;
+  color: white;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.action-buttons button {
+  flex: 1;
+}
+
+.info-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  margin: 1rem 0 0 0;
+  text-align: center;
+  font-style: italic;
 }
 
 /* Career Interests */
@@ -509,6 +703,7 @@
 
   .tab-panel h2 {
     font-size: 1.25rem;
+    color: white !important;
   }
 
   .form-group input,
@@ -700,7 +895,7 @@
 }
 
 .read-only-section h3 {
-  color: #06b6d4;
+  color: white !important;
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
   font-weight: 600;
@@ -736,7 +931,7 @@
 }
 
 .editable-section h3 {
-  color: #06b6d4;
+  color: white !important;
   font-size: 1.25rem;
   margin-bottom: 1.5rem;
   font-weight: 600;
@@ -995,5 +1190,513 @@
 
   .cv-input-section .skills-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Profile Layout with Sidebar */
+.profile-layout {
+  position: relative;
+  min-height: 100vh;
+}
+
+.profile-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.profile-header-actions h1 {
+  color: #f1f5f9;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.profile-edit-btn {
+  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-edit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(6, 182, 212, 0.3);
+}
+
+.profile-main-content {
+  transition: all 0.3s ease;
+}
+
+.profile-main-content.with-card {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Sidebar Styles */
+.profile-sidebar {
+  position: fixed;
+  top: 0;
+  right: -600px;
+  width: 600px;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-sidebar.open {
+  right: 0;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: rgba(15, 23, 42, 0.8);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.sidebar-header h2 {
+  color: #06b6d4;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.sidebar-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.sidebar-close:hover {
+  background: rgba(148, 163, 184, 0.1);
+  color: #f1f5f9;
+}
+
+.sidebar-tabs {
+  display: flex;
+  padding: 0 2rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  overflow-x: auto;
+}
+
+.sidebar-tab-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 1rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.sidebar-tab-btn:hover {
+  color: #cbd5e1;
+  background: rgba(148, 163, 184, 0.05);
+}
+
+.sidebar-tab-btn.active {
+  color: #06b6d4;
+  border-bottom-color: #06b6d4;
+  background: rgba(6, 182, 212, 0.05);
+}
+
+.sidebar-tab-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.sidebar-tab-content h3 {
+  color: white !important;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Responsive Sidebar */
+@media (max-width: 768px) {
+  .profile-sidebar {
+    width: 100%;
+    right: -100%;
+  }
+
+  .profile-header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .profile-header-actions h1 {
+    font-size: 1.5rem;
+  }
+
+  .sidebar-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .sidebar-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .sidebar-tabs {
+    padding: 0 1rem;
+  }
+
+  .sidebar-tab-btn {
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .sidebar-tab-content {
+    padding: 1.5rem;
+  }
+}
+
+/* ==================== CV/Resume Section Styles ==================== */
+
+.cv-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 0.75rem;
+}
+
+.cv-section h3 {
+  color: #06b6d4;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.cv-section h4 {
+  color: #94a3b8;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.pdf-upload-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.pdf-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pdf-actions button {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.pdf-info {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(6, 182, 212, 0.1);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+.cv-stats {
+  color: white !important;
+}
+
+.cv-stats h4 {
+  color: white !important;
+}
+
+.cv-stats ul {
+  color: white !important;
+}
+
+.cv-stats li {
+  color: white !important;
+}
+
+.home-btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.home-btn-danger:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  transform: translateY(-2px);
+}
+
+/* CV Data Display Styles */
+
+.cv-data-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.cv-data-section:last-child {
+  border-bottom: none;
+}
+
+.cv-summary {
+  color: #cbd5e1;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+/* Skills Display */
+.cv-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.cv-skill-tag {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2));
+  color: #06b6d4;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+}
+
+/* Tools Display */
+.cv-tools-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.cv-tool-tag {
+  background: rgba(139, 92, 246, 0.1);
+  color: #a78bfa;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+/* Experience Display */
+.cv-experience-item {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(6, 182, 212, 0.05);
+  border-left: 3px solid #06b6d4;
+  border-radius: 0.5rem;
+}
+
+.cv-experience-item:last-child {
+  margin-bottom: 0;
+}
+
+.cv-exp-header {
+  font-size: 1rem;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+}
+
+.cv-exp-header strong {
+  color: #06b6d4;
+}
+
+.cv-exp-location {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin-bottom: 0.25rem;
+}
+
+.cv-exp-dates {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+}
+
+.cv-exp-desc {
+  color: #cbd5e1;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* Education Display */
+.cv-education-item {
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background: rgba(59, 130, 246, 0.05);
+  border-left: 3px solid #3b82f6;
+  border-radius: 0.5rem;
+}
+
+.cv-education-item:last-child {
+  margin-bottom: 0;
+}
+
+.cv-edu-header {
+  font-size: 1rem;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+}
+
+.cv-edu-header strong {
+  color: #3b82f6;
+}
+
+.cv-edu-institution {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 0.25rem;
+}
+
+.cv-edu-year,
+.cv-edu-gpa {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* Projects Display */
+.cv-project-item {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(139, 92, 246, 0.05);
+  border-left: 3px solid #8b5cf6;
+  border-radius: 0.5rem;
+}
+
+.cv-project-item:last-child {
+  margin-bottom: 0;
+}
+
+.cv-proj-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.cv-proj-header strong {
+  color: #a78bfa;
+  font-size: 1rem;
+}
+
+.cv-proj-link {
+  color: #06b6d4;
+  text-decoration: none;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(6, 182, 212, 0.1);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  transition: all 0.3s ease;
+}
+
+.cv-proj-link:hover {
+  background: rgba(6, 182, 212, 0.2);
+  transform: translateY(-2px);
+}
+
+.cv-proj-desc {
+  color: #cbd5e1;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.cv-proj-tech {
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+.cv-proj-tech strong {
+  color: #a78bfa;
+}
+
+/* Responsive CV Styles */
+@media (max-width: 768px) {
+  .cv-section {
+    padding: 1rem;
+  }
+
+  .pdf-actions {
+    flex-direction: column;
+  }
+
+  .pdf-actions button {
+    width: 100%;
+  }
+
+  .cv-proj-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 }

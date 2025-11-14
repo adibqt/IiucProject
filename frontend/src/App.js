@@ -19,6 +19,8 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Resources from "./pages/Resources";
 import CareerBot from "./pages/CareerBot";
+import AIServices from "./pages/AIServices";
+import JobRecommendation from "./pages/JobRecommendation";
 import "./App.css";
 
 // Protected Route Component for User Auth
@@ -157,6 +159,10 @@ function AppRoutes() {
         element={
           <ProtectedUserRoute>
             <CareerBot />
+        path="/ai-services"
+        element={
+          <ProtectedUserRoute>
+            <AIServices />
           </ProtectedUserRoute>
         }
       />
@@ -165,6 +171,10 @@ function AppRoutes() {
         element={
           <ProtectedUserRoute>
             <CareerBot />
+        path="/ai/job-recommendation"
+        element={
+          <ProtectedUserRoute>
+            <JobRecommendation />
           </ProtectedUserRoute>
         }
       />

@@ -1,0 +1,360 @@
+/**
+ * SkillCoach AI Services Page Styles
+ */
+
+.ai-services-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.ai-services-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 100px 40px 60px;
+}
+
+/* Hero Section */
+.ai-services-hero {
+  text-align: center;
+  margin-bottom: 60px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.ai-hero-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.ai-services-title {
+  font-size: 56px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  letter-spacing: -1px;
+}
+
+.ai-services-subtitle {
+  font-size: 20px;
+  color: #94a3b8;
+  max-width: 600px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+.ai-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 50px;
+  color: #a5b4fc;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  background: #667eea;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+/* Services Grid */
+.ai-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+/* Service Card */
+.ai-service-card {
+  background: #1e293b;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #334155;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.ai-service-card:nth-child(1) { animation-delay: 0.1s; }
+.ai-service-card:nth-child(2) { animation-delay: 0.2s; }
+.ai-service-card:nth-child(3) { animation-delay: 0.3s; }
+.ai-service-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-service-card:hover {
+  transform: translateY(-8px);
+  border-color: #667eea;
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+}
+
+.ai-service-card:hover .ai-card-overlay {
+  opacity: 1;
+}
+
+.ai-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* Card Header */
+.ai-card-header {
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-card-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.ai-card-icon {
+  font-size: 64px;
+  position: relative;
+  z-index: 1;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.ai-card-status {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1e293b;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 2;
+}
+
+/* Card Content */
+.ai-card-content {
+  padding: 30px;
+}
+
+.ai-card-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 12px;
+}
+
+.ai-card-description {
+  font-size: 15px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* Features List */
+.ai-card-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+
+.ai-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.feature-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: rgba(102, 126, 234, 0.2);
+  border-radius: 50%;
+  color: #667eea;
+  font-size: 12px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Card Button */
+.ai-card-button {
+  width: 100%;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-card-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.ai-card-button:hover::before {
+  left: 100%;
+}
+
+.ai-card-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.button-arrow {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.ai-card-button:hover .button-arrow {
+  transform: translateX(5px);
+}
+
+/* Footer */
+.ai-services-footer {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 16px;
+  border: 1px solid #334155;
+}
+
+.ai-services-footer p {
+  color: #94a3b8;
+  font-size: 16px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ai-services-container {
+    padding: 80px 20px 40px;
+  }
+
+  .ai-services-title {
+    font-size: 40px;
+  }
+
+  .ai-services-subtitle {
+    font-size: 18px;
+  }
+
+  .ai-services-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .ai-card-content {
+    padding: 24px;
+  }
+
+  .ai-card-title {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-services-title {
+    font-size: 32px;
+  }
+
+  .ai-hero-icon {
+    font-size: 60px;
+  }
+
+  .ai-card-icon {
+    font-size: 48px;
+  }
+}

@@ -50,6 +50,19 @@
   color: white;
 }
 
+.ai-services-nav-btn {
+  transition: all 0.3s ease !important;
+}
+
+.ai-services-nav-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+}
+
+.ai-services-nav-btn.active {
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.5) !important;
+}
+
 .dashboard-logout-button {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.08);

@@ -1,0 +1,987 @@
+/* Professional Profile Card */
+.profile-card-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.professional-profile-card {
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.95) 0%,
+    rgba(30, 41, 59, 0.95) 100%
+  );
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+              0 0 100px rgba(6, 182, 212, 0.1) inset;
+  backdrop-filter: blur(20px);
+  transition: all 0.3s ease;
+}
+
+.professional-profile-card:hover {
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6),
+              0 0 120px rgba(6, 182, 212, 0.15) inset;
+  transform: translateY(-4px);
+}
+
+/* Card Header */
+.card-header {
+  position: relative;
+  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+  padding: 3rem 2.5rem 2.5rem;
+  overflow: hidden;
+}
+
+.card-background-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px),
+    repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px);
+  opacity: 0.3;
+}
+
+.card-header-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.avatar-section {
+  position: relative;
+}
+
+.profile-avatar-large {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  object-fit: cover;
+  background: white;
+}
+
+.profile-avatar-placeholder {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 5px solid rgba(255, 255, 255, 0.9);
+  background: linear-gradient(135deg, #1e293b, #334155);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.avatar-status-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #10b981;
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 3px solid white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.profile-identity {
+  flex: 1;
+  color: white;
+}
+
+.profile-name {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.profile-username {
+  font-size: 1.1rem;
+  margin: 0 0 0.25rem 0;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.profile-email {
+  font-size: 1rem;
+  margin: 0 0 0.25rem 0;
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-phone {
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Card Sections */
+.card-section {
+  padding: 2rem 2.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card-section:last-of-type {
+  border-bottom: none;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 1.25rem 0;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-icon {
+  font-size: 1.5rem;
+}
+
+.section-count {
+  background: rgba(6, 182, 212, 0.2);
+  color: #06b6d4;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+.bio-text,
+.experience-text {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.8;
+  font-size: 1.05rem;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* Skills Showcase */
+.skills-showcase {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.skill-showcase-item {
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.skill-showcase-item:hover {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: rgba(6, 182, 212, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);
+}
+
+.skill-name {
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.skill-level {
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skill-level.level-beginner {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+.skill-level.level-intermediate {
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+}
+
+.skill-level.level-advanced {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.skill-level.level-expert {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+/* Career Interests Showcase */
+.interests-showcase {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.interest-showcase-item {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.15));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #c4b5fd;
+  padding: 0.65rem 1.25rem;
+  border-radius: 24px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.interest-showcase-item:hover {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(99, 102, 241, 0.25));
+  border-color: rgba(139, 92, 246, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+/* CV Indicator */
+.cv-indicator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+}
+
+.cv-icon {
+  font-size: 1.75rem;
+}
+
+.cv-text {
+  flex: 1;
+  color: #6ee7b7;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.cv-badge {
+  background: #10b981;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Card Footer */
+.card-footer {
+  display: flex;
+  justify-content: space-around;
+  padding: 1.5rem 2.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  gap: 2rem;
+}
+
+.footer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.footer-value {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-header {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .card-header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-avatar-large,
+  .profile-avatar-placeholder {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-name {
+    font-size: 2rem;
+  }
+
+  .card-section {
+    padding: 1.5rem;
+  }
+
+  .skills-showcase {
+    grid-template-columns: 1fr;
+  }
+
+  .card-footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== CV Data Sections ==================== */
+
+/* Tools Section */
+.tools-section .tools-showcase {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.tool-showcase-item {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(168, 85, 247, 0.15));
+  color: #a78bfa;
+  padding: 0.65rem 1.25rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  transition: all 0.3s ease;
+}
+
+.tool-showcase-item:hover {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(168, 85, 247, 0.25));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* Experience Items */
+.experiences-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.experience-item-card {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(59, 130, 246, 0.08));
+  border-left: 4px solid #06b6d4;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.experience-item-card:hover {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(59, 130, 246, 0.12));
+  transform: translateX(8px);
+  box-shadow: 0 8px 20px rgba(6, 182, 212, 0.2);
+}
+
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.exp-title-company {
+  flex: 1;
+}
+
+.exp-title {
+  color: #06b6d4;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+}
+
+.exp-company {
+  color: #94a3b8;
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.current-badge {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.exp-location {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+  font-weight: 500;
+}
+
+.exp-dates {
+  color: #475569;
+  font-size: 0.875rem;
+  margin: 0.5rem 0 0.75rem 0;
+  font-weight: 500;
+}
+
+.exp-description {
+  color: #cbd5e1;
+  line-height: 1.7;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Education Items */
+.education-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.education-item-card {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(99, 102, 241, 0.08));
+  border-left: 4px solid #3b82f6;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.education-item-card:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(99, 102, 241, 0.12));
+  transform: translateX(8px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+}
+
+.edu-degree {
+  color: #3b82f6;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+}
+
+.edu-field {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem 0;
+  font-style: italic;
+}
+
+.edu-institution {
+  color: #cbd5e1;
+  font-size: 1rem;
+  margin: 0 0 0.75rem 0;
+  font-weight: 500;
+}
+
+.edu-details {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.edu-year,
+.edu-gpa {
+  color: #64748b;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Projects Items */
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.project-item-card {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(168, 85, 247, 0.08));
+  border-left: 4px solid #8b5cf6;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.project-item-card:hover {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(168, 85, 247, 0.12));
+  transform: translateX(8px);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.project-name {
+  color: #a78bfa;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  flex: 1;
+}
+
+.project-link {
+  background: rgba(6, 182, 212, 0.15);
+  color: #06b6d4;
+  padding: 0.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+}
+
+.project-link:hover {
+  background: rgba(6, 182, 212, 0.25);
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.project-description {
+  color: #cbd5e1;
+  line-height: 1.7;
+  font-size: 0.95rem;
+  margin: 0 0 0.75rem 0;
+}
+
+.project-tech {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  padding: 0.75rem;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.project-tech strong {
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+/* CV Extracted Skills Badge */
+.skill-level.level-extracted {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* ==================== CRUD Edit Buttons & Forms ==================== */
+
+.edit-btn-inline,
+.add-btn-inline {
+  background: rgba(6, 182, 212, 0.15);
+  color: #06b6d4;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.edit-btn-inline:hover,
+.add-btn-inline:hover {
+  background: rgba(6, 182, 212, 0.25);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.edit-btn-small,
+.delete-btn-small {
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+.edit-btn-small:hover {
+  background: rgba(6, 182, 212, 0.15);
+  transform: scale(1.1);
+}
+
+.delete-btn-small:hover {
+  background: rgba(239, 68, 68, 0.15);
+  transform: scale(1.1);
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Edit Forms */
+.edit-form-inline,
+.edit-form-card {
+  background: rgba(15, 23, 42, 0.8);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  box-sizing: border-box;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+.edit-input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 6px;
+  padding: 0.75rem;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: #06b6d4;
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+}
+
+.edit-textarea {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 6px;
+  padding: 0.75rem;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.edit-textarea:focus {
+  outline: none;
+  border-color: #06b6d4;
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-row .edit-input {
+  margin-bottom: 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.save-btn-inline,
+.cancel-btn-inline {
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.save-btn-inline {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  flex: 1;
+}
+
+.save-btn-inline:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.cancel-btn-inline {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.cancel-btn-inline:hover {
+  background: rgba(239, 68, 68, 0.25);
+  transform: translateY(-2px);
+}
+
+.edu-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive CV Sections */
+@media (max-width: 768px) {
+  .experience-item-card,
+  .education-item-card,
+  .project-item-card {
+    padding: 1.25rem;
+  }
+
+  .exp-header,
+  .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .current-badge {
+    align-self: flex-start;
+  }
+
+  .exp-title,
+  .edu-degree,
+  .project-name {
+    font-size: 1rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+  }
+
+  .save-btn-inline,
+  .cancel-btn-inline {
+    width: 100%;
+  }
+}
+
+/* Tool CRUD Styles */
+.tool-edit-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  background-color: #f8f9fa;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+}
+
+.tool-edit-input {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.9rem;
+  flex: 1;
+  min-width: 100px;
+  max-width: 200px;
+  box-sizing: border-box;
+}
+
+.tool-save-btn,
+.tool-cancel-btn {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.tool-save-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.tool-save-btn:hover {
+  background-color: #218838;
+}
+
+.tool-cancel-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.tool-cancel-btn:hover {
+  background-color: #5a6268;
+}
+
+.tool-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+}
+
+.tool-edit-btn,
+.tool-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  line-height: 1;
+}
+
+.tool-edit-btn:hover {
+  opacity: 1;
+  color: #007bff;
+}
+
+.tool-delete-btn:hover {
+  opacity: 1;
+  color: #dc3545;
+}
+
+.tool-add-new {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px dashed #ddd;
+}
+
+.tool-add-new input {
+  flex: 1;
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.tool-add-new button {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tool-add-new .tool-save-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.tool-add-new .tool-save-btn:hover {
+  background-color: #218838;
+}
+
+.tool-add-new .tool-cancel-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.tool-add-new .tool-cancel-btn:hover {
+  background-color: #5a6268;
+}

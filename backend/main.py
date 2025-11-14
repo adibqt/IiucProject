@@ -55,6 +55,9 @@ app.include_router(cv_router)
 # Include CareerBot routes (AI-powered career guidance)
 from routes.careerbot_routes import router as careerbot_router
 app.include_router(careerbot_router)
+# Include job recommendation routes (AI-powered job matching)
+from routes.job_recommendation_routes import router as job_recommendation_router
+app.include_router(job_recommendation_router)
 
 
 # ==================== Authentication Helpers ====================

@@ -14,6 +14,7 @@ from api_users import get_current_user
 from services.cv_service import CVService
 from services.gemini_service import analyze_cv_pdf
 from models import Skill
+from profile_service import ProfileService
 
 router = APIRouter(prefix="/api/cv", tags=["cv"])
 
@@ -226,6 +227,16 @@ async def parse_cv_pdf(
     
     # Replace skill names with skill IDs
     extracted_data['skills'] = skill_ids
+
+    # Automatically add extracted skills to user's profile
+    # This will add them to the user.skills relationship if not already present
+    for skill_id in skill_ids:
+        try:
+            ProfileService.add_skill(db, current_user.id, skill_id, proficiency_level="beginner")
+        except Exception as e:
+            # Skill might already exist, continue with others
+            print(f"Skill {skill_id} already added or error: {e}")
+            continue
 
     # Create a CVCreate object from the extracted data
     cv_update_data = CVCreate(**extracted_data)
