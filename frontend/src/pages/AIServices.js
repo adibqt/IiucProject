@@ -53,8 +53,8 @@ const AIServices = () => {
         "Interview preparation",
         "Resume tips & feedback",
       ],
-      status: "Coming Soon",
-      route: "/ai/careerbot",
+      status: "Active",
+      route: "/bot",
     },
     {
       id: 4,
@@ -86,14 +86,15 @@ const AIServices = () => {
   return (
     <div className="ai-services-page">
       <Navbar />
-      
+
       <div className="ai-services-container">
         {/* Hero Section */}
         <div className="ai-services-hero">
           <div className="ai-hero-icon">✨</div>
           <h1 className="ai-services-title">SkillCoach AI</h1>
           <p className="ai-services-subtitle">
-            Unlock your career potential with AI-powered tools and personalized guidance
+            Unlock your career potential with AI-powered tools and personalized
+            guidance
           </p>
           <div className="ai-hero-badge">
             <span className="badge-dot"></span>
@@ -137,8 +138,8 @@ const AIServices = () => {
 
                 {/* Card Action */}
                 <button className="ai-card-button">
-                  {service.status === "Coming Soon" 
-                    ? "Notify Me" 
+                  {service.status === "Coming Soon"
+                    ? "Notify Me"
                     : service.status === "Active"
                     ? "Get Started"
                     : "Learn More"}
