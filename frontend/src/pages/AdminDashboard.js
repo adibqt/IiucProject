@@ -97,15 +97,6 @@ const AdminDashboard = () => {
               <span className="admin-nav-icon">📊</span>
               <span>Dashboard</span>
             </div>
-            <div
-              className={`admin-nav-item ${
-                activeSection === "analytics" ? "active" : ""
-              }`}
-              onClick={() => setActiveSection("analytics")}
-            >
-              <span className="admin-nav-icon">📈</span>
-              <span>Analytics</span>
-            </div>
           </div>
 
           <div className="admin-nav-section">
@@ -145,59 +136,6 @@ const AdminDashboard = () => {
             >
               <span className="admin-nav-icon">💼</span>
               <span>Jobs</span>
-            </div>
-            <div
-              className={`admin-nav-item ${
-                activeSection === "instructors" ? "active" : ""
-              }`}
-              onClick={() => setActiveSection("instructors")}
-            >
-              <span className="admin-nav-icon">🎓</span>
-              <span>Instructors</span>
-            </div>
-          </div>
-
-          <div className="admin-nav-section">
-            <div className="admin-nav-section-title">AI Features</div>
-            <div
-              className={`admin-nav-item ${
-                activeSection === "recommendations" ? "active" : ""
-              }`}
-              onClick={() => setActiveSection("recommendations")}
-            >
-              <span className="admin-nav-icon">🤖</span>
-              <span>AI Recommendations</span>
-            </div>
-            <div
-              className={`admin-nav-item ${
-                activeSection === "learning-paths" ? "active" : ""
-              }`}
-              onClick={() => setActiveSection("learning-paths")}
-            >
-              <span className="admin-nav-icon">🗺️</span>
-              <span>Learning Paths</span>
-            </div>
-          </div>
-
-          <div className="admin-nav-section">
-            <div className="admin-nav-section-title">System</div>
-            <div
-              className={`admin-nav-item ${
-                activeSection === "settings" ? "active" : ""
-              }`}
-              onClick={() => setActiveSection("settings")}
-            >
-              <span className="admin-nav-icon">⚙️</span>
-              <span>Settings</span>
-            </div>
-            <div
-              className={`admin-nav-item ${
-                activeSection === "logs" ? "active" : ""
-              }`}
-              onClick={() => setActiveSection("logs")}
-            >
-              <span className="admin-nav-icon">📋</span>
-              <span>Activity Logs</span>
             </div>
           </div>
         </nav>

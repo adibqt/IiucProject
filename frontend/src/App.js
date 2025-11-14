@@ -21,6 +21,7 @@ import Resources from "./pages/Resources";
 import CareerBot from "./pages/CareerBot";
 import AIServices from "./pages/AIServices";
 import JobRecommendation from "./pages/JobRecommendation";
+import Roadmap from "./pages/Roadmap";
 import CVAssistant from "./pages/CVAssistant";
 import "./App.css";
 
@@ -181,6 +182,14 @@ function AppRoutes() {
         element={
           <ProtectedUserRoute>
             <JobRecommendation />
+          </ProtectedUserRoute>
+        }
+      />
+      <Route
+        path="/roadmap"
+        element={
+          <ProtectedUserRoute>
+            <Roadmap />
           </ProtectedUserRoute>
         }
       />

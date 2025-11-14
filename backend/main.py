@@ -58,6 +58,9 @@ app.include_router(careerbot_router)
 # Include job recommendation routes (AI-powered job matching)
 from routes.job_recommendation_routes import router as job_recommendation_router
 app.include_router(job_recommendation_router)
+# Include roadmap routes (AI-generated career roadmaps)
+from routes.roadmap_routes import router as roadmap_router
+app.include_router(roadmap_router)
 # Include CV assistant routes (AI-powered CV generation and suggestions)
 from routes.cv_assistant_routes import router as cv_assistant_router
 app.include_router(cv_assistant_router)

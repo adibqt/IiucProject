@@ -151,6 +151,36 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-card fade-in">
+        <button
+          onClick={() => navigate("/")}
+          className="login-back-button"
+          type="button"
+          style={{
+            position: "absolute",
+            top: "20px",
+            left: "20px",
+            background: "rgba(255, 255, 255, 0.1)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            borderRadius: "8px",
+            padding: "8px 16px",
+            color: "#fff",
+            cursor: "pointer",
+            fontSize: "14px",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            transition: "all 0.3s ease",
+            zIndex: 1000,
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.background = "rgba(255, 255, 255, 0.2)";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = "rgba(255, 255, 255, 0.1)";
+          }}
+        >
+          ← Back to Home
+        </button>
         <div className="login-header">
           <div className="login-logo">
             <SkillSyncLogo size={60} variant="icon" theme="light" />

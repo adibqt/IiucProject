@@ -26,7 +26,7 @@ const SkillCoach = () => {
         "Get a customized step-by-step roadmap to achieve your career goals based on your skills, interests, and target positions.",
       icon: "🗺️",
       color: "purple",
-      path: "/skillcoach/roadmap",
+      path: "/roadmap",
     },
     {
       id: 3,

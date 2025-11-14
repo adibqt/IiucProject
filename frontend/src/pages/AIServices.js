@@ -38,8 +38,8 @@ const AIServices = () => {
         "Skill progression tracking",
         "Industry insights",
       ],
-      status: "Coming Soon",
-      route: "/ai/career-roadmap",
+      status: "Active",
+      route: "/roadmap",
     },
     {
       id: 3,

@@ -18,12 +18,15 @@ if not api_key:
 
 genai.configure(api_key=api_key)
 
-# Create a generative model instance
-model = genai.GenerativeModel('gemini-2.5-flash')
+# Create generative model instances with fallback options
+# Use gemini-2.5-flash as primary (fast and efficient)
+# Fallback to gemini-2.0-flash if primary fails
+primary_model = genai.GenerativeModel('gemini-2.5-flash')
+fallback_model = genai.GenerativeModel('gemini-2.0-flash')
 
 def generate_text(prompt: str) -> str:
     """
-    Generates text using the Gemini model.
+    Generates text using the Gemini model with automatic fallback.
 
     Args:
         prompt: The text prompt to send to the model.
@@ -31,12 +34,31 @@ def generate_text(prompt: str) -> str:
     Returns:
         The generated text as a string.
     """
+    # Try primary model first
     try:
-        response = model.generate_content(prompt)
+        response = primary_model.generate_content(prompt)
         return response.text
     except Exception as e:
-        print(f"Error generating text with Gemini: {e}")
-        return "Sorry, I couldn't generate a response at this time."
+        error_msg = str(e)
+        print(f"Error generating text with Gemini (primary model): {error_msg}")
+        
+        # Check if it's a quota/rate limit error
+        if "429" in error_msg or "quota" in error_msg.lower() or "rate limit" in error_msg.lower():
+            # Try fallback model
+            try:
+                print("Attempting fallback model...")
+                response = fallback_model.generate_content(prompt)
+                return response.text
+            except Exception as fallback_error:
+                print(f"Error generating text with Gemini (fallback model): {fallback_error}")
+                return "I apologize, but I've reached the API rate limit. Please try again in a few minutes."
+        
+        # For other errors, provide a more helpful message
+        if "api key" in error_msg.lower() or "authentication" in error_msg.lower():
+            return "I apologize, but there's an authentication issue with the AI service. Please contact support."
+        
+        # Generic error message
+        return "I apologize, but I'm having trouble processing your request right now. Please try again later."
 
 def analyze_cv_pdf(pdf_file_path: str, available_skills: list = None) -> dict:
     """
@@ -106,7 +128,17 @@ IMPORTANT: For the 'skills' field, ONLY extract skills that are present in the a
         """
 
         # Generate content using the model with the uploaded file
-        response = model.generate_content([prompt, uploaded_file])
+        # Try primary model first, fallback to secondary if needed
+        try:
+            response = primary_model.generate_content([prompt, uploaded_file])
+        except Exception as e:
+            error_msg = str(e)
+            print(f"Error with primary model for CV analysis: {error_msg}")
+            if "429" in error_msg or "quota" in error_msg.lower():
+                # Try fallback model
+                response = fallback_model.generate_content([prompt, uploaded_file])
+            else:
+                raise
         
         # Clean up the response and parse the JSON
         cleaned_response = response.text.strip().replace('```json', '').replace('```', '')
