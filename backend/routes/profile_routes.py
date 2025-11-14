@@ -6,9 +6,10 @@ from sqlalchemy.orm import Session
 from typing import Optional, List
 from database import get_db
 from models import User, Skill
-from schemas import UserProfile, UserProfileUpdate, SkillResponse, SuccessResponse
+from schemas import UserProfile, UserProfileUpdate, SkillResponse, SuccessResponse, SkillSuggest
 from api_users import get_current_user
 from profile_service import ProfileService
+import re
 
 router = APIRouter(prefix="/api/users", tags=["profile"])
 
@@ -70,6 +71,77 @@ async def get_current_user_skills(
     """
     skills = ProfileService.get_user_skills(db, current_user.id)
     return skills
+
+
+@router.post("/me/skills/suggest", response_model=SkillResponse, status_code=status.HTTP_201_CREATED)
+async def suggest_new_skill(
+    skill_data: SkillSuggest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Suggest a new skill and automatically add it to the database and user's profile
+    Protected route - requires valid JWT token
+    
+    Body:
+        {
+            "skill_name": "React Native",
+            "category": "Programming" (optional, default: "Other"),
+            "proficiency_level": "beginner" (optional, default: "beginner")
+        }
+    
+    Returns:
+        The newly created or existing skill
+    """
+    print(f"Received skill suggestion: {skill_data}")
+    print(f"Skill name: {skill_data.skill_name}")
+    print(f"Category: {skill_data.category}")
+    print(f"Proficiency: {skill_data.proficiency_level}")
+    
+    skill_name = skill_data.skill_name.strip()
+    category = skill_data.category or "Other"
+    proficiency_level = skill_data.proficiency_level or "beginner"
+    
+    # Check if skill already exists (case-insensitive)
+    existing_skill = db.query(Skill).filter(
+        Skill.name.ilike(skill_name)
+    ).first()
+    
+    if existing_skill:
+        # Skill exists, just add it to user's profile
+        try:
+            ProfileService.add_skill(db, current_user.id, existing_skill.id, proficiency_level)
+        except:
+            pass  # Already added
+        return existing_skill
+    
+    # Create slug from skill name
+    slug = re.sub(r'[^a-z0-9]+', '-', skill_name.lower()).strip('-')
+    
+    # Ensure slug is unique
+    base_slug = slug
+    counter = 1
+    while db.query(Skill).filter(Skill.slug == slug).first():
+        slug = f"{base_slug}-{counter}"
+        counter += 1
+    
+    # Create new skill
+    new_skill = Skill(
+        name=skill_name,
+        slug=slug,
+        category=category,
+        description=f"User-suggested skill: {skill_name}",
+        is_active=True
+    )
+    
+    db.add(new_skill)
+    db.commit()
+    db.refresh(new_skill)
+    
+    # Automatically add to user's profile
+    ProfileService.add_skill(db, current_user.id, new_skill.id, proficiency_level)
+    
+    return new_skill
 
 
 @router.post("/me/skills/{skill_id}", response_model=SuccessResponse)

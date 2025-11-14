@@ -168,6 +168,13 @@ class SkillResponse(SkillBase):
         from_attributes = True
 
 
+class SkillSuggest(BaseModel):
+    """User skill suggestion request"""
+    skill_name: str = Field(..., min_length=2, max_length=100)
+    category: Optional[str] = Field(default="Other", max_length=100)
+    proficiency_level: Optional[str] = Field(default="beginner")
+
+
 # Course Schemas
 class CourseBase(BaseModel):
     """Base course information"""

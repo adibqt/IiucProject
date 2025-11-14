@@ -10,6 +10,7 @@ import { useAuth } from "../contexts/AuthContext";
 import "./Profile.css";
 import Navbar from "../components/Navbar";
 import CVTab from "../components/profile/CVTab";
+import SkillsTab from "../components/profile/SkillsTab";
 
 const Profile = () => {
   const { getCurrentUser } = useAuth();
@@ -147,6 +148,41 @@ const Profile = () => {
     } catch (err) {
       setError("Failed to remove skill");
       console.error(err);
+    }
+  };
+
+  const handleSuggestSkill = async (skillData) => {
+    try {
+      setError(null);
+      await profileAPI.suggestSkill(skillData);
+      const updated = await profileAPI.getProfile();
+      setProfile(updated);
+      
+      // Refresh available skills list
+      const skills = await profileAPI.getAvailableSkills();
+      setAvailableSkills(skills);
+      
+      setSuccess("✨ New skill added successfully!");
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err) {
+      console.error("Suggest skill error:", err);
+      console.error("Response data:", err.response?.data);
+      
+      // Handle validation errors
+      if (err.response?.data?.detail) {
+        const detail = err.response.data.detail;
+        if (Array.isArray(detail)) {
+          // Validation errors from FastAPI
+          const errors = detail.map(e => `${e.loc.join('.')}: ${e.msg}`).join(', ');
+          setError(errors);
+        } else if (typeof detail === 'string') {
+          setError(detail);
+        } else {
+          setError("Failed to add skill");
+        }
+      } else {
+        setError("Failed to add skill");
+      }
     }
   };
 
@@ -302,65 +338,17 @@ const Profile = () => {
 
           {/* Skills Tab */}
           {activeTab === "skills" && (
-            <div className="tab-panel">
-              <h2>Skills</h2>
-              <div className="skills-section">
-                <div className="add-skill">
-                  <h3>Add a Skill</h3>
-                  <div className="skill-input-group">
-                    <select
-                      value={selectedSkillId}
-                      onChange={(e) => setSelectedSkillId(e.target.value)}
-                    >
-                      <option value="">Select a skill...</option>
-                      {availableSkills.map((skill) => (
-                        <option key={skill.id} value={skill.id}>
-                          {skill.name}
-                        </option>
-                      ))}
-                    </select>
-                    <select
-                      value={proficiencyLevel}
-                      onChange={(e) => setProficiencyLevel(e.target.value)}
-                    >
-                      <option value="beginner">Beginner</option>
-                      <option value="intermediate">Intermediate</option>
-                      <option value="advanced">Advanced</option>
-                      <option value="expert">Expert</option>
-                    </select>
-                    <button
-                      type="button"
-                      onClick={handleAddSkill}
-                      className="home-btn home-btn-primary"
-                    >
-                      Add Skill
-                    </button>
-                  </div>
-                </div>
-
-                <div className="my-skills">
-                  <h3>Your Skills</h3>
-                  {profile?.skills && profile.skills.length > 0 ? (
-                    <div className="skills-grid">
-                      {profile.skills.map((skill) => (
-                        <div key={skill.id} className="skill-tag">
-                          <span>{skill.name}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveSkill(skill.id)}
-                            className="skill-remove"
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="empty-message">No skills added yet</p>
-                  )}
-                </div>
-              </div>
-            </div>
+            <SkillsTab
+              profile={profile}
+              availableSkills={availableSkills}
+              selectedSkillId={selectedSkillId}
+              setSelectedSkillId={setSelectedSkillId}
+              proficiencyLevel={proficiencyLevel}
+              setProficiencyLevel={setProficiencyLevel}
+              onAddSkill={handleAddSkill}
+              onRemoveSkill={handleRemoveSkill}
+              onSuggestSkill={handleSuggestSkill}
+            />
           )}
 
           {/* Career Interests Tab */}
