@@ -55,6 +55,9 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 # CORS Configuration
 CORS_ORIGINS=http://localhost:3000,http://localhost:3001
+
+# Google Gemini AI API (Required for AI features)
+GEMINI_API_KEY=your-gemini-api-key-here
 ```
 
 3. **Start the Application**
@@ -334,6 +337,81 @@ NutriMap/
 - **Volumes**: Persistent storage for database
 - **Network**: Bridge network for inter-service communication
 - **Environment**: Development with hot-reload enabled
+
+## 🔌 External APIs
+
+### Google Gemini AI API
+
+The platform integrates with **Google Gemini AI** for various AI-powered features:
+
+- **API Provider**: Google Generative AI
+- **Library**: `google-generativeai` (Python)
+- **Authentication**: API Key via `GEMINI_API_KEY` environment variable
+- **Models Used**:
+  - `gemini-2.5-flash` (Primary - fast and efficient)
+  - `gemini-2.0-flash` (Fallback - for rate limit handling)
+  - `gemini-2.0-flash-exp` (Job recommendations)
+
+#### Features Using Gemini API
+
+1. **CareerBot** (`/api/careerbot`)
+
+   - AI-powered career guidance and advice
+   - Context-aware conversations with user profile integration
+   - Personalized career recommendations
+
+2. **Job Recommendations** (`/api/job-recommendations`)
+
+   - AI-powered job matching with skill gap analysis
+   - Per-job detailed analysis and scoring
+   - Course recommendations for skill gaps
+
+3. **CV Assistant** (`/api/cv-assistant`)
+
+   - Professional CV summary generation
+   - Bullet point optimization
+   - CV improvement recommendations
+   - Skills extraction and suggestions
+
+4. **Career Roadmap** (`/api/roadmaps`)
+
+   - AI-generated personalized career roadmaps
+   - Visual roadmap creation with milestones
+   - Career trajectory planning
+
+5. **Local Opportunities** (`/api/opportunities/recommend`)
+
+   - Personalized local opportunity recommendations
+   - Narrative explanations with social impact focus
+   - SDG 8 aligned opportunity matching
+
+6. **CV PDF Parsing** (`/api/cv/parse-pdf`)
+   - Automated CV/Resume PDF analysis
+   - Structured data extraction (experiences, education, skills, projects)
+   - Skills matching with database
+
+#### Configuration
+
+Add to your `.env` file:
+
+```env
+# Google Gemini AI API Key
+GEMINI_API_KEY=your-gemini-api-key-here
+```
+
+#### API Usage Notes
+
+- **Rate Limiting**: Automatic fallback to secondary model on rate limit errors
+- **Error Handling**: Graceful degradation with user-friendly error messages
+- **Cost Management**: Efficient model selection (flash models for speed and cost-effectiveness)
+- **File Uploads**: CV PDF parsing uses Gemini's file upload API with automatic cleanup
+
+#### Getting an API Key
+
+1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Sign in with your Google account
+3. Create a new API key
+4. Add it to your `.env` file as `GEMINI_API_KEY`
 
 ## 📚 API Endpoints
 
