@@ -23,6 +23,7 @@ import AIServices from "./pages/AIServices";
 import JobRecommendation from "./pages/JobRecommendation";
 import Roadmap from "./pages/Roadmap";
 import CVAssistant from "./pages/CVAssistant";
+import Opportunities from "./pages/Opportunities";
 import "./App.css";
 
 // Protected Route Component for User Auth
@@ -198,6 +199,14 @@ function AppRoutes() {
         element={
           <ProtectedUserRoute>
             <CVAssistant />
+          </ProtectedUserRoute>
+        }
+      />
+      <Route
+        path="/opportunities"
+        element={
+          <ProtectedUserRoute>
+            <Opportunities />
           </ProtectedUserRoute>
         }
       />

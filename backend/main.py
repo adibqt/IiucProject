@@ -10,7 +10,7 @@ from datetime import datetime
 
 # Import local modules
 from database import engine, Base, get_db
-from models import User, UserRole, Skill, Course, AdminLog, Job, UserResume
+from models import User, UserRole, Skill, Course, AdminLog, Job, UserResume, LocalOpportunity
 from schemas import (
     AdminLogin, Token, UserResponse, SuccessResponse, 
     DashboardStats, SkillResponse, CourseResponse,
@@ -64,6 +64,9 @@ app.include_router(roadmap_router)
 # Include CV assistant routes (AI-powered CV generation and suggestions)
 from routes.cv_assistant_routes import router as cv_assistant_router
 app.include_router(cv_assistant_router)
+# Include opportunity routes (local opportunity recommendations)
+from routes.opportunity_routes import router as opportunity_router
+app.include_router(opportunity_router)
 
 
 # ==================== Authentication Helpers ====================

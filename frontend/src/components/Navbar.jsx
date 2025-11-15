@@ -83,6 +83,21 @@ const Navbar = () => {
             </li>
             <li>
               <button
+                onClick={() => navigate("/opportunities")}
+                className={`dashboard-nav-link ${
+                  isActive("/opportunities") ? "active" : ""
+                }`}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Opportunities
+              </button>
+            </li>
+            <li>
+              <button
                 onClick={() => navigate("/cv-assistant")}
                 className={`dashboard-nav-link ${
                   isActive("/cv-assistant") ? "active" : ""

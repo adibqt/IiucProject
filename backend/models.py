@@ -412,3 +412,38 @@ class CareerRoadmap(Base):
     
     # Relationships
     user = relationship("User", backref="career_roadmaps")
+
+
+class LocalOpportunity(Base):
+    """
+    Local Opportunity model
+    Stores curated local opportunities (jobs, internships, training programs, youth programs)
+    Used for personalized recommendations based on user profile and skills
+    """
+    __tablename__ = "local_opportunities"
+
+    id = Column(Integer, primary_key=True, index=True)
+    
+    # Basic information
+    title = Column(String(255), nullable=False, index=True)
+    organization = Column(String(255), nullable=False)
+    description = Column(Text, nullable=False)
+    location = Column(String(255), nullable=False)
+    
+    # Categorization
+    category = Column(String(100), nullable=False, index=True)  # "Internship", "Training", "Job", "Youth Program"
+    target_track = Column(String(255), nullable=True, index=True)  # e.g., "Frontend", "Data Science", "Cybersecurity"
+    
+    # Requirements
+    required_skills = Column(Text)  # JSON array of skill IDs or skill names
+    
+    # Application details
+    link = Column(String(1000), nullable=True)  # URL to apply or learn more
+    
+    # Social impact
+    priority_group = Column(String(255), nullable=True)  # e.g., "Women", "Rural Youth", "All Youth", "Low-Income"
+    
+    # Metadata
+    is_active = Column(Boolean, default=True, index=True)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())

@@ -94,7 +94,6 @@ const AdminDashboard = () => {
               }`}
               onClick={() => setActiveSection("dashboard")}
             >
-              <span className="admin-nav-icon">📊</span>
               <span>Dashboard</span>
             </div>
           </div>
@@ -107,7 +106,6 @@ const AdminDashboard = () => {
               }`}
               onClick={() => setActiveSection("users")}
             >
-              <span className="admin-nav-icon">👥</span>
               <span>Users</span>
             </div>
             <div
@@ -116,7 +114,6 @@ const AdminDashboard = () => {
               }`}
               onClick={() => setActiveSection("courses")}
             >
-              <span className="admin-nav-icon">📚</span>
               <span>Courses</span>
             </div>
             <div
@@ -125,7 +122,6 @@ const AdminDashboard = () => {
               }`}
               onClick={() => setActiveSection("skills")}
             >
-              <span className="admin-nav-icon">🎯</span>
               <span>Skills</span>
             </div>
             <div
@@ -134,7 +130,6 @@ const AdminDashboard = () => {
               }`}
               onClick={() => setActiveSection("jobs")}
             >
-              <span className="admin-nav-icon">💼</span>
               <span>Jobs</span>
             </div>
           </div>

@@ -400,3 +400,55 @@ class RoadmapGenerateResponse(BaseModel):
     roadmap_id: int
     visual: str
     description: str
+
+
+# Local Opportunity Schemas
+class LocalOpportunityBase(BaseModel):
+    """Base local opportunity information"""
+    title: str = Field(..., min_length=3, max_length=255)
+    organization: str = Field(..., min_length=2, max_length=255)
+    description: str = Field(..., min_length=20)
+    location: str = Field(..., min_length=2, max_length=255)
+    category: str = Field(..., description="Internship, Training, Job, Youth Program")
+    target_track: Optional[str] = Field(None, max_length=255)
+    required_skills: Optional[str] = Field(None, description="JSON array of skill IDs or skill names")
+    link: Optional[str] = Field(None, max_length=1000)
+    priority_group: Optional[str] = Field(None, max_length=255)
+
+
+class LocalOpportunityCreate(LocalOpportunityBase):
+    """Local opportunity creation request"""
+    is_active: bool = True
+
+
+class LocalOpportunityUpdate(BaseModel):
+    """Local opportunity update request"""
+    title: Optional[str] = Field(None, min_length=3, max_length=255)
+    organization: Optional[str] = Field(None, min_length=2, max_length=255)
+    description: Optional[str] = Field(None, min_length=20)
+    location: Optional[str] = Field(None, min_length=2, max_length=255)
+    category: Optional[str] = None
+    target_track: Optional[str] = Field(None, max_length=255)
+    required_skills: Optional[str] = None
+    link: Optional[str] = Field(None, max_length=1000)
+    priority_group: Optional[str] = Field(None, max_length=255)
+    is_active: Optional[bool] = None
+
+
+class LocalOpportunityResponse(LocalOpportunityBase):
+    """Local opportunity response"""
+    id: int
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
+class OpportunityRecommendationResponse(BaseModel):
+    """Opportunity recommendation response"""
+    success: bool = True
+    explanation: str  # Gemini-generated personalized explanation
+    opportunities: List[LocalOpportunityResponse] = []  # Ranked opportunities
+    total_matched: int
