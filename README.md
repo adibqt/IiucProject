@@ -3,7 +3,14 @@
 A comprehensive platform for skill development, job matching, and personalized learning paths with AI-powered recommendations.
 
 ## ✨ Features
-
+### 🧠 Smart AI Features
+- **Smart Skill Extraction**: Automatically extract skills from your CV or profile using advanced AI/NLP heuristics.
+- **Intelligent Job Matching**: specialized matching algorithms that provide a precise match percentage for every opportunity.
+- **Skill Gap Analysis**: detailed analysis of your current profile vs. job requirements, accompanied by tailored learning suggestions.
+- **AI-Generated Career Roadmap**: dynamic, personalized career paths and milestones to guide your professional journey.
+- **CareerBot / Mentor Assistant**: 24/7 AI assistant for instant career advice, interview prep, and guidance.
+- **CV / Profile Builder**: Intelligent tools to help you build and optimize professional resumes and profiles.
+  
 ### 🎓 For Students & Professionals
 
 - **Profile Management**: Build and showcase your skills portfolio
